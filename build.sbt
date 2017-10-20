@@ -1,6 +1,6 @@
 name          := "Reversi in Scala"
 organization  := "de.htwg.se.Reversi"
-version       := "0.0.1"
+version       := "0.0.2"
 scalaVersion  := "2.11.8"
 scalacOptions := Seq("-unchecked", "-feature", "-deprecation", "-encoding", "utf8")
 

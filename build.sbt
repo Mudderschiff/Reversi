@@ -1,4 +1,4 @@
-name          := "Sudoku in Scala"
+name          := "Reversi in Scala"
 organization  := "de.htwg.se"
 version       := "0.2.0"
 scalaVersion  := "2.12.7"

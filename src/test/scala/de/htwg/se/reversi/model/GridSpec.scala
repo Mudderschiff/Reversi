@@ -46,7 +46,6 @@ class GridSpec extends WordSpec with Matchers {
       "have Houses with the right Cells" in {
         tinyGrid.row(0).cell(0) should be(Cell(1))
         tinyGrid.col(0).cell(0) should be(Cell(1))
-        tinyGrid.block(0).cell(0) should be(Cell(1))
 
         smallGrid.row(0).cell(0) should be(Cell(1))
         smallGrid.row(0).cell(1) should be(Cell(2))
@@ -56,21 +55,6 @@ class GridSpec extends WordSpec with Matchers {
         smallGrid.col(0).cell(1) should be(Cell(3))
         smallGrid.col(1).cell(0) should be(Cell(2))
         smallGrid.col(1).cell(1) should be(Cell(4))
-      }
-    }
-    "prefilled with 1 to n on the diagonal" should {
-      val normalGrid = new Grid(8)
-      val diagonalGrid = normalGrid.set(0, 0, 1).set(1, 1, 2).set(2, 2, 3).set(3, 3, 4).set(4, 4, 5).set(5, 5, 6).set(6, 6, 7).set(7, 7, 8).set(8, 8, 9)
-      "have blocks with the right cells" in {
-        diagonalGrid.block(0).cell(0) should be(Cell(1))
-        diagonalGrid.block(0).cell(4) should be(Cell(2))
-        diagonalGrid.block(0).cell(8) should be(Cell(3))
-        diagonalGrid.block(4).cell(0) should be(Cell(4))
-        diagonalGrid.block(4).cell(4) should be(Cell(5))
-        diagonalGrid.block(4).cell(8) should be(Cell(6))
-        diagonalGrid.block(8).cell(0) should be(Cell(7))
-        diagonalGrid.block(8).cell(4) should be(Cell(8))
-        diagonalGrid.block(8).cell(8) should be(Cell(9))
       }
     }
   }

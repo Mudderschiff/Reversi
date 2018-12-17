@@ -1,6 +1,6 @@
-package de.htwg.se.Reversi
+package de.htwg.se.reversi
 
-import de.htwg.se.sudoku.model.Player
+import de.htwg.se.reversi.model.playerComponent.Player
 
 object Reversi {
   def main(args: Array[String]): Unit = {

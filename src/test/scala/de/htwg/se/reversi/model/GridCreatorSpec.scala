@@ -1,5 +1,6 @@
 package de.htwg.se.reversi.model
 
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, GridCreator}
 import org.scalatest.{Matchers, WordSpec}
 
 class GridCreatorSpec extends WordSpec with Matchers {

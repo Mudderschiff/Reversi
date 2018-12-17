@@ -1,13 +1,14 @@
-package de.htwg.se.reversi.model
+package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
 case class GridCreator() {
 
   def createGrid(size:Int): Grid = {
     if(size % 2 != 0 || size < 3) {
+      //Todo: Wie geben wir diesne Error schön zurück ohne Fehler zu erzeugen
       throw new Exception("Die Zahl muss gerade und größer 2 sein!")
     }
 
-    var grid = new Grid(size)
+    val grid = new Grid(size)
 
     initGrid(grid)
 

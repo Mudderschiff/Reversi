@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.model
+package model.gridComponent.gridBaseImpl
 
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Matrix}
 import org.scalatest.{Matchers, WordSpec}

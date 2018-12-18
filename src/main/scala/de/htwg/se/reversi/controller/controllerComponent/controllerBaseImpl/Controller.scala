@@ -10,13 +10,15 @@ class Controller(var grid: GridInterface) extends ControllerInterface{
   val gridcreator = new GridCreator
 
   def createNewGrid: Unit = {
-    grid = gridcreator.createGrid(8)
+    gridcreator.createGrid(8) match {
+      case Right(x) => grid = x
+      case Left(x) => //Todo
+    }
   }
 
   def getValidCells(playerId: Int): ListBuffer[(Int, Int)] = {
     val obtainedCells = List()
     var reval = new ListBuffer[(Int, Int)];
-
 
     for (cell <- obtainedCells) {
       //Todo: Richtige parameter übergeben aber v.a. vorher durch das Grid iterieren
@@ -30,7 +32,6 @@ class Controller(var grid: GridInterface) extends ControllerInterface{
       }
 
     }
-
     reval
   }
 
@@ -52,11 +53,11 @@ class Controller(var grid: GridInterface) extends ControllerInterface{
   def lookdown(row: Int, col: Int, playerId: Int): Option[(Int, Int)] = {
     if(row == grid.size || row == grid.size - 1) None
 
-    var down = row +1
+    var down = row + 1
 
     if(grid.cell(down,col).value != playerId && grid.cell(down,col).value != 0) {
       while (down < grid.size -1) {
-        down = down +1
+        down = down + 1
         if(grid.cell(down,col).value == 0) Some((down,col))
       }
       None

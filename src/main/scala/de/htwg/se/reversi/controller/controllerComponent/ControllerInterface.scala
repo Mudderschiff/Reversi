@@ -3,6 +3,8 @@ package de.htwg.se.reversi.controller.controllerComponent
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus.GameStatus
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid}
 
+import scala.collection.mutable.ListBuffer
+
 trait ControllerInterface {
 
   //def gridSize:Int
@@ -12,7 +14,7 @@ trait ControllerInterface {
   /*def set(row:Int, col:Int, value:Int):Unit
   def isSet(row:Int, col:Int):Boolean*/
   def gridToString:String
-  def getValidCells(playerId:Int):List[(Int, Int)]
+  def getValidCells(playerId:Int):ListBuffer[(Int, Int)]
   def checkSet(row:Int, col:Int):Boolean
   def gameStatus:GameStatus
   def evaluateGame(grid:Grid):Int //PlayerId

@@ -1,10 +1,28 @@
 package model.gridComponent.gridBaseImpl
 
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Matrix, Grid}
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix, Turn}
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Direction
 import org.scalatest.{Matchers, WordSpec}
 
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
+
+    "function validTurns" should {
+      val freshGrid = new Grid(8).createNewGrid
+      "4" in {
+        freshGrid.getValidTurns(1).size should be(4)
+      }
+    }
+
+    "function setTurn" should {
+      var freshGrid = new Grid(8).createNewGrid
+      var x = freshGrid.getValidTurns(1)
+      freshGrid = freshGrid.setTurn(x.head, 1)//Turn(0,0,0,0,Direction.Down),1)
+      "set " in {
+        print("AMK")
+      }
+    }
+
     "evaluating Winner" should {
       val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
       val white = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(1)), Vector(Cell(0), Cell(2)))))

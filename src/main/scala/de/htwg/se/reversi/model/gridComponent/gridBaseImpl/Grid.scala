@@ -44,16 +44,15 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 
   def setTurn(turn:Turn, value:Int):GridInterface = {
-    //copy(cells.replaceCell(turn.fromRow, turn.fromCol, Cell(value)), cells.replaceCell())
-    val grid = this
+    var grid = this
     turn.dir match {
-      case Direction.Up | Direction.Down => for (i <- turn.fromRow to turn.toRow) grid.cells.replaceCell(i, turn.fromCol, Cell(value))
-      case Direction.Left | Direction.Right => for(i <- turn.fromCol to turn.toCol) grid.cells.replaceCell(turn.fromRow, i, Cell(value))
+      case Direction.Up | Direction.Down => for (i <- turn.fromRow to turn.toRow) grid = grid.set(i, turn.fromCol,value)
+      case Direction.Left | Direction.Right => for(i <- turn.fromCol to turn.toCol)grid = grid.set(turn.fromRow, i, value)
       case Direction.UpRight => {
         var i = turn.fromRow
         var j = turn.fromCol
         while (i > turn.toRow && j <= turn.toCol) {
-          grid.cells.replaceCell(i,j,Cell(value))
+          grid = grid.set(i,j,value)
           i = i-1
           j = j+1
         }
@@ -62,7 +61,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         var i = turn.fromRow
         var j = turn.fromCol
         while (i > turn.toRow && j > turn.toCol) {
-          grid.cells.replaceCell(i,j,Cell(value))
+          grid = grid.set(i,j,value)
           i = i-1
           j = j-1
         }
@@ -71,7 +70,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         var i = turn.fromRow
         var j = turn.fromCol
         while (i <= turn.toRow && j <= turn.toCol) {
-          grid.cells.replaceCell(i,j,Cell(value))
+          grid = grid.set(i,j,value)
           i = i+1
           j = j+1
         }
@@ -80,7 +79,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         var i = turn.fromRow
         var j = turn.fromCol
         while (i <= turn.toRow && j > turn.toCol) {
-          grid.cells.replaceCell(i,j,Cell(value))
+          grid = grid.set(i,j,value)
           i = i+1
           j = j-1
         }
@@ -89,37 +88,45 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  def getValidCells(playerId: Int): List[Turn] = {
+  def getValidTurns(playerId: Int): List[Turn] = {
     val grid = this
     var reval = new ListBuffer[Turn]
 
-    for(row <- 0 to size) {
-      for(col <- 0 to size) {
-
-        if(grid.cell(row,col) == playerId) {
+    for(row <- 0 until size) {
+      for(col <- 0 until size) {
+        var cell = grid.cell(row,col)
+        if(cell.value == playerId) {
           lookup(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
           lookdown(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
           lookleft(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
           lookright(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
           lookupright(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
           lookdownright(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
           lookupleft(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
           lookdownleft(row, col, playerId, grid) match {
             case Some(value) => reval += value
+            case None => {}
           }
         }
       }
@@ -133,9 +140,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var up = row-1
 
     if(grid.cell(up,col).value != playerId && grid.cell(up,col).value != 0) {
-      while (up > 0) {
+      while (up > 1) {
         up = up-1
-        if(grid.cell(up,col).value == 0) Some(Turn(row,col,up,col,Direction.Up))
+        if(grid.cell(up,col).value == 0) return Some(Turn(row,col,up,col,Direction.Up))
       }
       None
     }
@@ -148,9 +155,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var down = row + 1
 
     if(grid.cell(down,col).value != playerId && grid.cell(down,col).value != 0) {
-      while (down < grid.size) {
+      while (down < grid.size-1) {
         down = down + 1
-        if(grid.cell(down,col).value == 0) Some(Turn(row,col,down,col,Direction.Down))
+        if(grid.cell(down,col).value == 0) return Some(Turn(row,col,down,col,Direction.Down))
       }
       None
     }
@@ -163,9 +170,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var right = col + 1
 
     if(grid.cell(row,right).value != playerId && grid.cell(row,right).value != 0) {
-      while (right < grid.size) {
+      while (right < grid.size-1) {
         right = right + 1
-        if(grid.cell(row,right).value == 0) Some(Turn(row,col,row,right,Direction.Right))
+        if(grid.cell(row,right).value == 0) return Some(Turn(row,col,row,right,Direction.Right))
       }
       None
     }
@@ -178,9 +185,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var left = col-1
 
     if(grid.cell(row,left).value != playerId && grid.cell(row,left).value != 0) {
-      while (left > 0) {
+      while (left > 1) {
         left = left-1
-        if(grid.cell(row,left).value == 0) Some(Turn(row,col,row,left,Direction.Left))
+        if(grid.cell(row,left).value == 0) return Some(Turn(row,col,row,left,Direction.Left))
       }
       None
     }
@@ -194,10 +201,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var right = col+1
 
     if(grid.cell(up,right).value != playerId && grid.cell(up,right).value != 0) {
-      while (up > 0 && right < grid.size) {
+      while (up > 1 && right < grid.size-1) {
         up = up-1
         right = right+1
-        if(grid.cell(up,right).value == 0) Some(Turn(row,col,up,right,Direction.UpRight))
+        if(grid.cell(up,right).value == 0) return Some(Turn(row,col,up,right,Direction.UpRight))
       }
       None
     }
@@ -211,10 +218,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var left = col-1
 
     if(grid.cell(up,left).value != playerId && grid.cell(up,left).value != 0) {
-      while (up > 0 && left > 0) {
+      while (up > 1 && left > 1) {
         up = up-1
         left = left-1
-        if(grid.cell(up,left).value == 0) Some(Turn(row,col,up,left, Direction.UpLeft))
+        if(grid.cell(up,left).value == 0) return Some(Turn(row,col,up,left, Direction.UpLeft))
       }
       None
     }
@@ -228,10 +235,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var right = col + 1
 
     if(grid.cell(down,right).value != playerId && grid.cell(down,right).value != 0) {
-      while (down < grid.size && right < grid.size) {
+      while (down < grid.size-1 && right < grid.size-1) {
         down = down + 1
         right = right+1
-        if(grid.cell(down,right).value == 0) Some(Turn(row,col,down,right, Direction.DownRight))
+        if(grid.cell(down,right).value == 0) return Some(Turn(row,col,down,right, Direction.DownRight))
       }
       None
     }
@@ -245,10 +252,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var left = col-1
 
     if(grid.cell(down,left).value != playerId && grid.cell(down,left).value != 0) {
-      while (down < grid.size && left > 0) {
+      while (down < grid.size-1 && left > 1) {
         down = down + 1
         left = left-1
-        if(grid.cell(down,left).value == 0) Some(Turn(row,col,down,left,Direction.DownLeft))
+        if(grid.cell(down,left).value == 0) return Some(Turn(row,col,down,left,Direction.DownLeft))
       }
       None
     }

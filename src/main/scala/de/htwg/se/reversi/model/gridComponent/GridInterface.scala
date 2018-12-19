@@ -10,6 +10,8 @@ trait GridInterface {
   def reset(row:Int, col:Int): GridInterface
   def createNewGrid: GridInterface
   def size: Int
+  def getValidTurns(playerId:Int):List[Turn]
+  def evaluateGame():Int
 
   //def isfinished:Boolean
 

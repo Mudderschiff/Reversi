@@ -24,6 +24,24 @@ class CellSpec extends WordSpec with Matchers {
         nonEmptyCell.isSet should be(true)
       }
     }
+    "toString 0" should {
+      val stringCell0 = Cell(0)
+      "return toString" in {
+        stringCell0.toString should be(" ")
+      }
+    }
+    "toString 1" should {
+      val stringCell1 = Cell(1)
+      "return toString" in {
+        stringCell1.toString should be("W")
+      }
+    }
+    "toString 2" should {
+      val stringCell2 = Cell(2)
+      "return toString" in {
+        stringCell2.toString should be("B")
+      }
+    }
   }
 
 }

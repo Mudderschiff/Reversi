@@ -11,12 +11,23 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def this(size:Int) = this(new Matrix[Cell](size, Cell(0)))
   val size:Int = cells.size
   def cell(row:Int, col:Int):Cell = cells.cell(row, col)
-  def row(row:Int):House = ??? //House(cells.rows(row))
+  def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
-  def reset(row: Int, col: Int): Grid = ???
+  def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
+  val blocknum: Int = sqrt(size).toInt
+
+  override def toString: String = {
+    val lineseparator = ("+-" + ("--" * (size - 1))) + "+\n"
+    val line = ("|" + (("x" + "|") * size)) + "\n"
+    var box = "\n" + lineseparator + ((line + lineseparator) * size)
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } box = box.replaceFirst("x", cell(row, col).toString)
+    box
+  }
 
   override def createNewGrid: GridInterface = ???
-  override def toString : String = ???
 
   def set(turn:Turn, value:Int):Grid = {
     //copy(cells.replaceCell(turn.fromRow, turn.fromCol, Cell(value)), cells.replaceCell())
@@ -64,9 +75,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  def getValidTurns(playerId: Int): List[Turn] = {
+  def getValidCells(playerId: Int): ListBuffer[(Int, Int)] = {
     val grid = this
     var reval = new ListBuffer[Turn]
+
 
     for(row <- 0 to size) {
       for(col <- 0 to size) {

@@ -3,6 +3,7 @@ package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Cell
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 
+import scala.collection.mutable.ListBuffer
 import scala.math.sqrt
 
 case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
@@ -16,8 +17,184 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   override def createNewGrid: GridInterface = ???
   override def toString : String = ???
+
+
+  def getValidCells(playerId: Int): ListBuffer[(Int, Int)] = {
+    val grid = this
+    var reval = new ListBuffer[(Int, Int)]
+
+    for(row <- 0 to size) {
+      for(col <- 0 to size) {
+
+        if(grid.cell(row,col) == playerId) {
+          lookup(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookdown(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookleft(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookright(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookupright(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookdownright(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookupleft(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookdownleft(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+        }
+      }
+    }
+    reval
+  }
+
+  private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == 0 || row == 1) None
+
+    var up = row-1
+
+    if(grid.cell(up,col).value != playerId && grid.cell(up,col).value != 0) {
+      while (up > 0) {
+        up = up-1
+        if(grid.cell(up,col).value == 0) Some((up,col))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookdown(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == grid.size || row == grid.size - 1) None
+
+    var down = row + 1
+
+    if(grid.cell(down,col).value != playerId && grid.cell(down,col).value != 0) {
+      while (down < grid.size) {
+        down = down + 1
+        if(grid.cell(down,col).value == 0) Some((down,col))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookright(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(col == grid.size || col == grid.size - 1) None
+
+    var right = col + 1
+
+    if(grid.cell(row,right).value != playerId && grid.cell(row,right).value != 0) {
+      while (right < grid.size) {
+        right = right + 1
+        if(grid.cell(row,right).value == 0) Some((row,right))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(col == 0 || col == 1) None
+
+    var left = col-1
+
+    if(grid.cell(row,left).value != playerId && grid.cell(row,left).value != 0) {
+      while (left > 0) {
+        left = left-1
+        if(grid.cell(row,left).value == 0) Some((row,left))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookupright(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == 0 || row == 1 || col == grid.size || col == grid.size - 1) None
+
+    var up = row-1
+    var right = col+1
+
+    if(grid.cell(up,right).value != playerId && grid.cell(up,right).value != 0) {
+      while (up > 0 && right < grid.size) {
+        up = up-1
+        right = right+1
+        if(grid.cell(up,right).value == 0) Some((up,right))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookupleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == 0 || row == 1 || col == 0 || col == 1) None
+
+    var up = row-1
+    var left = col-1
+
+    if(grid.cell(up,left).value != playerId && grid.cell(up,left).value != 0) {
+      while (up > 0 && left > 0) {
+        up = up-1
+        left = left-1
+        if(grid.cell(up,left).value == 0) Some((up,left))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookdownright(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == grid.size || row == grid.size - 1) None
+
+    var down = row + 1
+    var right = col + 1
+
+    if(grid.cell(down,right).value != playerId && grid.cell(down,right).value != 0) {
+      while (down < grid.size && right < grid.size) {
+        down = down + 1
+        right = right+1
+        if(grid.cell(down,right).value == 0) Some((down,right))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookdownleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == grid.size || row == grid.size - 1) None
+
+    var down = row + 1
+    var left = col-1
+
+    if(grid.cell(down,left).value != playerId && grid.cell(down,left).value != 0) {
+      while (down < grid.size && left > 0) {
+        down = down + 1
+        left = left-1
+        if(grid.cell(down,left).value == 0) Some((down,left))
+      }
+      None
+    }
+    None
+  }
 }
 
 case class House(private val cells:Vector[Cell]) {
   def cell(index:Int):Cell = cells(index)
 }
+

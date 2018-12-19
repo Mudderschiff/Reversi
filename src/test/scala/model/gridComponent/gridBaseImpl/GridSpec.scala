@@ -5,6 +5,21 @@ import org.scalatest.{Matchers, WordSpec}
 
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
+    "evaluating Winner" should {
+      val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
+      val white = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(1)), Vector(Cell(0), Cell(2)))))
+      val draw = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(1), Cell(1)))))
+      "Black schould win" in {
+        black.evaluateGame() should be(2)
+      }
+      "White should win" in {
+        white.evaluateGame() should be(1)
+      }
+      "Draw should occur" in {
+        draw.evaluateGame() should be(0)
+      }
+    }
+
     "to be constructed" should {
       "be created with the length of its edges as size. Practically relevant are size 1, 3, and 8" in {
         val tinygrid = new Grid(1)

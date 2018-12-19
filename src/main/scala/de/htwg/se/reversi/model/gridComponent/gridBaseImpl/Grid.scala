@@ -3,8 +3,6 @@ package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Cell
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 
-import scala.math.sqrt
-
 case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def this(size:Int) = this(new Matrix[Cell](size, Cell(0)))
   val size:Int = cells.size
@@ -13,7 +11,22 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
-  val blocknum: Int = sqrt(size).toInt
+
+  def evaluateGame():Int = {
+    var black = 0
+    var white = 0
+      this.cells.rows.foreach(coll => coll.foreach(cell => {
+        if (cell.value.equals(2)) {
+          black = black + 1
+        }
+      }))
+      this.cells.rows.foreach(coll => coll.foreach(cell => {
+        if (cell.value.equals(1)) {
+          white = white + 1
+        }
+      }))
+    if (white > black) return 1 else if (black > white) return 2 else return 0
+  }
 
   override def toString: String = {
     val lineseparator = ("+-" + ("--" * (size - 1))) + "+\n"
@@ -27,7 +40,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   override def createNewGrid: GridInterface = ???
-
+/*
   def getValidCells(playerId: Int): ListBuffer[(Int, Int)] = {
     val grid = this
     var reval = new ListBuffer[(Int, Int)]
@@ -200,7 +213,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       None
     }
     None
-  }
+  }*/
 }
 
 case class House(private val cells:Vector[Cell]) {

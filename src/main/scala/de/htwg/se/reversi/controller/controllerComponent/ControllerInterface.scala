@@ -14,8 +14,7 @@ trait ControllerInterface {
   /*def set(row:Int, col:Int, value:Int):Unit
   def isSet(row:Int, col:Int):Boolean*/
   def gridToString:String
-  def getValidCells(playerId:Int):ListBuffer[(Int, Int)]
-  def checkSet(row:Int, col:Int):Boolean
+  def getValidTurns(playerId:Int):ListBuffer[(Int, Int)]
   def gameStatus:GameStatus
   def evaluateGame(grid:Grid):Int //PlayerId
 

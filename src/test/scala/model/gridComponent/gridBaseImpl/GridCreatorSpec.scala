@@ -9,9 +9,9 @@ class GridCreatorSpec extends WordSpec with Matchers {
     val creator = GridCreator()
     "initialized with an even number" should {
       "be filled with zeros but in the middle of the field contain diagonal two 1 and two 2" in {
-        val normalGrid = creator.createGrid(8).right.getOrElse(new Grid(8))
-        val smallGrid = creator.createGrid(4).right.getOrElse(new Grid(4))
-        val tinyGrid = creator.createGrid(2).right.getOrElse(new Grid(2))
+        val normalGrid = creator.createGrid(8)
+        val smallGrid = creator.createGrid(4)
+        val tinyGrid = creator.createGrid(2)
 
         tinyGrid.cell(0,0) should be(Cell(1))
         tinyGrid.cell(0,1) should be(Cell(2))
@@ -40,10 +40,10 @@ class GridCreatorSpec extends WordSpec with Matchers {
 
     "initialized with an odd number" should {
 
-      "return an error String" in {
+      "return an empty Grid" in {
 
-        val oddGrid = creator.createGrid(7).left.getOrElse(GameStatus.IDLE)
-        oddGrid should be(GameStatus.OddNumber)
+        val oddGrid = creator.createGrid(7)
+        oddGrid should be(new Grid(7))
 
       }
 

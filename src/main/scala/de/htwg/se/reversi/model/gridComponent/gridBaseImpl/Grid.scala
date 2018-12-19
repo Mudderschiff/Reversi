@@ -1,7 +1,5 @@
 package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
-import com.sun.xml.internal.ws.handler.HandlerProcessor.Direction
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Cell
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 
 import scala.collection.mutable.ListBuffer
@@ -11,6 +9,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def this(size:Int) = this(new Matrix[Cell](size, Cell(0)))
   val size:Int = cells.size
   def cell(row:Int, col:Int):Cell = cells.cell(row, col)
+  def set(row:Int, col:Int, value:Int):Grid = copy(cells.replaceCell(row, col, Cell(value)))
   def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
@@ -27,14 +26,14 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     box
   }
 
-  override def createNewGrid: GridInterface = ???
+  override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 
-  def set(turn:Turn, value:Int):Grid = {
+  def setTurn(turn:Turn, value:Int):GridInterface = {
     //copy(cells.replaceCell(turn.fromRow, turn.fromCol, Cell(value)), cells.replaceCell())
     val grid = this
     turn.dir match {
-      case Direction.Up || Direction.Down => for (i <- turn.fromRow to turn.toRow) grid.cells.replaceCell(i, turn.fromCol, Cell(value))
-      case Direction.Left || Direction.Right => for(i <- turn.fromCol to turn.toCol) grid.cells.replaceCell(turn.fromRow, i, Cell(value))
+      case Direction.Up | Direction.Down => for (i <- turn.fromRow to turn.toRow) grid.cells.replaceCell(i, turn.fromCol, Cell(value))
+      case Direction.Left | Direction.Right => for(i <- turn.fromCol to turn.toCol) grid.cells.replaceCell(turn.fromRow, i, Cell(value))
       case Direction.UpRight => {
         var i = turn.fromRow
         var j = turn.fromCol
@@ -75,10 +74,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  def getValidCells(playerId: Int): ListBuffer[(Int, Int)] = {
+  def getValidCells(playerId: Int): List[Turn] = {
     val grid = this
     var reval = new ListBuffer[Turn]
-
 
     for(row <- 0 to size) {
       for(col <- 0 to size) {
@@ -86,35 +84,27 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if(grid.cell(row,col) == playerId) {
           lookup(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
           lookdown(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
           lookleft(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
           lookright(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
           lookupright(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
           lookdownright(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
           lookupleft(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
           lookdownleft(row, col, playerId, grid) match {
             case Some(value) => reval += value
-            case None => _
           }
         }
       }

@@ -14,18 +14,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
   val blocknum: Int = sqrt(size).toInt
-  override def createNewGrid: GridInterface = ???
 
-  /*override def toString: String = {
-    val lineseparator = ("+-" + ("--" * size)) * size + "+\n"
-    val line = ("| " + ("x " * size)) * size + "|\n"
-    var box = "\n" + (lineseparator + (line * size)) * size + lineseparator
-    /*for {
-      row <- 0 until size
-      col <- 0 until size
-    } box = box.replaceFirst("x ", cell(row, col).toString)*/
-    box
-  }*/
   override def toString: String = {
     val lineseparator = ("+-" + ("--" * (size - 1))) + "+\n"
     val line = ("|" + (("x" + "|") * size)) + "\n"
@@ -36,141 +25,184 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     } box = box.replaceFirst("x", cell(row, col).toString)
     box
   }
+
+  override def createNewGrid: GridInterface = ???
+
+  def getValidCells(playerId: Int): ListBuffer[(Int, Int)] = {
+    val grid = this
+    var reval = new ListBuffer[(Int, Int)]
+
+    for(row <- 0 to size) {
+      for(col <- 0 to size) {
+
+        if(grid.cell(row,col) == playerId) {
+          lookup(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookdown(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookleft(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookright(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookupright(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookdownright(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookupleft(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+          lookdownleft(row, col, playerId, grid) match {
+            case Some(value) => reval += value
+            case None => _
+          }
+        }
+      }
+    }
+    reval
+  }
+
+  private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == 0 || row == 1) None
+
+    var up = row-1
+
+    if(grid.cell(up,col).value != playerId && grid.cell(up,col).value != 0) {
+      while (up > 0) {
+        up = up-1
+        if(grid.cell(up,col).value == 0) Some((up,col))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookdown(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == grid.size || row == grid.size - 1) None
+
+    var down = row + 1
+
+    if(grid.cell(down,col).value != playerId && grid.cell(down,col).value != 0) {
+      while (down < grid.size) {
+        down = down + 1
+        if(grid.cell(down,col).value == 0) Some((down,col))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookright(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(col == grid.size || col == grid.size - 1) None
+
+    var right = col + 1
+
+    if(grid.cell(row,right).value != playerId && grid.cell(row,right).value != 0) {
+      while (right < grid.size) {
+        right = right + 1
+        if(grid.cell(row,right).value == 0) Some((row,right))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(col == 0 || col == 1) None
+
+    var left = col-1
+
+    if(grid.cell(row,left).value != playerId && grid.cell(row,left).value != 0) {
+      while (left > 0) {
+        left = left-1
+        if(grid.cell(row,left).value == 0) Some((row,left))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookupright(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == 0 || row == 1 || col == grid.size || col == grid.size - 1) None
+
+    var up = row-1
+    var right = col+1
+
+    if(grid.cell(up,right).value != playerId && grid.cell(up,right).value != 0) {
+      while (up > 0 && right < grid.size) {
+        up = up-1
+        right = right+1
+        if(grid.cell(up,right).value == 0) Some((up,right))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookupleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == 0 || row == 1 || col == 0 || col == 1) None
+
+    var up = row-1
+    var left = col-1
+
+    if(grid.cell(up,left).value != playerId && grid.cell(up,left).value != 0) {
+      while (up > 0 && left > 0) {
+        up = up-1
+        left = left-1
+        if(grid.cell(up,left).value == 0) Some((up,left))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookdownright(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == grid.size || row == grid.size - 1) None
+
+    var down = row + 1
+    var right = col + 1
+
+    if(grid.cell(down,right).value != playerId && grid.cell(down,right).value != 0) {
+      while (down < grid.size && right < grid.size) {
+        down = down + 1
+        right = right+1
+        if(grid.cell(down,right).value == 0) Some((down,right))
+      }
+      None
+    }
+    None
+  }
+
+  private def lookdownleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[(Int, Int)] = {
+    if(row == grid.size || row == grid.size - 1) None
+
+    var down = row + 1
+    var left = col-1
+
+    if(grid.cell(down,left).value != playerId && grid.cell(down,left).value != 0) {
+      while (down < grid.size && left > 0) {
+        down = down + 1
+        left = left-1
+        if(grid.cell(down,left).value == 0) Some((down,left))
+      }
+      None
+    }
+    None
+  }
 }
 
 case class House(private val cells:Vector[Cell]) {
   def cell(index:Int):Cell = cells(index)
 }
-
-/*
-package de.htwg.se.sudoku.model.gridComponent.gridBaseImpl
-
-import de.htwg.se.sudoku.model.gridComponent.{CellInterface, GridInterface}
-import play.api.libs.json.{JsNumber, JsValue, Json, Writes}
-
-import scala.math.sqrt
-
-case class Grid(cells: Matrix[Cell]) extends GridInterface{
-  val blocknum: Int = sqrt(size).toInt
-
-  def setGiven(row: Int, col: Int, value: Int): Grid = copy(cells.replaceCell(row, col, Cell(value, given=true)))
-
-  def highlight(index: Int):Grid = {
-    var grid = this
-    for {
-      row <- 0 until size
-      col <- 0 until size
-    } if (available(row, col).contains(index)) grid = grid.setHighlighted(row, col) else grid = grid.unsetHighlighted(row, col)
-    grid
-  }
-
-  def setHighlighted(row: Int, col: Int): Grid = copy(cells.replaceCell(row, col, cell(row, col).copy(isHighlighted=true)))
-
-  def unsetHighlighted(row: Int, col: Int): Grid = copy(cells.replaceCell(row, col, cell(row, col).copy( isHighlighted=false)))
-
-  def isHighlighted(row: Int, col: Int) = cell(row, col).isHighlighted
-
-  def setShowCandidates(row: Int, col: Int): Grid = copy(cells.replaceCell(row, col, cell(row, col).copy( showCandidates=true)))
-
-  def isShowCandidates(row:Int, col:Int) = cell(row, col).showCandidates
-
-  def unsetShowCandidates(row: Int, col: Int): Grid = copy(cells.replaceCell(row, col, cell(row, col).copy( showCandidates=false)))
-
-  def rows(row: Int): House = House(cells.rows(row))
-
-  def allrows: IndexedSeq[House] = (0 until size).map(i => rows(i))
-
-  def cols(col: Int): House = House(cells.rows.map(row => row(col)))
-
-  def allcols: IndexedSeq[House] = (0 until size).map(i => cols(i))
-
-  def blocks(block: Int): House = {
-    House((for {
-      row <- 0 until size
-      col <- 0 until size; if blockAt(row, col) == block
-    } yield cell(row, col)).asInstanceOf[Vector[Cell]])
-  }
-
-  def allblocks: IndexedSeq[House] = (0 until size).map(i => blocks(i))
-
-  def blockAt(row: Int, col: Int): Int = (col / blocknum) + (row / blocknum) * blocknum
-
-  def indexToRowCol(index: Int): (Int, Int) = {
-    val r = index / size
-    val c = index % size
-    (r, c)
-  }
-
-  def valid: Boolean = allrows.forall(house => house.valid) && allcols.forall(house => house.valid) && allblocks.forall(house => house.valid)
-
-  def isSymmetric:Boolean = {
-    val resultList:IndexedSeq[Boolean] = for (row<- 0 until size; col <- 0 until size) yield {
-        if((cell(row, col).isSet == true && symmetricCell(row, col).isSet == true) || (cell(row, col).isSet == false && symmetricCell(row, col).isSet == false)) true else false
-      }
-    resultList.forall(_==true)
-  }
-
-  def symmetricCell(row:Int, col:Int):Cell = cell(size-1 -row, size-1 - col)
-
-  def available(row: Int, col: Int): Set[Int] = if (cell(row, col).isSet) {
-    Set.empty
-  }
-  else {
-    (1 to size).toSet -- rows(row).toIntSet -- cols(col).toIntSet -- blocks(blockAt(row, col)).toIntSet
-  }
-
-  def solved: Boolean = cells.rows.forall(coll => coll.forall(cell => cell.isSet))
-
-  def markFilledCellsAsGiven: Grid = {
-    var tempGrid = this
-    for {
-      row <- 0 until size
-      col <- 0 until size; if cell(row, col).isSet
-    } tempGrid = tempGrid.setGiven(row, col, cell(row, col).value)
-    tempGrid
-  }
-
-  override def toString: String = {
-    val lineseparator = ("+-" + ("--" * blocknum)) * blocknum + "+\n"
-    val line = ("| " + ("x " * blocknum)) * blocknum + "|\n"
-    var box = "\n" + (lineseparator + (line * blocknum)) * blocknum + lineseparator
-    for {
-      row <- 0 until size
-      col <- 0 until size
-    } box = box.replaceFirst("x ", cell(row, col).toString)
-    box
-  }
-
-  implicit val cellWrites = new Writes[CellInterface] {
-    def writes(cell: CellInterface) = Json.obj(
-      "value" -> cell.value,
-      "given" -> cell.given,
-      "showCandidates" -> cell.showCandidates
-    )
-  }
-
-  def toJson:JsValue = {
-    Json.obj(
-      "grid" -> Json.obj(
-        "size" -> JsNumber(size),
-        "cells" -> Json.toJson(
-          for {row <- 0 until size;
-               col <- 0 until size} yield {
-            Json.obj(
-              "row" -> row,
-              "col" -> col,
-              "cell" -> Json.toJson(cell(row, col)))
-          }
-        )
-      )
-    )
-  }
-
-  override def createNewGrid: GridInterface = (new GridCreateRandomStrategy).createNewGrid(size)
-
-  override def solve: (Boolean, GridInterface) = new Solver(this).solve
-}
-
-
-
- */

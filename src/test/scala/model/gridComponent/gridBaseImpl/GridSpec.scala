@@ -40,15 +40,51 @@ class GridSpec extends WordSpec with Matchers {
         grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
       }
     }
-    "function setTurn" should {
-      var freshGrid = new Grid(8).createNewGrid
-      var valid0 = freshGrid.getValidTurns(1)
-      freshGrid = freshGrid.setTurn(valid0.head, 1)
-      var valid1 = freshGrid.getValidTurns(1)
-      freshGrid = freshGrid.setTurn(valid0(1), 1)
-      "set " in {
-        print(valid1)
-        print(freshGrid)
+    "function setTurn set all cell values from startpoint to endpoint to the given value in the given direction" should {
+      var grid = new Grid(4).createNewGrid
+      var turns = grid.getValidTurns(1)
+
+      var gridsettodown = grid.setTurn(turns(0),1)
+      var gridsettoright = grid.setTurn(turns(1),1)
+      var gridsettoup = grid.setTurn(turns(2),1)
+      var gridsettoleft = grid.setTurn(turns(3),1)
+      "set direction down by Player1" in {
+        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(1),Cell(0),Cell(0)))))
+        gridsettodown should be(settodownmanual)
+      }
+      "set direction right by Player1" in {
+        var settorightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        gridsettoright should be (settorightmanual)
+      }
+      "set direction up by Player1" in {
+        var settoupmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(1),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        gridsettoup should be(settoupmanual)
+      }
+      "set direction left by Player1" in {
+        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(1), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        gridsettoleft should be(settodownmanual)
+      }
+      "set direction down left by Player2" in {
+        var settodownleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(2), Cell(1),Cell(0),Cell(0)))))
+        var p2turns = gridsettoleft.getValidTurns(2)
+        gridsettodown.setTurn(p2turns(2),2) should be(settodownleftmanual)
+      }
+      "set direction up right by Player2" in {
+        var settouprightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(2)), Vector(Cell(0), Cell(1), Cell(2), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var p2turns = gridsettoright.getValidTurns(2)
+        gridsettoright.setTurn(p2turns(2),2) should be(settouprightmanual)
+      }
+      "set direction up left by Player2" in {
+        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var settoupleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(2),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var p2turns = gridbefore.getValidTurns(2)
+        gridbefore.setTurn(p2turns(2),2) should be(settoupleftmanual)
+      }
+      "set direction down right by Player2" in {
+        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var settodownrightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(2)))))
+        var p2turns = gridbefore.getValidTurns(2)
+        gridbefore.setTurn(p2turns(2),2) should be(settodownrightmanual)
       }
     }
 

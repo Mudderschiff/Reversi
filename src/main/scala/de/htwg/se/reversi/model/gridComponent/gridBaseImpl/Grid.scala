@@ -76,18 +76,20 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def setTurn(turn:Turn, value:Int):GridInterface = {
     var grid = this
     turn.dir match {
-      case Direction.Up | Direction.Down => for (i <- turn.fromRow to turn.toRow) grid = grid.set(i, turn.fromCol,value)
-      case Direction.Left | Direction.Right => for(i <- turn.fromCol to turn.toCol)grid = grid.set(turn.fromRow, i, value)
+      case Direction.Down => for (i <- turn.fromRow to turn.toRow) grid = grid.set(i, turn.fromCol,value)
+      case Direction.Up => for (i <- turn.toRow to turn.fromRow) grid = grid.set(i, turn.fromCol, value)
+      case Direction.Left => for(i <- turn.toCol to turn.fromCol) grid = grid.set(turn.fromRow, i ,value)
+      case Direction.Right => for(i <- turn.fromCol to turn.toCol)grid = grid.set(turn.fromRow, i, value)
       case Direction.UpRight =>
         var (i, j) = (turn.fromRow, turn.fromCol)
-        while (i > turn.toRow && j <= turn.toCol) {
+        while (i >= turn.toRow && j <= turn.toCol) {
           grid = grid.set(i,j,value)
           i -= 1
           j += 1
         }
       case Direction.UpLeft =>
         var (i, j) = (turn.fromRow, turn.fromCol)
-        while (i > turn.toRow && j > turn.toCol) {
+        while (i >= turn.toRow && j >= turn.toCol) {
           grid = grid.set(i,j,value)
           i -= 1
           j -= 1
@@ -101,7 +103,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         }
       case Direction.DownLeft =>
         var (i, j) = (turn.fromRow, turn.fromCol)
-        while (i <= turn.toRow && j > turn.toCol) {
+        while (i <= turn.toRow && j >= turn.toCol) {
           grid = grid.set(i,j,value)
           i += 1
           j -= 1

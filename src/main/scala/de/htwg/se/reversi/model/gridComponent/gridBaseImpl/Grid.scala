@@ -120,38 +120,14 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     for(row <- 0 until size) {
       for(col <- 0 until size) {
         if(this.cell(row,col).value == playerId) {
-          lookup(row, col, playerId, this) match {
-            case Some(value) => reval += value
-            case None => {}
-          }
-          lookdown(row, col, playerId, this)match {
-            case Some(value) => reval += value
-            case None => {}
-          }
-          lookleft(row, col, playerId, this)match {
-            case Some(value) => reval += value
-            case None => {}
-          }
-          lookright(row, col, playerId, this)match {
-            case Some(value) => reval += value
-            case None => {}
-          }
-          lookupright(row, col, playerId, this)match {
-            case Some(value) => reval += value
-            case None => {}
-          }
-          lookdownright(row, col, playerId, this)match {
-            case Some(value) => reval += value
-            case None => {}
-          }
-          lookupleft(row, col, playerId, this)match {
-            case Some(value) => reval += value
-            case None => {}
-          }
-          lookdownleft(row, col, playerId, this)match {
-            case Some(value) => reval += value
-            case None => {}
-          }
+          lookup(row, col, playerId, this).foreach(i => reval += i)
+          lookdown(row, col, playerId, this).foreach(i => reval += i)
+          lookleft(row, col, playerId, this).foreach(i => reval += i)
+          lookright(row, col, playerId, this).foreach(i => reval += i)
+          lookupright(row, col, playerId, this).foreach(i => reval += i)
+          lookdownright(row, col, playerId, this).foreach(i => reval += i)
+          lookupleft(row, col, playerId, this).foreach(i => reval += i)
+          lookdownleft(row, col, playerId, this).foreach(i => reval += i)
         }
       }
     }

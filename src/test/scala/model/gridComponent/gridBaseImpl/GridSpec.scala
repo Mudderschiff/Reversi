@@ -8,24 +8,38 @@ class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
     "function validTurns" should {
       val freshGrid = new Grid(8).createNewGrid
-      "4" in {
-        freshGrid.getValidTurns(1).size should be(4)
+      var turns = freshGrid.getValidTurns(1)
+      "return for a fresh game these 4 possible turns for player1" in {
+        turns(0) should be(Turn(3, 3, 5, 3, Direction.Down))
+        turns(1) should be(Turn(3, 3, 3, 5, Direction.Right))
+        turns(2) should be(Turn(4, 4, 2, 4, Direction.Up))
+        turns(3) should be(Turn(4, 4, 4, 2, Direction.Left))
       }
-    }
-    "function highlight" should {
-      var freshGrid = new Grid(8).createNewGrid
-      var valid0 = freshGrid.getValidTurns(1)
-      freshGrid = freshGrid.setTurn(valid0.head, 1)
-      var valid1 = freshGrid.getValidTurns(1)
-      //freshGrid = freshGrid.setTurn(valid0(1), 1)
-      //val freshGrid = new Grid(8).createNewGrid
-      //val turns = freshGrid.getValidTurns(1)
-      "highlight" in {
-        print(valid1)
-        print(freshGrid.highlight(1))
+      "and these 4 turns for player2" in {
+        turns = freshGrid.getValidTurns(2)
+        turns(0) should be(Turn(3, 4, 5, 4, Direction.Down))
+        turns(1) should be(Turn(3, 4, 3, 2, Direction.Left))
+        turns(2) should be(Turn(4, 3, 2, 3, Direction.Up))
+        turns(3) should be(Turn(4, 3, 4, 5, Direction.Right))
       }
-    }
+      "and no turns for anything else" in {
+        freshGrid.getValidTurns(0).size should be(0)
+        freshGrid.getValidTurns(3).size should be(0)
+      }
+      "test scenarios for DownLeft, UpRight, UpLeft, DownRight" in {
+        var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
+        grid.getValidTurns(2)(2) should be(Turn(0,2,2,0,Direction.DownLeft))
 
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
+        grid.getValidTurns(2)(2) should be(Turn(2,0,0,2,Direction.UpRight))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
+        grid.getValidTurns(2)(2) should be(Turn(2,2,0,0,Direction.UpLeft))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
+        grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
+      }
+    }
     "function setTurn" should {
       var freshGrid = new Grid(8).createNewGrid
       var valid0 = freshGrid.getValidTurns(1)

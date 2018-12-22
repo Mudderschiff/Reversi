@@ -113,17 +113,45 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def getValidTurns(playerId: Int): List[Turn] = {
     var reval = new ListBuffer[Turn]
 
+    if(playerId != 2 && playerId != 1) {
+      return reval.toList
+    }
+
     for(row <- 0 until size) {
       for(col <- 0 until size) {
         if(this.cell(row,col).value == playerId) {
-          lookup(row, col, playerId, this).foreach(i => reval += i)
-          lookdown(row, col, playerId, this).foreach(i => reval += i)
-          lookleft(row, col, playerId, this).foreach(i => reval += i)
-          lookright(row, col, playerId, this).foreach(i => reval += i)
-          lookupright(row, col, playerId, this).foreach(i => reval += i)
-          lookdownright(row, col, playerId, this).foreach(i => reval += i)
-          lookupleft(row, col, playerId, this).foreach(i => reval += i)
-          lookdownleft(row, col, playerId, this).foreach(i => reval += i)
+          lookup(row, col, playerId, this) match {
+            case Some(value) => reval += value
+            case None => {}
+          }
+          lookdown(row, col, playerId, this)match {
+            case Some(value) => reval += value
+            case None => {}
+          }
+          lookleft(row, col, playerId, this)match {
+            case Some(value) => reval += value
+            case None => {}
+          }
+          lookright(row, col, playerId, this)match {
+            case Some(value) => reval += value
+            case None => {}
+          }
+          lookupright(row, col, playerId, this)match {
+            case Some(value) => reval += value
+            case None => {}
+          }
+          lookdownright(row, col, playerId, this)match {
+            case Some(value) => reval += value
+            case None => {}
+          }
+          lookupleft(row, col, playerId, this)match {
+            case Some(value) => reval += value
+            case None => {}
+          }
+          lookdownleft(row, col, playerId, this)match {
+            case Some(value) => reval += value
+            case None => {}
+          }
         }
       }
     }
@@ -131,12 +159,12 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(row == 0 || row == 1) None
+    if(row == 0 || row == 1) return None
 
     var up = row-1
 
     if(grid.cell(up,col).value != playerId && grid.cell(up,col).value != 0) {
-      while (up > 1) {
+      while (up > 0) {
         up -= 1
         if(grid.cell(up,col).value == 0) return Some(Turn(row,col,up,col,Direction.Up))
       }
@@ -146,7 +174,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookdown(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(row == grid.size || row == grid.size - 1) None
+    if(row == grid.size || row == grid.size - 1) return None
 
     var down = row + 1
 
@@ -161,7 +189,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookright(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(col == grid.size || col == grid.size - 1) None
+    if(col == grid.size || col == grid.size - 1) return None
 
     var right = col + 1
 
@@ -176,12 +204,12 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(col == 0 || col == 1) None
+    if(col == 0 || col == 1) return None
 
     var left = col - 1
 
     if(grid.cell(row,left).value != playerId && grid.cell(row,left).value != 0) {
-      while (left > 1) {
+      while (left > 0) {
         left -= 1
         if(grid.cell(row,left).value == 0) return Some(Turn(row,col,row,left,Direction.Left))
       }
@@ -191,13 +219,13 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookupright(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(row == 0 || row == 1 || col == grid.size || col == grid.size - 1) None
+    if(row == 0 || row == 1 || col == grid.size || col == grid.size - 1) return None
 
     var up = row - 1
     var right = col + 1
 
     if(grid.cell(up,right).value != playerId && grid.cell(up,right).value != 0) {
-      while (up > 1 && right < grid.size - 1) {
+      while (up > 0 && right < grid.size - 1) {
         up -= 1
         right += 1
         if(grid.cell(up,right).value == 0) return Some(Turn(row,col,up,right,Direction.UpRight))
@@ -208,13 +236,13 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookupleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(row == 0 || row == 1 || col == 0 || col == 1) None
+    if(row == 0 || row == 1 || col == 0 || col == 1) return None
 
     var up = row - 1
     var left = col - 1
 
     if(grid.cell(up,left).value != playerId && grid.cell(up,left).value != 0) {
-      while (up > 1 && left > 1) {
+      while (up > 0 && left > 0) {
         up -= 1
         left -= 1
         if(grid.cell(up,left).value == 0) return Some(Turn(row,col,up,left, Direction.UpLeft))
@@ -225,7 +253,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookdownright(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(row == grid.size || row == grid.size - 1) None
+    if(row == grid.size || row == grid.size - 1 || col == grid.size || col == grid.size - 1) return None
 
     var down = row + 1
     var right = col + 1
@@ -242,13 +270,13 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   private def lookdownleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if(row == grid.size || row == grid.size - 1) None
+    if(row == grid.size || row == grid.size - 1 || col == 0 || col == 1) return None
 
     var down = row + 1
     var left = col - 1
 
     if(grid.cell(down,left).value != playerId && grid.cell(down,left).value != 0) {
-      while (down < grid.size - 1 && left > 1) {
+      while (down < grid.size - 1 && left > 0) {
         down += 1
         left -= 1
         if(grid.cell(down,left).value == 0) return Some(Turn(row,col,down,left,Direction.DownLeft))

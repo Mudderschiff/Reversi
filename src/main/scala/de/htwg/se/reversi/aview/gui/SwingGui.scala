@@ -1,3 +1,3 @@
 package de.htwg.se.reversi.aview.gui
 
-import scala.swing._
+//import scala.swing._

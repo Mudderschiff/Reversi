@@ -16,11 +16,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def highlight(playerId: Int): GridInterface = {
     var grid = this
-    for(row <- 0 until size) {
-      for (col <- 0 until size) {
-          grid = grid.set(row, col, grid.cell(row, col).value)
-      }
-    }
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } grid = grid.set(row, col, grid.cell(row, col).value)
     getValidTurns(playerId: Int).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
@@ -121,9 +120,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       return reval.toList
     }
 
-    for(row <- 0 until size) {
-      for(col <- 0 until size) {
-        if(this.cell(row,col).value == playerId) {
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } if(this.cell(row,col).value == playerId) {
           lookup(row, col, playerId, this).foreach(i => reval += i)
           lookdown(row, col, playerId, this).foreach(i => reval += i)
           lookleft(row, col, playerId, this).foreach(i => reval += i)
@@ -132,8 +132,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
           lookdownright(row, col, playerId, this).foreach(i => reval += i)
           lookupleft(row, col, playerId, this).foreach(i => reval += i)
           lookdownleft(row, col, playerId, this).foreach(i => reval += i)
-        }
-      }
     }
     reval.toList
   }

@@ -14,14 +14,18 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
 
-  //TODO: Copy old Grid or return Grid
   def highlight(playerId: Int): GridInterface = {
-    var grid = new Grid(this.size).createNewGrid
-    getValidTurns(playerId: Int).foreach(turn => grid = grid.sethighlight(turn))
+    var grid = this
+    for(row <- 0 until size) {
+      for (col <- 0 until size) {
+          grid = grid.set(row, col, grid.cell(row, col).value)
+      }
+    }
+    getValidTurns(playerId: Int).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
 
-  def sethighlight(turn:Turn):GridInterface = {
+  def setHighlight(turn:Turn):Grid = {
     var grid = this
     turn.dir match {
       case Direction.Up => grid = grid.set(turn.toRow, turn.fromCol,3)
@@ -37,13 +41,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-/*
   def indexToRowCol(index: Int): (Int, Int) = {
     val r = index / size
     val c = index % size
     (r, c)
   }
-*/
 
   def evaluateGame():Int = {
     var black, white = 0

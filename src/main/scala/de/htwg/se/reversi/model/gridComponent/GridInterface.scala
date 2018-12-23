@@ -11,12 +11,7 @@ trait GridInterface {
   def size: Int
   def getValidTurns(playerId:Int):List[Turn]
   def evaluateGame():Int
-  def sethighlight(turn:Turn):GridInterface
   def highlight(playerId: Int): GridInterface
-  //def highlight(playerId: Int): GridInterface
-
-  //def isfinished:Boolean
-
 }
 
 trait CellInterface {

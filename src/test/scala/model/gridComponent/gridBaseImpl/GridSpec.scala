@@ -6,18 +6,28 @@ import org.scalatest.{Matchers, WordSpec}
 
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
+    "function highlight" should {
+      val freshGrid = new Grid(8).createNewGrid
+      var turns = freshGrid.getValidTurns(1)
+      val down = freshGrid.setTurn(turns.head, 1)
+      var turns2 = freshGrid.getValidTurns(1)
+      "return for a fresh game these 4 possible turns for player1" in {
+        print(down.highlight(1))
+        print(turns2)
+      }
+    }
     "function validTurns" should {
       val freshGrid = new Grid(8).createNewGrid
       var turns = freshGrid.getValidTurns(1)
       "return for a fresh game these 4 possible turns for player1" in {
-        turns(0) should be(Turn(3, 3, 5, 3, Direction.Down))
+        turns.head should be(Turn(3, 3, 5, 3, Direction.Down))
         turns(1) should be(Turn(3, 3, 3, 5, Direction.Right))
         turns(2) should be(Turn(4, 4, 2, 4, Direction.Up))
         turns(3) should be(Turn(4, 4, 4, 2, Direction.Left))
       }
       "and these 4 turns for player2" in {
         turns = freshGrid.getValidTurns(2)
-        turns(0) should be(Turn(3, 4, 5, 4, Direction.Down))
+        turns.head should be(Turn(3, 4, 5, 4, Direction.Down))
         turns(1) should be(Turn(3, 4, 3, 2, Direction.Left))
         turns(2) should be(Turn(4, 3, 2, 3, Direction.Up))
         turns(3) should be(Turn(4, 3, 4, 5, Direction.Right))
@@ -44,7 +54,7 @@ class GridSpec extends WordSpec with Matchers {
       var grid = new Grid(4).createNewGrid
       var turns = grid.getValidTurns(1)
 
-      var gridsettodown = grid.setTurn(turns(0),1)
+      var gridsettodown = grid.setTurn(turns.head,1)
       var gridsettoright = grid.setTurn(turns(1),1)
       var gridsettoup = grid.setTurn(turns(2),1)
       var gridsettoleft = grid.setTurn(turns(3),1)

@@ -21,6 +21,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
+  override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
+
+  override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
+
   def sethighlight(turn:Turn):GridInterface = {
     var grid = this
     turn.dir match {

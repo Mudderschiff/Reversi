@@ -6,17 +6,6 @@ import org.scalatest.{Matchers, WordSpec}
 
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
-    "function highlight" should {
-      val freshGrid = new Grid(8).createNewGrid
-      var turns = freshGrid.getValidTurns(1)
-      val down = freshGrid.setTurn(turns.head, 1)
-      var turns2 = freshGrid.getValidTurns(1)
-      "return for a fresh game these 4 possible turns for player1" in {
-        //val index = down.setIndex(1,2,5)
-        val index = down.setTurnIndex(1,21)
-        print(index)
-      }
-    }
     "function validTurns" should {
       val freshGrid = new Grid(8).createNewGrid
       var turns = freshGrid.getValidTurns(1)

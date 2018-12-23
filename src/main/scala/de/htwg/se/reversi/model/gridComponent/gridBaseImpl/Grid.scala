@@ -24,7 +24,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  private def setHighlight(turn:Turn):Grid = {
+  override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
+
+  override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
+
+  def setHighlight(turn:Turn):Grid = {
     var grid = this
     turn.dir match {
       case Direction.Up => grid = grid.set(turn.toRow, turn.fromCol,3)
@@ -48,9 +52,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  //getTurnvalue = 0 oder keine steine = spiel ende
-  // gewinner Steine ++ leere Felder
-  //
   def evaluateGame():Int = {
     var black, white = 0
       this.cells.rows.foreach(coll => coll.foreach(cell => {

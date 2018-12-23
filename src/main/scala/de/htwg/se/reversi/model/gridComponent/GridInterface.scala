@@ -13,7 +13,11 @@ trait GridInterface {
   def size: Int
   def getValidTurns(playerId:Int):List[Turn]
   def evaluateGame():Int
+  def sethighlight(turn:Turn):GridInterface
   def highlight(playerId: Int): GridInterface
+  def getNextTurnR(validTurns:List[Turn]):Turn
+  def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn
+  //def isfinished:Boolean
 
 }
 

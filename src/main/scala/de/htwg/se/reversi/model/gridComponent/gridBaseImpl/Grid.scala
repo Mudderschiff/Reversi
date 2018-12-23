@@ -14,7 +14,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
 
-  def highlight(playerId: Int): GridInterface = {
+  def highlight(playerId: Int): Grid = {
     var grid = this
     for {
       row <- 0 until size
@@ -40,10 +40,12 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  def indexToRowCol(index: Int): (Int, Int) = {
-    val r = index / size
-    val c = index % size
-    (r, c)
+  def setTurnIndex(playerId: Int, index: Int): Grid = setTurnRC(playerId: Int, index / size, index % size)
+
+  def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
+    var grid = this
+    getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
+    grid
   }
 
   def evaluateGame():Int = {
@@ -72,9 +74,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     box
   }
 
-  override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
+  override def createNewGrid: Grid = (new GridCreator).createGrid(size)
 
-  def setTurn(turn:Turn, value:Int):GridInterface = {
+  def setTurn(turn:Turn, value:Int):Grid = {
     var grid = this
     turn.dir match {
       case Direction.Down => for (i <- turn.fromRow to turn.toRow) grid = grid.set(i, turn.fromCol,value)

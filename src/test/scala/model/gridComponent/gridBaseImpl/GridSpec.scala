@@ -12,8 +12,9 @@ class GridSpec extends WordSpec with Matchers {
       val down = freshGrid.setTurn(turns.head, 1)
       var turns2 = freshGrid.getValidTurns(1)
       "return for a fresh game these 4 possible turns for player1" in {
-        print(down.highlight(1))
-        print(turns2)
+        //val index = down.setIndex(1,2,5)
+        val index = down.setTurnIndex(1,21)
+        print(index)
       }
     }
     "function validTurns" should {

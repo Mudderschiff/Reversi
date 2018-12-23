@@ -14,10 +14,13 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
 
-  //TODO: Copy old Grid or return Grid
-  def highlight(playerId: Int): GridInterface = {
-    var grid = new Grid(this.size).createNewGrid
-    getValidTurns(playerId: Int).foreach(turn => grid = grid.sethighlight(turn))
+  def highlight(playerId: Int): Grid = {
+    var grid = this
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } grid = grid.set(row, col, grid.cell(row, col).value)
+    getValidTurns(playerId: Int).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
 
@@ -41,13 +44,13 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-/*
-  def indexToRowCol(index: Int): (Int, Int) = {
-    val r = index / size
-    val c = index % size
-    (r, c)
+  def setTurnIndex(playerId: Int, index: Int): Grid = setTurnRC(playerId: Int, index / size, index % size)
+
+  def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
+    var grid = this
+    getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
+    grid
   }
-*/
 
   def evaluateGame():Int = {
     var black, white = 0
@@ -123,9 +126,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       return reval.toList
     }
 
-    for(row <- 0 until size) {
-      for(col <- 0 until size) {
-        if(this.cell(row,col).value == playerId) {
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } if(this.cell(row,col).value == playerId) {
           lookup(row, col, playerId, this).foreach(i => reval += i)
           lookdown(row, col, playerId, this).foreach(i => reval += i)
           lookleft(row, col, playerId, this).foreach(i => reval += i)
@@ -134,8 +138,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
           lookdownright(row, col, playerId, this).foreach(i => reval += i)
           lookupleft(row, col, playerId, this).foreach(i => reval += i)
           lookdownleft(row, col, playerId, this).foreach(i => reval += i)
-        }
-      }
     }
     reval.toList
   }

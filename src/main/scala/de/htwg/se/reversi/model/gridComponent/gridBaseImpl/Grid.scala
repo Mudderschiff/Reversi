@@ -16,11 +16,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def highlight(playerId: Int): Grid = {
     var grid = this
-    for(row <- 0 until size)
-      for(col <- 0 until size) {
-        if (grid.cell(row, col).value == 3) grid = grid.reset(row,col)
-        grid = grid.set(row, col, grid.cell(row, col).value)
-      }
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } if (grid.cell(row, col).value == 3) grid = grid.reset(row,col) else grid = grid.set(row, col, grid.cell(row, col).value)
     getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }

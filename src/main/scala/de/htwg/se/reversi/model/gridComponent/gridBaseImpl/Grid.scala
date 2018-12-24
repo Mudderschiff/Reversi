@@ -49,7 +49,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    grid
+    if(playerId == 1) grid.highlight(2) else grid.highlight(2)
   }
 
   def evaluateGame():Int = {
@@ -63,9 +63,16 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   override def toString: String = {
-    val lineseparator = ("+-" + ("--" * (size - 1))) + "+\n"
+    val row, col = StringBuilder.newBuilder
+    row.append("\n")
+    for {i <- 0 until size} if (i == 0) row.append("  " + i.toString) else row.append(" " + i.toString)
+    row.append("\n")
+
+    val lineseparator = (" +-" + ("--" * (size - 1))) + "+\n"
     val line = ("|" + (("x" + "|") * size)) + "\n"
-    var box = "\n" + lineseparator + ((line + lineseparator) * size)
+    for {i <- 0 until size } col.append(i.toString + line + lineseparator)
+
+    var box = row + lineseparator  + col
     for {
       row <- 0 until size
       col <- 0 until size

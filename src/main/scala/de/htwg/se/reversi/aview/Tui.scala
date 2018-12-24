@@ -17,6 +17,7 @@ class Tui {
     case "n"=> new Grid(8).createNewGrid
     case "h1" => grid.highlight(1)
     case "h2" => grid.highlight(2)
+    //case "i1" => input.toList.filter()
     //case ""index :: value :: Nil => grid.setTurnIndex(value, index)
     /*case "rc" => {
       val args = input.split(" ").splitAt(2).

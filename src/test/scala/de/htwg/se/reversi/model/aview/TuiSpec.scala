@@ -15,6 +15,7 @@ class TuiSpec extends WordSpec with Matchers {
       val n = tui.processInputLine("n", new Grid(4))
       val h1 = tui.processInputLine("h1",grid)
       val h2 = tui.processInputLine("h2",grid)
+      val moves1 = tui.processInputLine("m1", grid)
       val set = tui.processInputLine("rc 123",grid)
       set should be()
       //controller.grid should be(new Grid(9))

@@ -142,10 +142,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
     var up = row-1
 
-    if(grid.cell(up,col).value != playerId && grid.cell(up,col).value != 0) {
+    if(grid.cell(up,col).value != playerId && grid.cell(up,col).value != 0 && grid.cell(up,col).value != 3) {
       while (up > 0) {
         up -= 1
-        if(grid.cell(up,col).value == 0) return Some(Turn(row,col,up,col,Direction.Up))
+        if(grid.cell(up,col).value == 0 || grid.cell(up,col).value == 3) return Some(Turn(row,col,up,col,Direction.Up))
       }
       None
     }
@@ -157,10 +157,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
     var down = row + 1
 
-    if(grid.cell(down,col).value != playerId && grid.cell(down,col).value != 0) {
+    if(grid.cell(down,col).value != playerId && grid.cell(down,col).value != 0 && grid.cell(down,col).value != 3) {
       while (down < grid.size - 1) {
         down += 1
-        if(grid.cell(down,col).value == 0) return Some(Turn(row,col,down,col,Direction.Down))
+        if(grid.cell(down,col).value == 0 || grid.cell(down,col).value == 3) return Some(Turn(row,col,down,col,Direction.Down))
       }
       None
     }
@@ -172,10 +172,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
     var right = col + 1
 
-    if(grid.cell(row,right).value != playerId && grid.cell(row,right).value != 0) {
+    if(grid.cell(row,right).value != playerId && grid.cell(row,right).value != 0 && grid.cell(row,right).value != 3) {
       while (right < grid.size - 1) {
         right += 1
-        if(grid.cell(row,right).value == 0) return Some(Turn(row,col,row,right,Direction.Right))
+        if(grid.cell(row,right).value == 0 || grid.cell(row,right).value == 3) return Some(Turn(row,col,row,right,Direction.Right))
       }
       None
     }
@@ -187,10 +187,10 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
     var left = col - 1
 
-    if(grid.cell(row,left).value != playerId && grid.cell(row,left).value != 0) {
+    if(grid.cell(row,left).value != playerId && grid.cell(row,left).value != 0 && grid.cell(row,left).value != 3) {
       while (left > 0) {
         left -= 1
-        if(grid.cell(row,left).value == 0) return Some(Turn(row,col,row,left,Direction.Left))
+        if(grid.cell(row,left).value == 0 || grid.cell(row,left).value == 3) return Some(Turn(row,col,row,left,Direction.Left))
       }
       None
     }
@@ -203,11 +203,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var up = row - 1
     var right = col + 1
 
-    if(grid.cell(up,right).value != playerId && grid.cell(up,right).value != 0) {
+    if(grid.cell(up,right).value != playerId && grid.cell(up,right).value != 0 && grid.cell(up,right).value != 3) {
       while (up > 0 && right < grid.size - 1) {
         up -= 1
         right += 1
-        if(grid.cell(up,right).value == 0) return Some(Turn(row,col,up,right,Direction.UpRight))
+        if(grid.cell(up,right).value == 0 || grid.cell(up,right).value == 3) return Some(Turn(row,col,up,right,Direction.UpRight))
       }
       None
     }
@@ -220,11 +220,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var up = row - 1
     var left = col - 1
 
-    if(grid.cell(up,left).value != playerId && grid.cell(up,left).value != 0) {
+    if(grid.cell(up,left).value != playerId && grid.cell(up,left).value != 0 && grid.cell(up,left).value != 3) {
       while (up > 0 && left > 0) {
         up -= 1
         left -= 1
-        if(grid.cell(up,left).value == 0) return Some(Turn(row,col,up,left, Direction.UpLeft))
+        if(grid.cell(up,left).value == 0 || grid.cell(up,left).value == 3) return Some(Turn(row,col,up,left, Direction.UpLeft))
       }
       None
     }
@@ -237,11 +237,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var down = row + 1
     var right = col + 1
 
-    if(grid.cell(down,right).value != playerId && grid.cell(down,right).value != 0) {
+    if(grid.cell(down,right).value != playerId && grid.cell(down,right).value != 0 && grid.cell(down,right).value != 3) {
       while (down < grid.size - 1 && right < grid.size - 1) {
         down += 1
         right += 1
-        if(grid.cell(down,right).value == 0) return Some(Turn(row,col,down,right, Direction.DownRight))
+        if(grid.cell(down,right).value == 0 || grid.cell(down,right).value == 3) return Some(Turn(row,col,down,right, Direction.DownRight))
       }
       None
     }
@@ -254,11 +254,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     var down = row + 1
     var left = col - 1
 
-    if(grid.cell(down,left).value != playerId && grid.cell(down,left).value != 0) {
+    if(grid.cell(down,left).value != playerId && grid.cell(down,left).value != 0 && grid.cell(down,left).value != 3) {
       while (down < grid.size - 1 && left > 0) {
         down += 1
         left -= 1
-        if(grid.cell(down,left).value == 0) return Some(Turn(row,col,down,left,Direction.DownLeft))
+        if(grid.cell(down,left).value == 0 || grid.cell(down,left).value == 3) return Some(Turn(row,col,down,left,Direction.DownLeft))
       }
       None
     }

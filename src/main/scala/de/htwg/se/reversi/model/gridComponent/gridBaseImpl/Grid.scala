@@ -16,11 +16,14 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def highlight(playerId: Int): Grid = {
     var grid = this
-    for {
-      row <- 0 until size
-      col <- 0 until size
-    } grid = grid.set(row, col, grid.cell(row, col).value)
-    getValidTurns(playerId: Int).foreach(turn => grid = grid.setHighlight(turn))
+    for(row <- 0 until size) {
+      for(col <- 0 until size) {
+        if (grid.cell(row, col).value == 3) grid = grid.reset(row,col) else grid = grid.set(row, col, grid.cell(row, col).value)
+      }
+    }
+    val t = getValidTurns(playerId)
+    print(t)
+      t.foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
 
@@ -54,16 +57,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def evaluateGame():Int = {
     var black, white = 0
-      this.cells.rows.foreach(coll => coll.foreach(cell => {
-        if (cell.value.equals(2)) {
-          black += 1
-        }
-      }))
-      this.cells.rows.foreach(coll => coll.foreach(cell => {
-        if (cell.value.equals(1)) {
-          white += 1
-        }
-      }))
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } if(cell(row,col).value.equals(2)) black +=1 else if (cell(row,col).value.equals(1)) white +=1
+
     if (white > black) 1 else if (black > white) 2 else 0
   }
 

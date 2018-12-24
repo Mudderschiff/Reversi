@@ -8,11 +8,14 @@ class CellSpec extends WordSpec with Matchers {
   "A Cell" when {
     "not set to any value " should {
       val emptyCell = Cell(0)
+      val emptyCell2 = Cell(3)
       "have value 0" in {
         emptyCell.value should be(0)
+        emptyCell2.value should be(3)
       }
       "not be set" in {
         emptyCell.isSet should be(false)
+        emptyCell2.isSet should be(false)
       }
     }
     "set to a specific value" should {

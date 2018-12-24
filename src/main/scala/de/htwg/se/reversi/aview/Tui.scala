@@ -12,32 +12,19 @@ import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 
 class Tui {
 
-  def processInputLine(input: String, grid:Grid):Grid = {
-    input match {
-      case "q" => grid
-      case "n"=> new Grid(8)
-      //case "r" => new GridCreator(9).createRandom(16)
-      /*case "s" =>
-        val (success, solvedGrid) = new Solver(grid).solve;
-        if (success) println("Puzzle solved")else println("This puzzle could not be solved!")
-        solvedGrid*/
-      case _ => {
-        input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
-          case row :: column :: value :: Nil => grid.set(row, column, value)
-          case _ => grid
-        }
-      }
+  def processInputLine(input: String, grid:Grid):Grid = input match {
+    case "q" => grid.createNewGrid
+    case "n"=> new Grid(8).createNewGrid
+    case "h1" => grid.highlight(1)
+    case "h2" => grid.highlight(2)
+    //case ""index :: value :: Nil => grid.setTurnIndex(value, index)
+    /*case "rc" => {
+      val args = input.split(" ").splitAt(2).
+      grid.setTurnRC()
+    }*/
+    case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
+      case row :: column :: value :: Nil => grid.setTurnRC(value, row, column)
+      case _ => grid
     }
   }
 }
-
-/*package de.htwg.se.reversi.aview
-
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus
-import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
-
-import scala.swing.Reactor
-
-class Tui(controller: ControllerInterface) extends Reactor {
-
-}*/

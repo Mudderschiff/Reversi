@@ -5,12 +5,13 @@ import de.htwg.se.reversi.controller.controllerComponent.GameStatus.GameStatus
 
 case class GridCreator() {
 
-  def createGrid(size:Int): Either[GameStatus, Grid] = {
+  def createGrid(size:Int): Grid = {
     if(size % 2 != 0) {
-      Left(GameStatus.OddNumber)
+      new Grid(size)
     }
-    val grid = new Grid(size)
-    Right(initGrid(grid))
+    else {
+      initGrid(new Grid(size))
+    }
 
   }
 

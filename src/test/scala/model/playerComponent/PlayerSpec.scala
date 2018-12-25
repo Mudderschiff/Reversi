@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.model
+package model.playerComponent
 
 import de.htwg.se.reversi.model.playerComponent.Player
 import org.scalatest._

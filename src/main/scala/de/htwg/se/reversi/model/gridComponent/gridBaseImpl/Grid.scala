@@ -48,8 +48,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    if(playerId == 1) grid.highlight(2) else grid.highlight(1n
-    )
+    if(playerId == 1) grid.highlight(2) else grid.highlight(1)
   }
 
   def evaluateGame():Int = {

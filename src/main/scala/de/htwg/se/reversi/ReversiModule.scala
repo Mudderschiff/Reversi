@@ -4,10 +4,10 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import net.codingwell.scalaguice.ScalaModule
 import de.htwg.se.reversi.controller.controllerComponent._
-//import de.htwg.se.reversi.model.fileIoComponent._
+import de.htwg.se.reversi.model.fileIoComponent._
 import de.htwg.se.reversi.model.gridComponent.GridInterface
-//import de.htwg.se.reversi.model.gridComponent.gridAdvancedImpl.Grid
-/*
+import de.htwg.se.reversi.model.gridComponent.gridAdvancedImpl.Grid
+
 class ReversiModule extends AbstractModule with ScalaModule {
 
   val defaultSize: Int = 8
@@ -25,4 +25,4 @@ class ReversiModule extends AbstractModule with ScalaModule {
 
   }
 
-}*/
+}

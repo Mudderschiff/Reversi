@@ -1,31 +1,56 @@
 package de.htwg.se.reversi.aview
 
-//import com.typesafe.scalalogging.{LazyLogging, Logger}
-//import de.htwg.se.sudoku.controller.controllerComponent.ControllerInterface
-//import de.htwg.se.sudoku.controller.controllerComponent.GameStatus
-//import de.htwg.se.sudoku.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged}
+import com.typesafe.scalalogging.{LazyLogging, Logger}
+import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
+import de.htwg.se.reversi.controller.controllerComponent.GameStatus
+import de.htwg.se.reversi.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged}
 
+import scala.swing.Reactor
 
-//import de.htwg.se.reversi.model.{Grid,GridCreator,Solver}
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.GridCreator
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
+class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
 
-class Tui {
+  listenTo(controller)
+  def size = controller.gridSize
+  //def randomCells:Int = size*size/8
 
-  def processInputLine(input: String, grid:Grid):Grid = input match {
-    case "q" => grid.createNewGrid
-    case "n"=> new Grid(8).createNewGrid
-    case "h1" => grid.highlight(1)
-    case "h2" => grid.highlight(2)
-    //case "i1" => input.toList.filter()
-    //case ""index :: value :: Nil => grid.setTurnIndex(value, index)
-    /*case "rc" => {
-      val args = input.split(" ").splitAt(2).
-      grid.setTurnRC()
-    }*/
-    case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
-      case row :: column :: value :: Nil => grid.setTurnRC(value, row, column)
-      case _ => grid
+  def processInputLine(input: String):Unit = {
+    input match {
+      case "q" =>
+      //case "e" => controller.createEmptyGrid
+      case "n" => controller.createNewGrid
+      //case "z" => controller.undo
+      //case "y" => controller.redo
+      //case "s" => controller.solve
+      case "f" => controller.save
+      case "l" => controller.load
+      //case "." => controller.resize(1)
+      //case "+" => controller.resize(4)
+      //case "#" => controller.resize(8)
+      case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
+        case row :: col :: playerId :: Nil => controller.setTurnRC(playerId, row, col)
+        // row :: col::Nil => controller.showCandidates(row, col)
+        //case index::Nil => controller.highlight(index)
+        case _ =>
+      }
+
     }
   }
+
+  reactions += {
+    //case event: GridSizeChanged => printTui
+    case event: CellChanged     => printTui
+    //case event: CandidatesChanged => printCandidates
+  }
+
+  def printTui: Unit = {
+    logger.info(controller.gridToString)
+    logger.info(GameStatus.message(controller.gameStatus))
+  }
+/*
+  def printCandidates: Unit = {
+    logger.info("Candidates: ")
+    for (row <- 0 until size; col <- 0 until size) {
+      if (controller.isShowCandidates(row, col)) println("("+row+","+col+"):"+controller.available(row, col).toList.sorted)
+    }
+  }*/
 }

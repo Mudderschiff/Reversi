@@ -9,9 +9,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   val size:Int = cells.size
   def cell(row:Int, col:Int):Cell = cells.cell(row, col)
   def set(row:Int, col:Int, value:Int):Grid = copy(cells.replaceCell(row, col, Cell(value)))
+  def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
   def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
-  def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
+  def nofield: Boolean = cells.rows.forall(coll => coll.forall(cell => cell.isSet))
+  def noturns: Boolean = getValidTurns(1).isEmpty & getValidTurns(2).isEmpty
 
   def highlight(playerId: Int): Grid = {
     var grid = this
@@ -22,11 +24,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
-
-  override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
-
-  override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
-
   def setHighlight(turn:Turn):Grid = {
     var grid = this
     turn.dir match {
@@ -38,12 +35,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       case Direction.UpLeft => grid = grid.set(turn.toRow,turn.toCol,3)
       case Direction.DownRight => grid = grid.set(turn.toRow,turn.toCol,3)
       case Direction.DownLeft => grid = grid.set(turn.toRow,turn.toCol,3)
-
     }
     grid
   }
-
-  def setTurnIndex(playerId: Int, index: Int): Grid = setTurnRC(playerId: Int, index / size, index % size)
 
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
@@ -61,25 +55,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     if (white > black) 1 else if (black > white) 2 else 0
   }
 
-  override def toString: String = {
-    val row, col = StringBuilder.newBuilder
-    row.append("\n")
-    for {i <- 0 until size} if (i == 0) row.append("  " + i.toString) else row.append(" " + i.toString)
-    row.append("\n")
 
-    val lineseparator = (" +-" + ("--" * (size - 1))) + "+\n"
-    val line = ("|" + (("x" + "|") * size)) + "\n"
-    for {i <- 0 until size } col.append(i.toString + line + lineseparator)
 
-    var box = row + lineseparator  + col
-    for {
-      row <- 0 until size
-      col <- 0 until size
-    } box = box.replaceFirst("x", cell(row, col).toString)
-    box
-  }
 
-  override def createNewGrid: Grid = (new GridCreator).createGrid(size)
 
   def setTurn(turn:Turn, value:Int):Grid = {
     var grid = this
@@ -269,5 +247,27 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     }
     None
   }
+  override def createNewGrid: Grid = (new GridCreator).createGrid(size)
+  override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
+  override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
+
+  override def toString: String = {
+    val row, col = StringBuilder.newBuilder
+    row.append("\n")
+    for {i <- 0 until size} if (i == 0) row.append("  " + i.toString) else row.append(" " + i.toString)
+    row.append("\n")
+
+    val lineseparator = (" +-" + ("--" * (size - 1))) + "+\n"
+    val line = ("|" + (("x" + "|") * size)) + "\n"
+    for {i <- 0 until size } col.append(i.toString + line + lineseparator)
+
+    var box = row + lineseparator  + col
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } box = box.replaceFirst("x", cell(row, col).toString)
+    box
+  }
+
 }
 

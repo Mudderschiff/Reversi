@@ -1,6 +1,5 @@
 package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Cell
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 
 import scala.collection.mutable.ListBuffer
@@ -49,7 +48,8 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    if(playerId == 1) grid.highlight(2) else grid.highlight(2)
+    if(playerId == 1) grid.highlight(2) else grid.highlight(1n
+    )
   }
 
   def evaluateGame():Int = {
@@ -272,13 +272,3 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 }
 
-case class House(private val cells:Vector[Cell]) {
-  def cell(index:Int):Cell = cells(index)
-}
-
-case class Turn(var fromRow:Int, var fromCol:Int, var toRow:Int, var toCol:Int, var dir:Direction.Value)
-
-object Direction extends Enumeration {
-  type Direction = Value
-  val Up, Down, Left, Right, UpRight, UpLeft, DownRight, DownLeft = Value
-}

@@ -1,6 +1,7 @@
 package de.htwg.se.reversi.model.gridComponent.gridMockImpl
 
 import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Turn
 
 class Grid(var size:Int) extends GridInterface{
 
@@ -13,8 +14,8 @@ class Grid(var size:Int) extends GridInterface{
   def evaluateGame():Int = 0
   def highlight(playerId: Int): GridInterface = this
   //should be removed
-  def getNextTurnR(validTurns:List[Turn]):Turn = Turn(0,0,0,0,0)
-  def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn = Turn(0,0,0,0,0)
+  def getNextTurnR(validTurns:List[Turn]):Turn = ???
+  def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn = ???
   def finish: Boolean = false
 }
 

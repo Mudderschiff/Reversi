@@ -1,5 +1,5 @@
 package model.gridComponent.gridBaseImpl
-
+/*
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix, Turn}
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Direction
 import org.scalatest.{Matchers, WordSpec}
@@ -192,4 +192,4 @@ class GridSpec extends WordSpec with Matchers {
     }
   }
 
-}
+}*/

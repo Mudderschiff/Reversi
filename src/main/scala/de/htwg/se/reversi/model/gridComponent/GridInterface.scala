@@ -1,6 +1,7 @@
 package de.htwg.se.reversi.model.gridComponent
 
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Turn
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 
 trait GridInterface {
   def cell(row: Int, col: Int): CellInterface
@@ -14,6 +15,8 @@ trait GridInterface {
   def getNextTurnR(validTurns:List[Turn]):Turn
   def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn
   def finish: Boolean
+  def score(): (Int, Int)
+  //def checkChange(gridnew: Grid): Boolean
 }
 
 trait CellInterface {

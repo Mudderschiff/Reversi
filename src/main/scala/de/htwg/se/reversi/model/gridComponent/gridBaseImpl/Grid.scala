@@ -269,7 +269,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   
   override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
   override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
-  override def createNewGrid: Grid = (new GridCreator).createGrid(size)
+  override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 
   override def toString: String = {
     val row, col = StringBuilder.newBuilder

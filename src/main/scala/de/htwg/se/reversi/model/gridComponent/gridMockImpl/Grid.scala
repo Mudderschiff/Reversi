@@ -17,6 +17,8 @@ class Grid(var size:Int) extends GridInterface{
   def getNextTurnR(validTurns:List[Turn]):Turn = ???
   def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn = ???
   def finish: Boolean = false
+
+  override def score(): (Int, Int) = (0,0)
 }
 
 object EmptyCell extends CellInterface {

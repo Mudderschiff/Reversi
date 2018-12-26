@@ -19,7 +19,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def highlight(playerId: Int): Grid = {
     var grid = this
-    grid = unhighlight()
+    grid = grid.unhighlight()
     getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
@@ -50,18 +50,18 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def checkTurn(gridnew: Grid): Boolean = {
     var bool = true
-    val grid = this
+    var grid = this
     for {
       row <- 0 until size
       col <- 0 until size
-    } if(!grid.cell(row,col).value.equals(gridnew.cell(row,col).value)) bool = false
-    bool
+    } if (grid.unhighlight().cell(row, col).value != gridnew.unhighlight().cell(row,col).value) bool = false
+   bool
   }
 
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    //if(playerId == 1) grid.highlight(2) else grid.highlight(1)
+    if(playerId == 1) grid.highlight(2) else grid.highlight(1)
     grid
   }
 

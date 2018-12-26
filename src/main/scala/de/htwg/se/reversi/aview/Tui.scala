@@ -31,7 +31,7 @@ class Tui {
     }*/
     case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
       case row :: column :: Nil => {
-        val set = grid.setTurnRC(activePlayer, row, column)
+        var set = grid.setTurnRC(activePlayer, row, column)
         if (grid.checkTurn(set)) {
           changePlayer()
         }

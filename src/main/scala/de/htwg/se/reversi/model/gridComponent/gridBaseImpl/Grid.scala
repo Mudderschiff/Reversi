@@ -48,20 +48,20 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  def checkTurn(gridnew: Grid): Boolean = {
-    var bool = true
+  def checkChange(gridnew: Grid): Boolean = {
+    var bool = false
     var grid = this
     for {
       row <- 0 until size
       col <- 0 until size
-    } if (grid.unhighlight().cell(row, col).value != gridnew.unhighlight().cell(row,col).value) bool = false
+    } if (grid.unhighlight().cell(row, col).value != gridnew.unhighlight().cell(row,col).value) bool = true
    bool
   }
 
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    if(playerId == 1) grid.highlight(2) else grid.highlight(1)
+    //if(playerId == 1) grid.highlight(2) else grid.highlight(1)
     grid
   }
 

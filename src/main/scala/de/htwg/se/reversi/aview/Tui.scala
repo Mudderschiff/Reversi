@@ -14,6 +14,7 @@ class Tui {
   val player1 = new Player(1)
   val player2 = new Player(2)
   var activePlayer = player1.playerId
+  //var notactivePlayer
 
   def changePlayer(): Unit = if(activePlayer == 1)  activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
 
@@ -23,20 +24,14 @@ class Tui {
     case "n"=> new Grid(8).createNewGrid
     case "h1" => grid.highlight(1)
     case "h2" => grid.highlight(2)
-    //case "i1" => input.toList.filter()
-    //case ""index :: value :: Nil => grid.setTurnIndex(value, index)
-    /*case "rc" => {
-      val args = input.split(" ").splitAt(2).
-      grid.setTurnRC()
-    }*/
     case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
       case row :: column :: Nil => {
-        var set = grid.setTurnRC(activePlayer, row, column)
-        if (grid.checkTurn(set)) {
+        var returngrid = grid
+        if (grid.checkChange(grid.setTurnRC(activePlayer, row, column))) {
+          returngrid = grid.setTurnRC(activePlayer, row, column)
           changePlayer()
         }
-       println(activePlayer)
-        set
+        returngrid.highlight(activePlayer)
       }
       case _ => grid
     }

@@ -10,12 +10,12 @@ class GridSpec extends WordSpec with Matchers {
       val grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
       val newgrid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(2)), Vector(Cell(3), Cell(1)))))
       val ngrid = Grid(new Matrix[Cell](Vector(Vector(Cell(3), Cell(2)), Vector(Cell(0), Cell(1)))))
-      "return true if Grids are equal" in {
-        grid.checkTurn(grid) should be(true)
-        newgrid.checkTurn(ngrid) should be(true)
+      "return false if Grids didn't change" in {
+        grid.checkChange(grid) should be(false)
+        newgrid.checkChange(ngrid) should be(false)
       }
-      "return false if Grids aren't equal" in {
-        grid.checkTurn(newgrid) should be(false)
+      "return true if Grids changed" in {
+        grid.checkChange(newgrid) should be(true)
       }
     }
     "function finish" should {

@@ -1,5 +1,6 @@
 package de.htwg.se.reversi.model.playerComponent
 
-case class Player(name: String) {
-   override def toString:String = name
+case class Player(playerId: Int) {
+   this.playerId
+   //override def toString:String = name
 }

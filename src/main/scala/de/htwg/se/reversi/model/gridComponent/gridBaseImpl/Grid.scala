@@ -12,20 +12,24 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
+  def nofield: Boolean = cells.rows.forall(coll => coll.forall(cell => cell.isSet))
+  def noturns: Boolean = getValidTurns(1).isEmpty & getValidTurns(2).isEmpty
+  def finish: Boolean = noturns || nofield
 
   def highlight(playerId: Int): Grid = {
+    var grid = this
+    grid = grid.unhighlight()
+    getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
+    grid
+  }
+  def unhighlight(): Grid = {
     var grid = this
     for {
       row <- 0 until size
       col <- 0 until size
-    } if (grid.cell(row, col).value == 3) grid = grid.reset(row,col) else grid = grid.set(row, col, grid.cell(row, col).value)
-    getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
+    } if (grid.cell(row, col).value == 3) grid = grid.reset(row,col)
     grid
   }
-
-  override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
-
-  override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
 
   def setHighlight(turn:Turn):Grid = {
     var grid = this
@@ -43,44 +47,36 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  def setTurnIndex(playerId: Int, index: Int): Grid = setTurnRC(playerId: Int, index / size, index % size)
+  def checkChange(gridnew: Grid): Boolean = {
+    var bool = false
+    var grid = this
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } if (grid.unhighlight().cell(row, col).value != gridnew.unhighlight().cell(row,col).value) bool = true
+   bool
+  }
 
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    if(playerId == 1) grid.highlight(2) else grid.highlight(1n
-    )
+    //if(playerId == 1) grid.highlight(2) else grid.highlight(1)
+    grid
   }
 
-  def evaluateGame():Int = {
-    var black, white = 0
+  def score(): (Int, Int) = {
+    var (black, white) = (0,0)
     for {
       row <- 0 until size
       col <- 0 until size
     } if(cell(row,col).value.equals(2)) black +=1 else if (cell(row,col).value.equals(1)) white +=1
+    (black, white)
+  }
 
+  def evaluateGame():Int = {
+   val (black, white) = score()
     if (white > black) 1 else if (black > white) 2 else 0
   }
-
-  override def toString: String = {
-    val row, col = StringBuilder.newBuilder
-    row.append("\n")
-    for {i <- 0 until size} if (i == 0) row.append("  " + i.toString) else row.append(" " + i.toString)
-    row.append("\n")
-
-    val lineseparator = (" +-" + ("--" * (size - 1))) + "+\n"
-    val line = ("|" + (("x" + "|") * size)) + "\n"
-    for {i <- 0 until size } col.append(i.toString + line + lineseparator)
-
-    var box = row + lineseparator  + col
-    for {
-      row <- 0 until size
-      col <- 0 until size
-    } box = box.replaceFirst("x", cell(row, col).toString)
-    box
-  }
-
-  override def createNewGrid: Grid = (new GridCreator).createGrid(size)
 
   def setTurn(turn:Turn, value:Int):Grid = {
     var grid = this
@@ -270,5 +266,26 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     }
     None
   }
-}
+  
+  override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
+  override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
+  override def createNewGrid: Grid = (new GridCreator).createGrid(size)
 
+  override def toString: String = {
+    val row, col = StringBuilder.newBuilder
+    row.append("\n")
+    for {i <- 0 until size} if (i == 0) row.append("  " + i.toString) else row.append(" " + i.toString)
+    row.append("\n")
+
+    val lineseparator = (" +-" + ("--" * (size - 1))) + "+\n"
+    val line = ("|" + (("x" + "|") * size)) + "\n"
+    for {i <- 0 until size } col.append(i.toString + line + lineseparator)
+
+    var box = row + lineseparator  + col
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } box = box.replaceFirst("x", cell(row, col).toString)
+    box
+  }
+}

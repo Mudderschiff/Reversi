@@ -19,13 +19,19 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def highlight(playerId: Int): Grid = {
     var grid = this
-    for {
-      row <- 0 until size
-      col <- 0 until size
-    } if (grid.cell(row, col).value == 3) grid = grid.reset(row,col) else grid = grid.set(row, col, grid.cell(row, col).value)
+    grid = unhighlight()
     getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
+  def unhighlight(): Grid = {
+    var grid = this
+    for {
+      row <- 0 until size
+      col <- 0 until size
+    } if (grid.cell(row, col).value == 3) grid = grid.reset(row,col)
+    grid
+  }
+
   def setHighlight(turn:Turn):Grid = {
     var grid = this
     turn.dir match {
@@ -55,7 +61,8 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    if(playerId == 1) grid.highlight(2) else grid.highlight(2)
+    //if(playerId == 1) grid.highlight(2) else grid.highlight(1)
+    grid
   }
 
   def evaluateGame():Int = {

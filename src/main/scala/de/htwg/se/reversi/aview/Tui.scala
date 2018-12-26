@@ -13,9 +13,9 @@ import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 class Tui {
   val player1 = new Player(1)
   val player2 = new Player(2)
-  var activePlayer = player2.playerId
+  var activePlayer = player1.playerId
 
-  def changePlayer(): Unit = if(activePlayer == 2)  activePlayer = player1.playerId else  activePlayer = player2.playerId
+  def changePlayer(): Unit = if(activePlayer == 1)  activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
 
 
   def processInputLine(input: String, grid:Grid):Grid = input match {
@@ -31,11 +31,12 @@ class Tui {
     }*/
     case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
       case row :: column :: Nil => {
-       // val newgrid =
-        //println(activePlayer)
-        //changePlayer()
-        //println(activePlayer)
-          grid.setTurnRC(activePlayer, row, column)
+        val set = grid.setTurnRC(activePlayer, row, column)
+        if (grid.checkTurn(set)) {
+          changePlayer()
+        }
+       println(activePlayer)
+        set
       }
       case _ => grid
     }

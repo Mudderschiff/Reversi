@@ -18,7 +18,6 @@ class Tui {
 
   def changePlayer(): Unit = if(activePlayer == 1)  activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
 
-
   def processInputLine(input: String, grid:Grid):Grid = input match {
     case "q" => grid.createNewGrid
     case "n"=> new Grid(8).createNewGrid
@@ -31,6 +30,7 @@ class Tui {
           returngrid = grid.setTurnRC(activePlayer, row, column)
           changePlayer()
         }
+        print(grid.score())
         returngrid.highlight(activePlayer)
       }
       case _ => grid

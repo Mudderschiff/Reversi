@@ -65,13 +65,17 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     grid
   }
 
-  def evaluateGame():Int = {
-    var black, white = 0
+  def score(): (Int, Int) = {
+    var (black, white) = (0,0)
     for {
       row <- 0 until size
       col <- 0 until size
     } if(cell(row,col).value.equals(2)) black +=1 else if (cell(row,col).value.equals(1)) white +=1
+    (black, white)
+  }
 
+  def evaluateGame():Int = {
+   val (black, white) = score()
     if (white > black) 1 else if (black > white) 2 else 0
   }
 

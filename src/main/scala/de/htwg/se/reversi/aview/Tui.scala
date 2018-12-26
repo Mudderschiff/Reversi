@@ -45,12 +45,11 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
     logger.info(controller.gridToString)
     logger.info(GameStatus.message(controller.gameStatus))
   }
-
- /* def printCandidates: Unit = {
+/*
+  def printCandidates: Unit = {
     logger.info("Candidates: ")
     for (row <- 0 until size; col <- 0 until size) {
       if (controller.isShowCandidates(row, col)) println("("+row+","+col+"):"+controller.available(row, col).toList.sorted)
     }
   }*/
-
 }

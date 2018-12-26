@@ -9,6 +9,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   val size:Int = cells.size
   def cell(row:Int, col:Int):Cell = cells.cell(row, col)
   def set(row:Int, col:Int, value:Int):Grid = copy(cells.replaceCell(row, col, Cell(value)))
+  def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
   def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
@@ -42,7 +43,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       case Direction.UpLeft => grid = grid.set(turn.toRow,turn.toCol,3)
       case Direction.DownRight => grid = grid.set(turn.toRow,turn.toCol,3)
       case Direction.DownLeft => grid = grid.set(turn.toRow,turn.toCol,3)
-
     }
     grid
   }
@@ -77,6 +77,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
    val (black, white) = score()
     if (white > black) 1 else if (black > white) 2 else 0
   }
+
 
   def setTurn(turn:Turn, value:Int):Grid = {
     var grid = this

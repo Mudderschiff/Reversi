@@ -6,6 +6,16 @@ import org.scalatest.{Matchers, WordSpec}
 
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
+    "checkTurn" should {
+      val grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
+      val newgrid = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(2)), Vector(Cell(0), Cell(1)))))
+      "return true if Grids are equal" in {
+        grid.checkTurn(grid) should be(true)
+      }
+      "return false if Grids aren't equal" in {
+        grid.checkTurn(newgrid) should be(false)
+      }
+    }
     "function finish" should {
       val normalGrid = Grid(new Matrix[Cell](Vector(
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),

@@ -4,13 +4,19 @@ package de.htwg.se.reversi.aview
 //import de.htwg.se.sudoku.controller.controllerComponent.ControllerInterface
 //import de.htwg.se.sudoku.controller.controllerComponent.GameStatus
 //import de.htwg.se.sudoku.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged}
-
+import de.htwg.se.reversi.model.playerComponent.Player
 
 //import de.htwg.se.reversi.model.{Grid,GridCreator,Solver}
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.GridCreator
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 
 class Tui {
+  val player1 = new Player(1)
+  val player2 = new Player(2)
+  var activePlayer = player2.playerId
+
+  def changePlayer(): Unit = if(activePlayer == 2)  activePlayer = player1.playerId else  activePlayer = player2.playerId
+
 
   def processInputLine(input: String, grid:Grid):Grid = input match {
     case "q" => grid.createNewGrid
@@ -24,7 +30,13 @@ class Tui {
       grid.setTurnRC()
     }*/
     case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
-      case row :: column :: value :: Nil => grid.setTurnRC(value, row, column)
+      case row :: column :: Nil => {
+       // val newgrid =
+        //println(activePlayer)
+        //changePlayer()
+        //println(activePlayer)
+          grid.setTurnRC(activePlayer, row, column)
+      }
       case _ => grid
     }
   }

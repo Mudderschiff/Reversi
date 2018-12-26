@@ -7,10 +7,6 @@ import org.scalatest.{Matchers, WordSpec}
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
     "function finish" should {
-      //def nofield: Boolean = cells.rows.forall(coll => coll.forall(cell => cell.isSet))
-      //def noturns: Boolean = getValidTurns(1).isEmpty & getValidTurns(2).isEmpty
-      //def finish: Boolean = nofield && noturns
-      //val freshGrid = new Grid(4).createNewGrid
       val normalGrid = Grid(new Matrix[Cell](Vector(
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),

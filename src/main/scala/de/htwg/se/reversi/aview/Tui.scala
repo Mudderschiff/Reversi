@@ -4,40 +4,39 @@ import com.typesafe.scalalogging.{LazyLogging, Logger}
 import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus
 import de.htwg.se.reversi.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged}
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
+import de.htwg.se.reversi.model.playerComponent.Player
 
 import scala.swing.Reactor
 
 class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
-
+  val player1 = new Player(1)
+  val player2 = new Player(2)
+  var activePlayer = player1.playerId
+  def changePlayer(): Unit = if(activePlayer == 1)  activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
   listenTo(controller)
-  def size = controller.gridSize
-  //def randomCells:Int = size*size/8
 
-  def processInputLine(input: String):Unit = {
-    input match {
-      case "q" =>
-      //case "e" => controller.createEmptyGrid
-      case "n" => controller.createNewGrid
-      //case "z" => controller.undo
-      //case "y" => controller.redo
-      //case "s" => controller.solve
-      case "f" => controller.save
-      case "l" => controller.load
-      //case "." => controller.resize(1)
-      //case "+" => controller.resize(4)
-      //case "#" => controller.resize(8)
-      case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
-        case row :: col :: playerId :: Nil => controller.setTurnRC(playerId, row, col)
-        // row :: col::Nil => controller.showCandidates(row, col)
-        //case index::Nil => controller.highlight(index)
-        case _ =>
+  def processInputLine(input: String):Unit = input match {
+    case "q" => controller.createEmptyGrid
+    case "n"=> controller.createNewGrid
+    //case "f" => controller.save
+    //case "l" => controller.load
+    case "." => controller.resize(1)
+    case "+" => controller.resize(4)
+    case "#" => controller.resize(8)
+    //case "h1" => grid.highlight(1)
+    //case "h2" => grid.highlight(2)
+    case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
+      case row :: column :: Nil => {
+        controller.set(row, column,activePlayer)
+        changePlayer()
       }
-
+      case _ =>
     }
   }
 
   reactions += {
-    //case event: GridSizeChanged => printTui
+    case event: GridSizeChanged => printTui
     case event: CellChanged     => printTui
     //case event: CandidatesChanged => printCandidates
   }

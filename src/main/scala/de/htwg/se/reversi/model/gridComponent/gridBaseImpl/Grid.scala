@@ -1,6 +1,5 @@
 package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Cell
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 
 import scala.collection.mutable.ListBuffer
@@ -267,7 +266,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     }
     None
   }
-
+  
   override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
   override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
   override def createNewGrid: Grid = (new GridCreator).createGrid(size)
@@ -289,14 +288,4 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     } box = box.replaceFirst("x", cell(row, col).toString)
     box
   }
-
-
-
-
 }
-
-
-
-
-
-

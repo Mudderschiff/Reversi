@@ -6,3 +6,4 @@ object Direction extends Enumeration {
   type Direction = Value
   val Up, Down, Left, Right, UpRight, UpLeft, DownRight, DownLeft = Value
 }
+

@@ -8,7 +8,6 @@ import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
 import de.htwg.se.reversi.controller.controllerComponent._
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.GridInterface
-//import de.htwg.se.reversi.util.UndoManager
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 import de.htwg.se.reversi.model.playerComponent.Player
 
@@ -51,21 +50,6 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   }
 
   override def score(): (Int, Int) = grid.score()
-/*
-  def set(row: Int, col: Int, playerId: Int): Unit = {
-    if(grid.checkChange(grid.setTurnRC(playerId,row,col))) {
-      if (playerId == 1) {
-        grid = grid.setTurnRC(playerId,row,col).highlight(2)
-        gameStatus = SET_Player1
-      } else {
-        grid = grid.setTurnRC(playerId,row,col).highlight(1)
-        gameStatus = SET_Player2
-      }
-
-      //gameStatus = SET
-      publish(new CellChanged)
-    }
-  }*/
 
   def set(row: Int, col: Int, playerId: Int): Unit = {
     if(grid.checkChange(grid.setTurnRC(playerId,row,col))) {
@@ -76,12 +60,16 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
         grid = grid.setTurnRC(playerId,row,col).highlight(1)
         gameStatus = SET_Player2
       }
-      //gameStatus = SET
-      changePlayer()23
+      changePlayer()
       publish(new CellChanged)
     }
   }
-  //def isGiven(row: Int, col: Int): Boolean = grid.cell(row, col).given
+  def finish: Unit = {
+    if(grid.finish) gameStatus = FINISHED
+    publish(new Finished)
+  }
+
+  def evaluateGame(): Int = grid.evaluateGame()
 
   def changePlayer(): Unit = if(activePlayer == 1) activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
 
@@ -104,18 +92,6 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     gameStatus = CANDIDATES
     publish(new CandidatesChanged)
   }
-/*
-  def set(row: Int, col: Int, value: Int): Unit = {
-    undoManager.doStep(new SetCommand(row, col, value, this))
-    gameStatus = SET
-    publish(new CellChanged)
-  }
-
-  def solve: Unit = {
-    undoManager.doStep(new SolveCommand(this))
-    gameStatus = SOLVED
-    publish(new CellChanged)
-  }*/
 
   def save: Unit = {
     fileIo.save(grid)
@@ -140,41 +116,8 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
 
   def cell(row: Int, col: Int) = grid.cell(row, col)
 
-  //def isGiven(row: Int, col: Int): Boolean = grid.cell(row, col).given
-  //def isSet(row: Int, col: Int): Boolean = grid.cell(row, col).isSet
-  //def available(row: Int, col: Int): Set[Int] = grid.available(row, col)
-  /*
-  def showCandidates(row: Int, col: Int): Unit = {
-    grid = grid.setShowCandidates(row, col)
-    gameStatus = CANDIDATES
-    publish(new CandidatesChanged)
-  }*/
-
-  //def isShowCandidates(row: Int, col: Int): Boolean = grid.cell(row, col).showCandidates
   def gridSize: Int = grid.size
-  //def blockSize: Int = Math.sqrt(grid.size).toInt
-  //def isShowAllCandidates: Boolean = showAllCandidates
-  /*
-  def toggleShowAllCandidates: Unit = {
-    showAllCandidates = !showAllCandidates
-    gameStatus = CANDIDATES
-    publish(new CellChanged)
-  }*/
-  //def isHighlighted(row: Int, col: Int): Boolean = grid.isHighlighted(row, col)
+
   def statusText: String = GameStatus.message(gameStatus)
-  /*
-  def highlight(index: Int): Unit = {
-    grid = grid.highlight(index)
-    publish(new CellChanged)
-  }
 
-  override def setGiven(row: Int, col: Int, value: Int): Unit = {
-    grid = grid.setGiven(row, col, value)
-  }
-
-  override def setShowCandidates(row: Int, col: Int): Unit = {
-    grid = grid.setShowCandidates(row, col)
-  }
-  */
-  //override def checkChange(gridnew: GridInterface): Boolean = grid.checkChange(gridnew)
 }

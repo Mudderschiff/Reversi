@@ -20,6 +20,8 @@ trait ControllerInterface extends Publisher {
   def gameStatus: GameStatus
   def gridToString: String
   def getActivePlayer(): Int
+  def finish: Unit
+  def evaluateGame(): Int
 }
 /*
 trait ControllerIoInterface {
@@ -33,3 +35,5 @@ class CellChanged extends Event
 case class GridSizeChanged(newSize: Int) extends Event
 
 class CandidatesChanged extends Event
+
+class Finished extends Event

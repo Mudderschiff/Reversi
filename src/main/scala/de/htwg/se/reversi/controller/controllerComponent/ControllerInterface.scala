@@ -19,6 +19,7 @@ trait ControllerInterface extends Publisher {
   def score(): (Int, Int)
   def gameStatus: GameStatus
   def gridToString: String
+  def getActivePlayer(): Int
 }
 /*
 trait ControllerIoInterface {

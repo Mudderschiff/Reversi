@@ -20,11 +20,14 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   var gameStatus: GameStatus = IDLE
   val player1 = new Player(1)
   val player2 = new Player(2)
-  var activePlayer = Random.shuffle(List(player1.playerId,player2.playerId)).head
-  //var showAllCandidates: Boolean = false
-  //private val undoManager = new UndoManager
+  var activePlayer = randomActivePlayer()
+
   val injector = Guice.createInjector(new ReversiModule)
   val fileIo = injector.instance[FileIOInterface]
+
+  def getActivePlayer(): Int = activePlayer
+
+  def randomActivePlayer(): Int = Random.shuffle(List(player1.playerId,player2.playerId)).head
 
   def createEmptyGrid: Unit = {
     grid.size match {
@@ -75,11 +78,8 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
       case 8 => grid = injector.instance[GridInterface](Names.named("normal")).highlight(activePlayer)
       case _ =>
     }
-    if(activePlayer == 1) {
-      grid = grid.createNewGrid.highlight(1)
-    } else {
-      grid = grid.createNewGrid.highlight(2)
-    }
+    activePlayer = randomActivePlayer()
+    grid = grid.createNewGrid.highlight(getActivePlayer())
     gameStatus = NEW
     publish(new CellChanged)
   }

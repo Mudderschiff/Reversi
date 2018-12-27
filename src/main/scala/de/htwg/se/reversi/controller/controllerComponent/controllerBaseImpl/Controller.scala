@@ -6,7 +6,7 @@ import net.codingwell.scalaguice.InjectorExtensions._
 import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
 import de.htwg.se.reversi.controller.controllerComponent._
-//import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
+import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 //import de.htwg.se.reversi.util.UndoManager
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
@@ -24,7 +24,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   //var showAllCandidates: Boolean = false
   //private val undoManager = new UndoManager
   val injector = Guice.createInjector(new ReversiModule)
-  //val fileIo = injector.instance[FileIOInterface]
+  val fileIo = injector.instance[FileIOInterface]
 
   def createEmptyGrid: Unit = {
     grid.size match {
@@ -56,13 +56,12 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     if(!grid.checkChange(grid.setTurnRC(playerId,row,col))) {
       changePlayer()
     }
-    println(activePlayer)
+    //println(activePlayer)
     if(activePlayer == 1) {
       this.grid = this.grid.setTurnRC(playerId,row,col).highlight(2)
     } else {
       this.grid = this.grid.setTurnRC(playerId,row,col).highlight(1)
     }
-
     gameStatus = SET
     publish(new CellChanged)
   }
@@ -105,7 +104,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     gameStatus = SOLVED
     publish(new CellChanged)
   }*/
-/*
+
   def save: Unit = {
     fileIo.save(grid)
     gameStatus = SAVED
@@ -125,7 +124,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
       }
     }
     publish(new CellChanged)
-  }*/
+  }
 
   def cell(row: Int, col: Int) = grid.cell(row, col)
 

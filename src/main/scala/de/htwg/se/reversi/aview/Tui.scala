@@ -19,8 +19,8 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
   def processInputLine(input: String):Unit = input match {
     case "q" => controller.createEmptyGrid
     case "n"=> controller.createNewGrid
-    //case "f" => controller.save
-    //case "l" => controller.load
+    case "f" => controller.save
+    case "l" => controller.load
     case "." => controller.resize(1)
     case "+" => controller.resize(4)
     case "#" => controller.resize(8)

@@ -3,12 +3,12 @@ package de.htwg.se.reversi.model.fileIoComponent.fileIoXmlImpl
 import com.google.inject.Guice
 import com.google.inject.name.Names
 import net.codingwell.scalaguice.InjectorExtensions._
-//import de.htwg.se.reversi.ReversiModule
+import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 
 import scala.xml.{ NodeSeq, PrettyPrinter }
-/*
+
 class FileIO extends FileIOInterface {
 
   override def load: Option[GridInterface] = {
@@ -34,8 +34,8 @@ class FileIO extends FileIOInterface {
           _grid = _grid.set(row, col, value)
           val given = (cell \ "@given").text.toBoolean
           val showCandidates = (cell \ "@showCandidates").text.toBoolean
-          if (given) _grid = _grid.setGiven(row, col, value)
-          if (showCandidates) _grid = _grid.setShowCandidates(row, col)
+          //if (given) _grid = _grid.setGiven(row, col, value)
+          //if (showCandidates) _grid = _grid.setShowCandidates(row, col)
         }
         gridOption = Some(_grid)
       }
@@ -70,10 +70,9 @@ class FileIO extends FileIOInterface {
   }
 
   def cellToXml(grid:GridInterface, row:Int, col:Int) ={
-    <cell row ={row.toString} col={col.toString} given={grid.cell(row,col).given.toString} isHighlighted={grid.isHighlighted(row,col).toString} showCandidates={grid.cell(row, col).showCandidates.toString}>
+    <cell row ={row.toString} col={col.toString}>
       {grid.cell(row,col).value}
     </cell>
   }
 
 }
-*/

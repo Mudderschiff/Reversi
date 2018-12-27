@@ -10,8 +10,8 @@ trait ControllerInterface extends Publisher {
   def gridSize: Int
   def createEmptyGrid: Unit
   def createNewGrid: Unit
-  //def save: Unit
-  //def load: Unit
+  def save: Unit
+  def load: Unit
   def resize(newSize: Int): Unit
   def set(row: Int, col: Int, value: Int): Unit
   //def checkChange(gridnew: GridInterface): Boolean

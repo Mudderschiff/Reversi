@@ -16,7 +16,8 @@ trait GridInterface {
   def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn
   def finish: Boolean
   def score(): (Int, Int)
-  //def checkChange(gridnew: Grid): Boolean
+  def checkChange(gridnew: GridInterface): Boolean
+  def unhighlight(): Grid
 }
 
 trait CellInterface {

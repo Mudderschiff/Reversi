@@ -10,12 +10,17 @@ import de.htwg.se.reversi.controller.controllerComponent._
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 //import de.htwg.se.reversi.util.UndoManager
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
+import de.htwg.se.reversi.model.playerComponent.Player
 
 import scala.swing.Publisher
+import scala.util.Random
 
 class Controller @Inject() (var grid: GridInterface) extends ControllerInterface with Publisher {
 
   var gameStatus: GameStatus = IDLE
+  val player1 = new Player(1)
+  val player2 = new Player(2)
+  var activePlayer = Random.shuffle(List(player1.playerId,player2.playerId)).head
   //var showAllCandidates: Boolean = false
   //private val undoManager = new UndoManager
   val injector = Guice.createInjector(new ReversiModule)
@@ -35,7 +40,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     newSize match {
       case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
       case 4 => grid = injector.instance[GridInterface](Names.named("small"))
-      case 8 => grid = injector.instance[GridInterface](Names.named("normal"))
+      case 8 => grid = injector.instance[GridInterface](Names.named("normal")).highlight(activePlayer)
       case _ =>
     }
     gameStatus = RESIZE
@@ -45,20 +50,39 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   override def score(): (Int, Int) = grid.score()
 
   def set(row: Int, col: Int, playerId: Int): Unit = {
-    this.grid = this.grid.setTurnRC(playerId,row,col)
+    var grid = this.grid
+    println(activePlayer)
+    //this.grid = this.grid.setTurnRC(playerId,row,col)
+    if(!grid.checkChange(grid.setTurnRC(playerId,row,col))) {
+      changePlayer()
+    }
+    println(activePlayer)
+    if(activePlayer == 1) {
+      this.grid = this.grid.setTurnRC(playerId,row,col).highlight(2)
+    } else {
+      this.grid = this.grid.setTurnRC(playerId,row,col).highlight(1)
+    }
+
     gameStatus = SET
     publish(new CellChanged)
   }
   //def isGiven(row: Int, col: Int): Boolean = grid.cell(row, col).given
 
+  def changePlayer(): Unit = if(activePlayer == 1) activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
+
   override def createNewGrid: Unit = {
     grid.size match {
       case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
       case 4 => grid = injector.instance[GridInterface](Names.named("small"))
-      case 9 => grid = injector.instance[GridInterface](Names.named("normal"))
+      case 8 => grid = injector.instance[GridInterface](Names.named("normal")).highlight(activePlayer)
       case _ =>
     }
-    grid = grid.createNewGrid
+    if(activePlayer == 1) {
+      grid = grid.createNewGrid.highlight(2)
+    } else {
+      grid = grid.createNewGrid.highlight(1)
+    }
+    grid = grid.createNewGrid.highlight(activePlayer)
     gameStatus = NEW
     publish(new CellChanged)
   }

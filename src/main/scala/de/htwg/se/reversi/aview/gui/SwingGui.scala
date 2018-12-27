@@ -1,5 +1,5 @@
 package de.htwg.se.reversi.aview.gui
-
+/*
 import de.htwg.se.reversi.controller.controllerComponent.{ CandidatesChanged, CellChanged, ControllerInterface, GridSizeChanged }
 
 import scala.swing._
@@ -117,4 +117,4 @@ class SwingGui(controller: ControllerInterface) extends Frame {
     statusline.text = controller.statusText
     repaint
   }
-}
+}*/

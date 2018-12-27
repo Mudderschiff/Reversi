@@ -4,7 +4,7 @@ import scala.swing._
 import scala.swing.event._
 
 import de.htwg.se.reversi.controller.controllerComponent.{ CellChanged, ControllerInterface }
-
+/*
 class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends FlowPanel {
 
   //val givenCellColor = new Color(200, 200, 255)
@@ -88,4 +88,4 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
   else if (controller.isHighlighted(row, column)) highlightedCellColor
   else cellColor
 
-}
+}*/

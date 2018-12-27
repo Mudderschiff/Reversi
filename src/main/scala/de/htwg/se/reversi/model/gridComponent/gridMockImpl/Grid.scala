@@ -1,6 +1,6 @@
 package de.htwg.se.reversi.model.gridComponent.gridMockImpl
 
-import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
+import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface, gridBaseImpl}
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Turn
 
 class Grid(var size:Int) extends GridInterface{
@@ -19,6 +19,10 @@ class Grid(var size:Int) extends GridInterface{
   def finish: Boolean = false
 
   override def score(): (Int, Int) = (0,0)
+
+  override def checkChange(gridnew: GridInterface): Boolean = ???
+
+  override def unhighlight(): gridBaseImpl.Grid = ???
 }
 
 object EmptyCell extends CellInterface {

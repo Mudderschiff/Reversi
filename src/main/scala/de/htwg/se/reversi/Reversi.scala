@@ -24,4 +24,4 @@ object Reversi {
       tui.processInputLine(input)
     } while (input != "q")
   }
-}*/
+}

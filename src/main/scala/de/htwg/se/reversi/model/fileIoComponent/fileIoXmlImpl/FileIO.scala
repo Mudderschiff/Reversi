@@ -32,10 +32,6 @@ class FileIO extends FileIOInterface {
           val col: Int = (cell \ "@col").text.toInt
           val value: Int = cell.text.trim.toInt
           _grid = _grid.set(row, col, value)
-          //val given = (cell \ "@given").text.toBoolean
-          //val showCandidates = (cell \ "@showCandidates").text.toBoolean
-          //if (given) _grid = _grid.setGiven(row, col, value)
-          //if (showCandidates) _grid = _grid.setShowCandidates(row, col)
         }
         gridOption = Some(_grid)
       }

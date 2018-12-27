@@ -50,20 +50,19 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   override def score(): (Int, Int) = grid.score()
 
   def set(row: Int, col: Int, playerId: Int): Unit = {
-    var grid = this.grid
-    println(activePlayer)
-    //this.grid = this.grid.setTurnRC(playerId,row,col)
-    if(!grid.checkChange(grid.setTurnRC(playerId,row,col))) {
-      changePlayer()
+    var nonactivePlayer = 0
+    if(grid.checkChange(grid.setTurnRC(playerId,row,col))) {
+      if (playerId == 1) {
+        nonactivePlayer = 2
+        gameStatus = SET_Player1
+      } else {
+        nonactivePlayer = 1
+        gameStatus = SET_Player2
+      }
+      this.grid = this.grid.setTurnRC(playerId,row,col).highlight(nonactivePlayer)
+      //gameStatus = SET
+      publish(new CellChanged)
     }
-    //println(activePlayer)
-    if(activePlayer == 1) {
-      this.grid = this.grid.setTurnRC(playerId,row,col).highlight(2)
-    } else {
-      this.grid = this.grid.setTurnRC(playerId,row,col).highlight(1)
-    }
-    gameStatus = SET
-    publish(new CellChanged)
   }
   //def isGiven(row: Int, col: Int): Boolean = grid.cell(row, col).given
 
@@ -77,11 +76,10 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
       case _ =>
     }
     if(activePlayer == 1) {
-      grid = grid.createNewGrid.highlight(2)
-    } else {
       grid = grid.createNewGrid.highlight(1)
+    } else {
+      grid = grid.createNewGrid.highlight(2)
     }
-    grid = grid.createNewGrid.highlight(activePlayer)
     gameStatus = NEW
     publish(new CellChanged)
   }

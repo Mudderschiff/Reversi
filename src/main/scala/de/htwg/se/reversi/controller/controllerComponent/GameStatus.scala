@@ -2,12 +2,13 @@ package de.htwg.se.reversi.controller.controllerComponent
 
 object GameStatus extends Enumeration{
   type GameStatus = Value
-  val IDLE, RESIZE, SET, NEW, LOADED, COULDNOTLOAD, SAVED, CANDIDATES, FINISHED = Value
+  val IDLE, RESIZE, SET_Player1, SET_Player2, NEW, LOADED, COULDNOTLOAD, SAVED, CANDIDATES, FINISHED = Value
 
   val map = Map[GameStatus, String](
     IDLE -> "",
     NEW -> "A new game was created",
-    SET -> "A Cell was set",
+    SET_Player1 -> "Cell set by Player 1",
+    SET_Player2 -> "Cell set by Player 2",
     RESIZE -> "Game was resized",
     CANDIDATES -> "Showing candidates",
     FINISHED -> "Game successfully FINISHED",

@@ -33,10 +33,6 @@ class FileIO extends FileIOInterface {
           val cell = (json \\ "cell") (index)
           val value = (cell \ "value").as[Int]
           _grid = _grid.set(row, col, value)
-          //val given = (cell \ "given").as[Boolean]
-          //val showCandidates = (cell \ "showCandidates").as[Boolean]
-          //if (given) _grid = _grid.setGiven(row, col, value)
-          //if (showCandidates) _grid = _grid.setShowCandidates(row, col)
         }
         gridOption=Some(_grid)
       }
@@ -55,8 +51,6 @@ class FileIO extends FileIOInterface {
   implicit val cellWrites = new Writes[CellInterface] {
     def writes(cell: CellInterface) = Json.obj(
       "value" -> cell.value,
-      //"given" -> cell.given,
-      //"showCandidates" -> cell.showCandidates
     )
   }
 

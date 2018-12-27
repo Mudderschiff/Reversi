@@ -51,19 +51,33 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   }
 
   override def score(): (Int, Int) = grid.score()
-
+/*
   def set(row: Int, col: Int, playerId: Int): Unit = {
-    var nonactivePlayer = 0
     if(grid.checkChange(grid.setTurnRC(playerId,row,col))) {
       if (playerId == 1) {
-        nonactivePlayer = 2
+        grid = grid.setTurnRC(playerId,row,col).highlight(2)
         gameStatus = SET_Player1
       } else {
-        nonactivePlayer = 1
+        grid = grid.setTurnRC(playerId,row,col).highlight(1)
         gameStatus = SET_Player2
       }
-      this.grid = this.grid.setTurnRC(playerId,row,col).highlight(nonactivePlayer)
+
       //gameStatus = SET
+      publish(new CellChanged)
+    }
+  }*/
+
+  def set(row: Int, col: Int, playerId: Int): Unit = {
+    if(grid.checkChange(grid.setTurnRC(playerId,row,col))) {
+      if (playerId == 1) {
+        grid = grid.setTurnRC(playerId,row,col).highlight(2)
+        gameStatus = SET_Player1
+      } else {
+        grid = grid.setTurnRC(playerId,row,col).highlight(1)
+        gameStatus = SET_Player2
+      }
+      //gameStatus = SET
+      changePlayer()23
       publish(new CellChanged)
     }
   }

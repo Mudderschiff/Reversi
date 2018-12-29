@@ -43,9 +43,18 @@ class FileIO extends FileIOInterface {
   def save(grid:GridInterface):Unit = saveString(grid)
 
 
-  override def loadPlayer: Int = ???
+  override def loadPlayer: Int = {
+    val file = scala.xml.XML.loadFile("player.xml")
+    (file \\ "player").text.trim.toInt
+  }
 
-  override def savePlayer(activePlayer: Int): Unit = ???
+  override def savePlayer(activePlayer: Int): Unit = {
+    scala.xml.XML.save("player.xml", playerToXML(activePlayer))
+  }
+
+  def playerToXML(activePlayer: Int) = {
+    <player>{activePlayer}</player>
+  }
 
   def saveXML(grid:GridInterface):Unit = {
     scala.xml.XML.save("grid.xml", gridToXml(grid))

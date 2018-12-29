@@ -17,19 +17,18 @@ import scala.util.Random
 class Controller @Inject() (var grid: GridInterface) extends ControllerInterface with Publisher {
 
   var gameStatus: GameStatus = IDLE
-  val player1 = new Player(1)
-  val player2 = new Player(2)
-  var activePlayer = randomActivePlayer()
-
   val injector = Guice.createInjector(new ReversiModule)
   val fileIo = injector.instance[FileIOInterface]
 
+  val player1 = new Player(1)
+  val player2 = new Player(2)
+  var activePlayer = randomActivePlayer()
   var botplayer = false
 
 
   def getActivePlayer(): Int = activePlayer
-
   def randomActivePlayer(): Int = Random.shuffle(List(player1.playerId,player2.playerId)).head
+  def changePlayer(): Unit = if(activePlayer == 1) activePlayer = player2.playerId else activePlayer = player1.playerId
 
   def enableBot(): Unit = botplayer = true
   def disableBot(): Unit = botplayer = false
@@ -49,14 +48,34 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     newSize match {
       case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
       case 4 => grid = injector.instance[GridInterface](Names.named("small"))
-      case 8 => grid = injector.instance[GridInterface](Names.named("normal")).highlight(activePlayer)
+      case 8 => grid = injector.instance[GridInterface](Names.named("normal"))
       case _ =>
     }
     gameStatus = RESIZE
     publish(new GridSizeChanged(newSize))
   }
 
+  override def createNewGrid: Unit = {
+    grid.size match {
+      case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
+      case 4 => grid = injector.instance[GridInterface](Names.named("small"))
+      case 8 => grid = injector.instance[GridInterface](Names.named("normal"))
+      case _ =>
+    }
+    activePlayer = randomActivePlayer()
+    grid = grid.createNewGrid.highlight(getActivePlayer())
+    gameStatus = NEW
+    publish(new CellChanged)
+  }
+
+  def evaluateGame(): Int = grid.evaluateGame()
   override def score(): (Int, Int) = grid.score()
+  def finish(): Unit = {
+    if(grid.finish(getActivePlayer())) {
+      gameStatus = FINISHED
+      publish(new Finished)
+    }
+  }
 
   def set(row: Int, col: Int, playerId: Int): Unit = {
     if(grid.checkChange(grid.setTurnRC(playerId,row,col))) {
@@ -71,32 +90,19 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
       publish(new CellChanged)
     }
   }
-  def finish(): Unit = {
-    if(grid.finish(getActivePlayer())) {
-      gameStatus = FINISHED
-      publish(new Finished)
+
+  def bot: Unit = {
+    if(activePlayer == 2) {
+      if(grid.checkChange(grid.setTurn(grid.getNextTurnR(grid.getValidTurns(2)),2))) {
+        grid = grid.setTurn(grid.getNextTurnR(grid.getValidTurns(2)),2).highlight(1)
+        changePlayer()
+        gameStatus = SET_Bot
+        publish(new CellChanged)
+      }
     }
   }
 
-  def evaluateGame(): Int = grid.evaluateGame()
-
-  def changePlayer(): Unit = if(activePlayer == 1) activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
-
-  override def createNewGrid: Unit = {
-    grid.size match {
-      case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
-      case 4 => grid = injector.instance[GridInterface](Names.named("small"))
-      case 8 => grid = injector.instance[GridInterface](Names.named("normal")).highlight(activePlayer)
-      case _ =>
-    }
-    activePlayer = randomActivePlayer()
-    grid = grid.createNewGrid.highlight(getActivePlayer())
-    gameStatus = NEW
-    publish(new CellChanged)
-  }
-
-  def gridToString: String = grid.toString
-
+  // currently always higlight so unneded
   override def highlight(playerId: Int): Unit = {
     gameStatus = CANDIDATES
     publish(new CandidatesChanged)
@@ -126,20 +132,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   }
 
   def cell(row: Int, col: Int) = grid.cell(row, col)
-
   def gridSize: Int = grid.size
-
   def statusText: String = GameStatus.message(gameStatus)
-
-
-  def bot: Unit = {
-    if(activePlayer == 2) {
-      if(grid.checkChange(grid.setTurn(grid.getNextTurnR(grid.getValidTurns(2)),2))) {
-        grid = grid.setTurn(grid.getNextTurnR(grid.getValidTurns(2)),2).highlight(1)
-        changePlayer()
-        gameStatus = SET_Player2
-        publish(new CellChanged)
-      }
-    }
-  }
+  def gridToString: String = grid.toString
 }

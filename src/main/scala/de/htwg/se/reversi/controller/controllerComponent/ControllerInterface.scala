@@ -14,7 +14,6 @@ trait ControllerInterface extends Publisher {
   def load: Unit
   def resize(newSize: Int): Unit
   def set(row: Int, col: Int, value: Int): Unit
-  //def checkChange(gridnew: GridInterface): Boolean
   def highlight(playerId: Int): Unit
   def score(): (Int, Int)
   def gameStatus: GameStatus
@@ -27,10 +26,6 @@ trait ControllerInterface extends Publisher {
   def disableBot(): Unit
   def bot: Unit
 }
-/*
-trait ControllerIoInterface {
-  def setTurnRC(playerId: Int, row: Int, col: Int)
-}*/
 
 import scala.swing.event.Event
 

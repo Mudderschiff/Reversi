@@ -38,7 +38,6 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
     case event: GridSizeChanged => printTui
     case event: CellChanged     => printTui
     case event: Finished => printEnd
-    //case event: CandidatesChanged => printCandidates
   }
 
   def printTui: Unit = {
@@ -58,11 +57,4 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
     }
     logger.info("Final Score: B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString)
   }
-/*
-  def printCandidates: Unit = {
-    logger.info("Candidates: ")
-    for (row <- 0 until size; col <- 0 until size) {
-      if (controller.isShowCandidates(row, col)) println("("+row+","+col+"):"+controller.available(row, col).toList.sorted)
-    }
-  }*/
 }

@@ -12,9 +12,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
   def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
-  def nofield: Boolean = cells.rows.forall(coll => coll.forall(cell => cell.isSet))
-  def noturns: Boolean = getValidTurns(1).isEmpty & getValidTurns(2).isEmpty
-  def finish: Boolean = noturns || nofield
+  def finish(activePlyer: Int): Boolean = getValidTurns(activePlyer).isEmpty
 
   def highlight(playerId: Int): Grid = {
     var grid = this

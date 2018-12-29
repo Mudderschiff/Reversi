@@ -14,7 +14,7 @@ trait GridInterface {
   def highlight(playerId: Int): GridInterface
   def getNextTurnR(validTurns:List[Turn]):Turn
   def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn
-  def finish: Boolean
+  def finish(activePlyer: Int): Boolean
   def score(): (Int, Int)
   def checkChange(gridnew: GridInterface): Boolean
   def unhighlight(): Grid

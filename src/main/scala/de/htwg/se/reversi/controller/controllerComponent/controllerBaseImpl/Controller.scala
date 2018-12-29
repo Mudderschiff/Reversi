@@ -64,8 +64,8 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
       publish(new CellChanged)
     }
   }
-  def finish: Unit = {
-    if(grid.finish) {
+  def finish(): Unit = {
+    if(grid.finish(getActivePlayer())) {
       gameStatus = FINISHED
       publish(new Finished)
     }

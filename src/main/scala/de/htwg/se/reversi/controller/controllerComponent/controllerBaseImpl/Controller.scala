@@ -52,6 +52,8 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
       case _ =>
     }
     gameStatus = RESIZE
+    activePlayer = randomActivePlayer()
+    grid = grid.createNewGrid.highlight(getActivePlayer())
     publish(new GridSizeChanged(newSize))
   }
 

@@ -24,9 +24,16 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   val injector = Guice.createInjector(new ReversiModule)
   val fileIo = injector.instance[FileIOInterface]
 
+  var botplayer = false
+
+
   def getActivePlayer(): Int = activePlayer
 
   def randomActivePlayer(): Int = Random.shuffle(List(player1.playerId,player2.playerId)).head
+
+  def enableBot(): Unit = botplayer = true
+  def disableBot(): Unit = botplayer = false
+  def botstate(): Boolean = botplayer
 
   def createEmptyGrid: Unit = {
     grid.size match {
@@ -124,4 +131,15 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
 
   def statusText: String = GameStatus.message(gameStatus)
 
+
+  def bot: Unit = {
+    if(activePlayer == 2) {
+      if(grid.checkChange(grid.setTurn(grid.getNextTurnR(grid.getValidTurns(2)),2))) {
+        grid = grid.setTurn(grid.getNextTurnR(grid.getValidTurns(2)),2).highlight(1)
+        changePlayer()
+        gameStatus = SET_Player2
+        publish(new CellChanged)
+      }
+    }
+  }
 }

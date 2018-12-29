@@ -22,6 +22,10 @@ trait ControllerInterface extends Publisher {
   def getActivePlayer(): Int
   def finish: Unit
   def evaluateGame(): Int
+  def botstate(): Boolean
+  def enableBot(): Unit
+  def disableBot(): Unit
+  def bot: Unit
 }
 /*
 trait ControllerIoInterface {

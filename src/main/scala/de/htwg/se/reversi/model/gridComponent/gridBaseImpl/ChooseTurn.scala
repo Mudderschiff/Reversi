@@ -5,9 +5,7 @@ import scala.collection.concurrent.TrieMap
 
 class ChooseTurn(size: Int) {
   def getNextTurnR(turns:List[Turn]):Turn = {
-    var randNr = (new Random).nextInt()
-
-    turns(randNr % turns.size)
+    Random.shuffle(turns).head
   }
 
   def getNextTurnKI(turns:List[Turn], playerId:Int):Turn = {

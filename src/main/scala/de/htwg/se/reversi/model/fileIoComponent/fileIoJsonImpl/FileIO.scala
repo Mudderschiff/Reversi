@@ -40,7 +40,6 @@ class FileIO extends FileIOInterface {
     }
     gridOption
   }
-
   override def save(grid: GridInterface): Unit = {
     import java.io._
     val pw = new PrintWriter(new File("grid.json"))
@@ -48,9 +47,28 @@ class FileIO extends FileIOInterface {
     pw.close
   }
 
+  override def loadPlayer: Int = {
+    val source: String = Source.fromFile("player.json").getLines.mkString
+    val json: JsValue = Json.parse(source)
+    val activePlayer = (json \ "activePlayer").get.toString.toInt
+    activePlayer
+  }
+
+  override def savePlayer(activePlayer: Int): Unit = {
+    import java.io._
+    val pw = new PrintWriter(new File("player.json"))
+    pw.write(Json.prettyPrint(playerToJson(activePlayer)))
+    pw.close
+  }
+
   implicit val cellWrites = new Writes[CellInterface] {
     def writes(cell: CellInterface) = Json.obj(
       "value" -> cell.value,
+    )
+  }
+  def playerToJson(activePlayer: Int) = {
+    Json.obj(
+      "activePlayer" -> JsNumber(activePlayer)
     )
   }
 

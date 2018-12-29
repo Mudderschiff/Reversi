@@ -20,8 +20,6 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
     case "." => controller.resize(1)
     case "+" => controller.resize(4)
     case "#" => controller.resize(8)
-    //case "h1" => grid.highlight(1)
-    //case "h2" => grid.highlight(2)
     case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
       case row :: column :: Nil => {
         controller.set(row, column,controller.getActivePlayer())
@@ -47,9 +45,9 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
     //logger.info(controller.gridToString)
     logger.info(GameStatus.message(controller.gameStatus))
     if(controller.evaluateGame() == 1) {
-      logger.info("White Won\n")
+      logger.info("White Won")
     } else if (controller.evaluateGame() == 2) {
-      logger.info("Black Won\n")
+      logger.info("Black Won")
     } else {
       logger.info("Draw")
     }

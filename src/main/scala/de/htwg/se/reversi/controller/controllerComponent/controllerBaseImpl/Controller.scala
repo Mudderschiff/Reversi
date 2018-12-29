@@ -65,8 +65,10 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     }
   }
   def finish: Unit = {
-    if(grid.finish) gameStatus = FINISHED
-    publish(new Finished)
+    if(grid.finish) {
+      gameStatus = FINISHED
+      publish(new Finished)
+    }
   }
 
   def evaluateGame(): Int = grid.evaluateGame()
@@ -95,6 +97,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
 
   def save: Unit = {
     fileIo.save(grid)
+    fileIo.savePlayer(activePlayer)
     gameStatus = SAVED
     publish(new CellChanged)
   }
@@ -111,6 +114,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
         gameStatus = LOADED
       }
     }
+    activePlayer = fileIo.loadPlayer
     publish(new CellChanged)
   }
 

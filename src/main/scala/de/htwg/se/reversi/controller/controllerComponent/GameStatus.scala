@@ -11,7 +11,7 @@ object GameStatus extends Enumeration{
     SET_Player2 -> "Cell set by Player 2",
     RESIZE -> "Game was resized",
     CANDIDATES -> "Showing candidates",
-    FINISHED -> "Game successfully FINISHED",
+    FINISHED -> "Finished",
     LOADED ->"A new Game was loaded",
     COULDNOTLOAD -> "The file could not be loaded",
     SAVED ->  "The Game was saved")

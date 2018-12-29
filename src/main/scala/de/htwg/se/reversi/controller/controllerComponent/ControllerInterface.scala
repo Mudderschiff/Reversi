@@ -36,3 +36,5 @@ case class GridSizeChanged(newSize: Int) extends Event
 class CandidatesChanged extends Event
 
 class Finished extends Event
+
+class BotStatus extends Event

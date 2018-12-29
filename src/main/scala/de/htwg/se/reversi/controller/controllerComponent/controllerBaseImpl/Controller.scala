@@ -30,8 +30,16 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   def randomActivePlayer(): Int = Random.shuffle(List(player1.playerId,player2.playerId)).head
   def changePlayer(): Unit = if(activePlayer == 1) activePlayer = player2.playerId else activePlayer = player1.playerId
 
-  def enableBot(): Unit = botplayer = true
-  def disableBot(): Unit = botplayer = false
+  def enableBot(): Unit = {
+    botplayer = true
+    gameStatus = BOT_ENABLE
+    publish(new BotStatus)
+  }
+  def disableBot(): Unit = {
+    botplayer = false
+    gameStatus = BOT_DISABLE
+    publish(new BotStatus)
+  }
   def botstate(): Boolean = botplayer
 
   def createEmptyGrid: Unit = {
@@ -51,9 +59,9 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
       case 8 => grid = injector.instance[GridInterface](Names.named("normal"))
       case _ =>
     }
-    gameStatus = RESIZE
     activePlayer = randomActivePlayer()
     grid = grid.createNewGrid.highlight(getActivePlayer())
+    gameStatus = RESIZE
     publish(new GridSizeChanged(newSize))
   }
 

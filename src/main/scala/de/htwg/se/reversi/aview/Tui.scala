@@ -3,7 +3,7 @@ package de.htwg.se.reversi.aview
 import com.typesafe.scalalogging.{LazyLogging, Logger}
 import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus
-import de.htwg.se.reversi.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged, Finished}
+import de.htwg.se.reversi.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged, Finished, BotStatus}
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 import de.htwg.se.reversi.model.playerComponent.Player
 
@@ -38,8 +38,12 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
     case event: GridSizeChanged => printTui
     case event: CellChanged     => printTui
     case event: Finished => printEnd
+    case event: BotStatus => printStatus
   }
 
+  def printStatus: Unit = {
+    logger.info(GameStatus.message(controller.gameStatus))
+  }
   def printTui: Unit = {
     logger.info(controller.gridToString)
     logger.info(GameStatus.message(controller.gameStatus))

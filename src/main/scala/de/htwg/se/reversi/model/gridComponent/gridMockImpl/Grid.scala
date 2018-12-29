@@ -13,9 +13,6 @@ class Grid(var size:Int) extends GridInterface{
   def createNewGrid: GridInterface = this
   def evaluateGame():Int = 0
   def highlight(playerId: Int): GridInterface = this
-  //should be removed
-  def getNextTurnR(validTurns:List[Turn]):Turn = ???
-  def getNextTurnKI(validTurns:List[Turn], playerId:Int):Turn = ???
   def finish(activePlayer: Int): Boolean = false
 
   override def score(): (Int, Int) = (0,0)
@@ -27,6 +24,10 @@ class Grid(var size:Int) extends GridInterface{
   override def getValidTurns(playerId: Int): List[Turn] = ???
 
   override def setTurn(turn: Turn, value: Int): gridBaseImpl.Grid = ???
+
+  override def makeNextTurnKI(playerId: Int): gridBaseImpl.Grid = ???
+
+  override def makeNextTurnRandom(playerId: Int): gridBaseImpl.Grid = ???
 }
 
 object EmptyCell extends CellInterface {

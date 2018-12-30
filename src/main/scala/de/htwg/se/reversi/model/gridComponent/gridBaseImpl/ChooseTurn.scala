@@ -6,7 +6,8 @@ import scala.collection.concurrent.TrieMap
 class ChooseTurn(grid: Grid) {
 
   def makeNextTurnRandom(player:Int):Grid = {
-    grid.setTurn(Random.shuffle(grid.getValidTurns(player)).head, player)
+    val t = Random.shuffle(grid.getValidTurns(player)).head
+    grid.setTurnRC(player, t.toRow, t.toCol)
   }
 
   def makeNextTurnKI(player:Int):Grid = {
@@ -17,7 +18,7 @@ class ChooseTurn(grid: Grid) {
 
     val sorted = turnsAnditsValue.toSeq.sortBy(_._2).toMap
     //Todo: Hier unter den gleichwertigen noch eine Entscheidung treffen
-    grid.setTurn(sorted.head._1, player);
+    grid.setTurnRC(player, sorted.head._1.toRow, sorted.head._1.toCol);
   }
 
   private def isWall(turn:Turn):Boolean = {

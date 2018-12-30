@@ -1,5 +1,5 @@
 package model.gridComponent.gridBaseImpl
-/*
+
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix, Turn}
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Direction
 import org.scalatest.{Matchers, WordSpec}
@@ -29,7 +29,7 @@ class GridSpec extends WordSpec with Matchers {
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
       val tinyGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1)), Vector(Cell(1), Cell(2)))))
-      "finish if noturns available" in {
+      /*"finish if noturns available" in {
         normalGrid.noturns should be(true)
         normalGrid.finish should be(true)
       }
@@ -37,7 +37,7 @@ class GridSpec extends WordSpec with Matchers {
         tinyGrid.noturns should be(true)
         tinyGrid.nofield should be(true)
         tinyGrid.finish should be(true)
-      }
+      }*/
 
     }
     "function validTurns" should {
@@ -192,4 +192,4 @@ class GridSpec extends WordSpec with Matchers {
     }
   }
 
-}*/
+}

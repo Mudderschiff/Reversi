@@ -25,6 +25,9 @@ trait ControllerInterface extends Publisher {
   def enableBot(): Unit
   def disableBot(): Unit
   def bot: Unit
+  def statusText: String
+  def cell(row: Int, col: Int): CellInterface
+  def cellToString(row: Int, col: Int): String
 }
 
 import scala.swing.event.Event

@@ -25,4 +25,6 @@ trait GridInterface {
 trait CellInterface {
   def value:Int
   def isSet: Boolean
+
+  override def toString: String = super.toString
 }

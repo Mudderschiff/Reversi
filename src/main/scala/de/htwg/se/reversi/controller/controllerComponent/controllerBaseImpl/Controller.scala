@@ -145,4 +145,6 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   def gridSize: Int = grid.size
   def statusText: String = GameStatus.message(gameStatus)
   def gridToString: String = grid.toString
+
+  override def cellToString(row: Int, col: Int): String = cell(row,col).toString
 }

@@ -7,14 +7,13 @@ import scala.collection.mutable.ListBuffer
 case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def this(size:Int) = this(new Matrix[Cell](size, Cell(0)))
   val size:Int = cells.size
+  var currentValidTurns:List[Turn] = Nil
   def cell(row:Int, col:Int):Cell = cells.cell(row, col)
   def set(row:Int, col:Int, value:Int):Grid = copy(cells.replaceCell(row, col, Cell(value)))
+  def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
   def row(row:Int):House = House(cells.rows(row))
   def col(col:Int):House = House(cells.rows.map(row=>row(col)))
-  def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
-  def nofield: Boolean = cells.rows.forall(coll => coll.forall(cell => cell.isSet))
-  def noturns: Boolean = getValidTurns(1).isEmpty & getValidTurns(2).isEmpty
-  def finish: Boolean = noturns || nofield
+  def finish(activePlayer: Int): Boolean = getValidTurns(activePlayer).isEmpty
 
   def highlight(playerId: Int): Grid = {
     var grid = this
@@ -42,12 +41,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       case Direction.UpLeft => grid = grid.set(turn.toRow,turn.toCol,3)
       case Direction.DownRight => grid = grid.set(turn.toRow,turn.toCol,3)
       case Direction.DownLeft => grid = grid.set(turn.toRow,turn.toCol,3)
-
     }
     grid
   }
 
-  def checkChange(gridnew: Grid): Boolean = {
+  def checkChange(gridnew: GridInterface): Boolean = {
     var bool = false
     var grid = this
     for {
@@ -60,7 +58,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    //if(playerId == 1) grid.highlight(2) else grid.highlight(1)
+    currentValidTurns = Nil
     grid
   }
 
@@ -77,6 +75,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
    val (black, white) = score()
     if (white > black) 1 else if (black > white) 2 else 0
   }
+
 
   def setTurn(turn:Turn, value:Int):Grid = {
     var grid = this
@@ -118,11 +117,16 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   def getValidTurns(playerId: Int): List[Turn] = {
+    if(playerId != 2 && playerId != 1) {
+      return Nil
+    }
+
+    if(currentValidTurns != Nil) {
+      return currentValidTurns
+    }
+
     var reval = new ListBuffer[Turn]
 
-    if(playerId != 2 && playerId != 1) {
-      return reval.toList
-    }
     for {
       row <- 0 until size
       col <- 0 until size
@@ -147,6 +151,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     if(grid.cell(up,col).value != playerId && grid.cell(up,col).value != 0 && grid.cell(up,col).value != 3) {
       while (up > 0) {
         up -= 1
+        if (grid.cell(up,col).value == playerId) return None
         if(grid.cell(up,col).value == 0 || grid.cell(up,col).value == 3) return Some(Turn(row,col,up,col,Direction.Up))
       }
       None
@@ -162,6 +167,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     if(grid.cell(down,col).value != playerId && grid.cell(down,col).value != 0 && grid.cell(down,col).value != 3) {
       while (down < grid.size - 1) {
         down += 1
+        if (grid.cell(down,col).value == playerId) return None
         if(grid.cell(down,col).value == 0 || grid.cell(down,col).value == 3) return Some(Turn(row,col,down,col,Direction.Down))
       }
       None
@@ -177,6 +183,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     if(grid.cell(row,right).value != playerId && grid.cell(row,right).value != 0 && grid.cell(row,right).value != 3) {
       while (right < grid.size - 1) {
         right += 1
+        if (grid.cell(row,right).value == playerId) return None
         if(grid.cell(row,right).value == 0 || grid.cell(row,right).value == 3) return Some(Turn(row,col,row,right,Direction.Right))
       }
       None
@@ -192,6 +199,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     if(grid.cell(row,left).value != playerId && grid.cell(row,left).value != 0 && grid.cell(row,left).value != 3) {
       while (left > 0) {
         left -= 1
+        if (grid.cell(row,left).value == playerId) return None
         if(grid.cell(row,left).value == 0 || grid.cell(row,left).value == 3) return Some(Turn(row,col,row,left,Direction.Left))
       }
       None
@@ -209,6 +217,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       while (up > 0 && right < grid.size - 1) {
         up -= 1
         right += 1
+        if (grid.cell(up,right).value == playerId) return None
         if(grid.cell(up,right).value == 0 || grid.cell(up,right).value == 3) return Some(Turn(row,col,up,right,Direction.UpRight))
       }
       None
@@ -226,6 +235,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       while (up > 0 && left > 0) {
         up -= 1
         left -= 1
+        if (grid.cell(up,left).value == playerId) return None
         if(grid.cell(up,left).value == 0 || grid.cell(up,left).value == 3) return Some(Turn(row,col,up,left, Direction.UpLeft))
       }
       None
@@ -243,6 +253,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       while (down < grid.size - 1 && right < grid.size - 1) {
         down += 1
         right += 1
+        if (grid.cell(down,right).value == playerId) return None
         if(grid.cell(down,right).value == 0 || grid.cell(down,right).value == 3) return Some(Turn(row,col,down,right, Direction.DownRight))
       }
       None
@@ -260,6 +271,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
       while (down < grid.size - 1 && left > 0) {
         down += 1
         left -= 1
+        if (grid.cell(down,left).value == playerId) return None
         if(grid.cell(down,left).value == 0 || grid.cell(down,left).value == 3) return Some(Turn(row,col,down,left,Direction.DownLeft))
       }
       None
@@ -267,9 +279,9 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     None
   }
   
-  override def getNextTurnKI(validTurns: List[Turn], playerId: Int): Turn = (new ChooseTurn(size)).getNextTurnKI(validTurns, playerId)
-  override def getNextTurnR(validTurns: List[Turn]): Turn = (new ChooseTurn(size)).getNextTurnR(validTurns)
-  override def createNewGrid: Grid = (new GridCreator).createGrid(size)
+  override def makeNextTurnRandom(playerId: Int): Grid = (new ChooseTurn(this)).makeNextTurnRandom(playerId)
+  override def makeNextTurnKI(playerId: Int): Grid = (new ChooseTurn(this)).makeNextTurnKI(playerId)
+  override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 
   override def toString: String = {
     val row, col = StringBuilder.newBuilder

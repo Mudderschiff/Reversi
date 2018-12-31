@@ -1,39 +1,64 @@
 package de.htwg.se.reversi.aview
 
-//import com.typesafe.scalalogging.{LazyLogging, Logger}
-//import de.htwg.se.sudoku.controller.controllerComponent.ControllerInterface
-//import de.htwg.se.sudoku.controller.controllerComponent.GameStatus
-//import de.htwg.se.sudoku.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged}
+import com.typesafe.scalalogging.{LazyLogging, Logger}
+import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
+import de.htwg.se.reversi.controller.controllerComponent.GameStatus
+import de.htwg.se.reversi.controller.controllerComponent.{CandidatesChanged, CellChanged, GridSizeChanged, Finished, BotStatus}
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 import de.htwg.se.reversi.model.playerComponent.Player
 
-//import de.htwg.se.reversi.model.{Grid,GridCreator,Solver}
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.GridCreator
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
+import scala.swing.Reactor
 
-class Tui {
-  val player1 = new Player(1)
-  val player2 = new Player(2)
-  var activePlayer = player1.playerId
-  //var notactivePlayer
-
-  def changePlayer(): Unit = if(activePlayer == 1)  activePlayer = player2.playerId else if (activePlayer == 2) activePlayer = player1.playerId
-
-  def processInputLine(input: String, grid:Grid):Grid = input match {
-    case "q" => grid.createNewGrid
-    case "n"=> new Grid(8).createNewGrid
-    case "h1" => grid.highlight(1)
-    case "h2" => grid.highlight(2)
+class Tui(controller: ControllerInterface) extends Reactor with LazyLogging{
+  listenTo(controller)
+  def processInputLine(input: String):Unit = input match {
+    case "q" => controller.createEmptyGrid
+    case "n"=> controller.createNewGrid
+    case "f" => controller.save
+    case "l" => controller.load
+    case "." => controller.resize(1)
+    case "+" => controller.resize(4)
+    case "#" => controller.resize(8)
+    case "e" => {
+      controller.enableBot()
+      if(controller.botstate()) controller.bot
+    }
+    case "d" => { controller.disableBot()}
     case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
       case row :: column :: Nil => {
-        var returngrid = grid
-        if (grid.checkChange(grid.setTurnRC(activePlayer, row, column))) {
-          returngrid = grid.setTurnRC(activePlayer, row, column)
-          changePlayer()
-        }
-        print(grid.score())
-        returngrid.highlight(activePlayer)
+        controller.set(row, column,controller.getActivePlayer())
+        if(controller.botstate()) controller.bot
+        controller.finish
       }
-      case _ => grid
+      case _ =>
     }
+  }
+
+  reactions += {
+    case event: GridSizeChanged => printTui
+    case event: CellChanged     => printTui
+    case event: Finished => printEnd
+    case event: BotStatus => printStatus
+  }
+
+  def printStatus: Unit = {
+    logger.info(GameStatus.message(controller.gameStatus))
+  }
+  def printTui: Unit = {
+    logger.info(controller.gridToString)
+    logger.info(GameStatus.message(controller.gameStatus))
+    logger.info("B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString)
+  }
+  def printEnd: Unit = {
+    //logger.info(controller.gridToString)
+    logger.info(GameStatus.message(controller.gameStatus))
+    if(controller.evaluateGame() == 1) {
+      logger.info("White Won")
+    } else if (controller.evaluateGame() == 2) {
+      logger.info("Black Won")
+    } else {
+      logger.info("Draw")
+    }
+    logger.info("Final Score: B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString)
   }
 }

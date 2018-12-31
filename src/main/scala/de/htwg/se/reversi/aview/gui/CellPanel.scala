@@ -9,19 +9,12 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
 
   val cellColor = new Color(224, 224, 255)
   val highlightedCellColor = new Color(192, 255, 192)
+  val unhighlightedCellColor = new Color(255, 189, 189)
 
   def myCell = controller.cell(row, column)
-/*
-  def cellText(row: Int, col: Int) =  {
-    if(controller.cell(row,column).value == 3) {
-      ""
-    } else {
-      "" + controller.cell(row,column)
-    }
 
-  }
-*/
-  def cellText(row: Int, col: Int) =  "" + controller.cell(row,column)
+  def cellText(row: Int, col: Int) = if(controller.cell(row,column).value == 3)  "" else  "" + controller.cell(row,column)
+
   val label =
     new Label {
       text = cellText(row, column)
@@ -34,6 +27,7 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
     background = cellColor
     //border = Swing.BeveledBorder(Swing.Raised)
     listenTo(mouse.clicks)
+    listenTo(mouse.moves)
     listenTo(controller)
     reactions += {
       case e: CellChanged => {
@@ -42,6 +36,16 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
       }
       case MouseClicked(src, pt, mod, clicks, pops) => {
         controller.set(row,column,controller.getActivePlayer())
+        repaint
+      }
+      case MouseEntered(src,pt,mod) => {
+        if (controller.cell(row,column).value == 3) {background = highlightedCellColor }
+        else if (controller.cell(row,column).isSet) {background = cellColor }
+        else {background = unhighlightedCellColor}
+        repaint
+      }
+      case MouseExited(src,pt,mod) => {
+        background = cellColor
         repaint
       }
     }

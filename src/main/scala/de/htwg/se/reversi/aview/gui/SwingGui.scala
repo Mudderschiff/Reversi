@@ -1,6 +1,7 @@
 package de.htwg.se.reversi.aview.gui
 
-import de.htwg.se.reversi.controller.controllerComponent.{ CandidatesChanged, CellChanged, ControllerInterface, GridSizeChanged }
+import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, CandidatesChanged, CellChanged, ControllerInterface, Finished, GridSizeChanged}
+import javax.swing.JPanel
 
 import scala.swing._
 import scala.swing.Swing.LineBorder
@@ -13,15 +14,21 @@ class SwingGui(controller: ControllerInterface) extends Frame {
   listenTo(controller)
 
   title = "HTWG Reversi"
-  var cells = Array.ofDim[CellPanel](controller.gridSize, controller.gridSize)
-
-  def gridPanel = new GridPanel(1,1) {
-    //border = LineBorder(java.awt.Color.BLACK, 2)
-    //background = java.awt.Color.BLACK
-    contents += new GridPanel(controller.gridSize, controller.gridSize) {
+  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.gridSize, controller.gridSize)
+/*
+ def scorepanel = new FlowPanel {
+    //logger.info("B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString)
+    contents += new Label("Score:")
+    val score = new TextComponent
+    score.text = "B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString
+    contents += score
+  }
+*/
+  def gridPanel: GridPanel = new GridPanel(1,1) {
+    contents += new GridPanel(cells.length, cells.length) {
       for {
-        innerRow <- 0 until controller.gridSize
-        innerColumn <- 0 until controller.gridSize
+        innerRow <- cells.indices
+        innerColumn <- cells.indices
       } {
         val cellPanel = new CellPanel(innerRow, innerColumn, controller)
         cells(innerRow)(innerColumn) = cellPanel
@@ -31,8 +38,10 @@ class SwingGui(controller: ControllerInterface) extends Frame {
     }
   }
   val statusline = new TextField(controller.statusText, 20)
+  controller.finish
 
   contents = new BorderPanel {
+    //add(scorepanel, BorderPanel.Position.North)
     add(gridPanel, BorderPanel.Position.Center)
     add(statusline, BorderPanel.Position.South)
   }
@@ -46,43 +55,64 @@ class SwingGui(controller: ControllerInterface) extends Frame {
       contents += new MenuItem(Action("Load") { controller.load })
       contents += new MenuItem(Action("Quit") { System.exit(0) })
     }
-    contents += new Menu("Highlight") {
-      mnemonic = Key.H
-      for { index <- 0 to controller.gridSize } {
-        contents += new MenuItem(Action(index.toString) { controller.highlight(index) })
-      }
+
+    contents += new Menu("Bot") {
+      mnemonic = Key.B
+      contents += new MenuItem(Action("Enable") {
+        controller.enableBot()
+        if(controller.botstate()) controller.bot
+      })
+      contents += new MenuItem(Action("Disable") { controller.disableBot()})
     }
+
     contents += new Menu("Options") {
       mnemonic = Key.O
       contents += new MenuItem(Action("Size 1*1") { controller.resize(1) })
       contents += new MenuItem(Action("Size 4*4") { controller.resize(4) })
-      contents += new MenuItem(Action("Size 9*9") { controller.resize(9) })
+      contents += new MenuItem(Action("Size 8*8") { controller.resize(8) })
 
     }
   }
 
   visible = true
-  redraw
+  redraw()
 
   reactions += {
     case event: GridSizeChanged => resize(event.newSize)
-    case event: CellChanged => redraw
-    case event: CandidatesChanged => redraw
+    case event: CellChanged     => redraw
+    case event: Finished => end
+    case event: BotStatus => redraw
   }
 
-  def resize(gridSize: Int) = {
+  def resize(gridSize: Int): Unit = {
     cells = Array.ofDim[CellPanel](controller.gridSize, controller.gridSize)
     contents = new BorderPanel {
+      //add(scorepanel, BorderPanel.Position.North)
       add(gridPanel, BorderPanel.Position.Center)
       add(statusline, BorderPanel.Position.South)
     }
+    redraw()
   }
-  def redraw = {
+  def redraw(): Unit = {
     for {
       row <- 0 until controller.gridSize
       column <- 0 until controller.gridSize
     } cells(row)(column).redraw
     statusline.text = controller.statusText
     repaint
+  }
+
+  def end(): Unit = {
+    val end = StringBuilder.newBuilder
+    end.append(controller.statusText)
+      if(controller.evaluateGame() == 1) {
+        end.append(" White Won")
+      } else if (controller.evaluateGame() == 2) {
+        end.append(" Black Won")
+      } else {
+        end.append(" Draw")
+      }
+    end.append(" Final Score: B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString)
+    statusline.text = end.toString()
   }
 }

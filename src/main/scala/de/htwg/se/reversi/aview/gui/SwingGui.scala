@@ -79,9 +79,9 @@ class SwingGui(controller: ControllerInterface) extends Frame {
 
   reactions += {
     case event: GridSizeChanged => resize(event.newSize)
-    case event: CellChanged     => redraw
+    case event: CellChanged     => resize(controller.gridSize)
     case event: Finished => end
-    case event: BotStatus => redraw
+    case event: BotStatus => redraw()
   }
 
   def resize(gridSize: Int): Unit = {

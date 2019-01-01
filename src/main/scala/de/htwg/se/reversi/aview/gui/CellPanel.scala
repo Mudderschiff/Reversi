@@ -21,7 +21,7 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
 
   val cell: BoxPanel = new BoxPanel(Orientation.Vertical) {
     contents += label
-    preferredSize = new Dimension(80, 80)
+    preferredSize = new Dimension(65, 65)
     border = Swing.BeveledBorder(Swing.Lowered)
     listenTo(mouse.clicks)
     listenTo(mouse.moves)

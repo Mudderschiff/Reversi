@@ -1,6 +1,9 @@
 package de.htwg.se.reversi.aview.gui
 
+import java.awt.Color
+
 import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, CellChanged, ControllerInterface, Finished, GridSizeChanged}
+import javax.swing.JPanel
 
 import scala.swing._
 import scala.swing.event._
@@ -34,7 +37,7 @@ class SwingGui(controller: ControllerInterface) extends Frame {
     }
   }
 
-  def gridPanel: GridPanel = new GridPanel(1,1) {
+  def gridPanel: FlowPanel = new FlowPanel() {
     contents += new GridPanel(cells.length, cells.length) {
       for {
         innerRow <- cells.indices

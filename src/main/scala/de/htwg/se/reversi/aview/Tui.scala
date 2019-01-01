@@ -10,22 +10,22 @@ import scala.swing.Reactor
 class Tui(controller: ControllerInterface) extends Reactor with LazyLogging {
   listenTo(controller)
   def processInputLine(input: String):Unit = input match {
-    case "q" => controller.createEmptyGrid
-    case "n"=> controller.createNewGrid
-    case "f" => controller.save
-    case "l" => controller.load
+    case "q" => controller.createEmptyGrid()
+    case "n"=> controller.createNewGrid()
+    case "f" => controller.save()
+    case "l" => controller.load()
     case "." => controller.resize(1)
     case "+" => controller.resize(4)
     case "#" => controller.resize(8)
     case "e" =>
       controller.enableBot()
-      if(controller.botstate()) controller.bot
+      if(controller.botState()) controller.bot()
     case "d" => controller.disableBot()
     case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
       case row :: column :: Nil =>
         controller.set(row, column,controller.getActivePlayer())
-        if(controller.botstate()) controller.bot
-        controller.finish
+        if(controller.botState()) controller.bot()
+        controller.finish()
       case _ =>
     }
   }

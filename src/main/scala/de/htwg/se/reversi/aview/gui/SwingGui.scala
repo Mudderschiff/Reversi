@@ -51,10 +51,10 @@ class SwingGui(controller: ControllerInterface) extends Frame {
   menuBar = new MenuBar {
     contents += new Menu("File") {
       mnemonic = Key.F
-      contents += new MenuItem(Action("Empty") {controller.createEmptyGrid})
-      contents += new MenuItem(Action("New") {controller.createNewGrid})
-      contents += new MenuItem(Action("Save") { controller.save })
-      contents += new MenuItem(Action("Load") { controller.load })
+      contents += new MenuItem(Action("Empty") {controller.createEmptyGrid()})
+      contents += new MenuItem(Action("New") {controller.createNewGrid()})
+      contents += new MenuItem(Action("Save") { controller.save() })
+      contents += new MenuItem(Action("Load") { controller.load() })
       contents += new MenuItem(Action("Quit") { System.exit(0) })
     }
 
@@ -62,7 +62,7 @@ class SwingGui(controller: ControllerInterface) extends Frame {
       mnemonic = Key.B
       contents += new MenuItem(Action("Enable") {
         controller.enableBot()
-        if(controller.botstate()) controller.bot
+        if(controller.botState()) controller.bot()
       })
       contents += new MenuItem(Action("Disable") { controller.disableBot()})
     }
@@ -97,7 +97,7 @@ class SwingGui(controller: ControllerInterface) extends Frame {
     for {
       row <- 0 until controller.gridSize
       column <- 0 until controller.gridSize
-    } cells(row)(column).redraw
+    } cells(row)(column).redraw()
     statusline.text = controller.statusText
   }
 

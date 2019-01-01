@@ -32,8 +32,8 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
         repaint
       case MouseClicked(src, pt, mod, clicks, pops) =>
         controller.set(row,column,controller.getActivePlayer())
-        if(controller.botstate()) controller.bot
-        controller.finish
+        if(controller.botState()) controller.bot()
+        controller.finish()
         repaint
       case MouseEntered(src,pt,mod) =>
         if (controller.cell(row,column).value == 3) {background = highlightedCellColor}

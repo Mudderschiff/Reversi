@@ -1,14 +1,13 @@
 package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
 
 import com.google.inject.name.Names
-import com.google.inject.{ Guice, Inject }
+import com.google.inject.{Guice, Inject, Injector}
 import net.codingwell.scalaguice.InjectorExtensions._
 import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
 import de.htwg.se.reversi.controller.controllerComponent._
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
-import de.htwg.se.reversi.model.gridComponent.GridInterface
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
+import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
 import de.htwg.se.reversi.model.playerComponent.Player
 
 import scala.swing.Publisher
@@ -17,13 +16,13 @@ import scala.util.Random
 class Controller @Inject() (var grid: GridInterface) extends ControllerInterface with Publisher {
 
   var gameStatus: GameStatus = IDLE
-  val injector = Guice.createInjector(new ReversiModule)
-  val fileIo = injector.instance[FileIOInterface]
+  val injector: Injector = Guice.createInjector(new ReversiModule)
+  val fileIo: FileIOInterface = injector.instance[FileIOInterface]
 
-  val player1 = new Player(1)
-  val player2 = new Player(2)
-  var activePlayer = randomActivePlayer()
-  var botplayer = false
+  val player1 = Player(1)
+  val player2 = Player(2)
+  var activePlayer: Int = randomActivePlayer()
+  var botPlayer = false
 
 
   def getActivePlayer(): Int = activePlayer
@@ -31,18 +30,18 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   def changePlayer(): Unit = if(activePlayer == 1) activePlayer = player2.playerId else activePlayer = player1.playerId
 
   def enableBot(): Unit = {
-    botplayer = true
+    botPlayer = true
     gameStatus = BOT_ENABLE
     publish(new BotStatus)
   }
   def disableBot(): Unit = {
-    botplayer = false
+    botPlayer = false
     gameStatus = BOT_DISABLE
     publish(new BotStatus)
   }
-  def botstate(): Boolean = botplayer
+  def botState(): Boolean = botPlayer
 
-  def createEmptyGrid: Unit = {
+  def createEmptyGrid(): Unit = {
     grid.size match {
       case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
       case 4 => grid = injector.instance[GridInterface](Names.named("small"))
@@ -62,10 +61,10 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     activePlayer = randomActivePlayer()
     grid = grid.createNewGrid.highlight(getActivePlayer())
     gameStatus = RESIZE
-    publish(new GridSizeChanged(newSize))
+    publish(GridSizeChanged(newSize))
   }
 
-  override def createNewGrid: Unit = {
+  override def createNewGrid(): Unit = {
     grid.size match {
       case 1 => grid = injector.instance[GridInterface](Names.named("tiny"))
       case 4 => grid = injector.instance[GridInterface](Names.named("small"))
@@ -101,7 +100,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     }
   }
 
-  def bot: Unit = {
+  def bot(): Unit = {
     if(activePlayer == 2) {
       if(grid.checkChange(grid.makeNextTurnRandom(activePlayer))) {
         grid = grid.makeNextTurnRandom(activePlayer).highlight(1)
@@ -112,39 +111,29 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
     }
   }
 
-  // currently always higlight so unneded
-  override def highlight(playerId: Int): Unit = {
-    gameStatus = CANDIDATES
-    publish(new CandidatesChanged)
-  }
-
-  def save: Unit = {
+  def save(): Unit = {
     fileIo.save(grid)
     fileIo.savePlayer(activePlayer)
     gameStatus = SAVED
     publish(new CellChanged)
   }
 
-  def load: Unit = {
+  def load(): Unit = {
     val gridOption = fileIo.load
     gridOption match {
-      case None => {
-        createEmptyGrid
+      case None =>
+        createEmptyGrid()
         gameStatus = COULDNOTLOAD
-      }
-      case Some(_grid) => {
+      case Some(_grid) =>
         grid = _grid
         gameStatus = LOADED
-      }
     }
     activePlayer = fileIo.loadPlayer
     publish(new CellChanged)
   }
 
-  def cell(row: Int, col: Int) = grid.cell(row, col)
+  def cell(row: Int, col: Int): CellInterface = grid.cell(row, col)
   def gridSize: Int = grid.size
   def statusText: String = GameStatus.message(gameStatus)
   def gridToString: String = grid.toString
-
-  override def cellToString(row: Int, col: Int): String = cell(row,col).toString
 }

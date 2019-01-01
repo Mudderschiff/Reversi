@@ -54,7 +54,7 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
   }
 
   def setBackground(p: Panel): Unit =
-    if (controller.cell(row,column).value == 1) {p.background = cellWhite}
-    else if(controller.cell(row,column).value == 2) {p.background = cellBlack}
+    if (controller.cell(row, column).value equals 1) {p.background = cellWhite}
+    else if(controller.cell(row,column).value.equals(2)) {p.background = cellBlack}
     else {p.background = UIManager.getColor(GridPanel)}
 }

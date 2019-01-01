@@ -19,7 +19,7 @@ class Grid(var size:Int) extends GridInterface{
 
   override def checkChange(gridnew: GridInterface): Boolean = ???
 
-  override def unhighlight(): gridBaseImpl.Grid = ???
+  override def unHighlight(): gridBaseImpl.Grid = ???
 
   override def getValidTurns(playerId: Int): List[Turn] = ???
 

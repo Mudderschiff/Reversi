@@ -17,11 +17,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def highlight(playerId: Int): Grid = {
     var grid = this
-    grid = grid.unhighlight()
+    grid = grid.unHighlight()
     getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
     grid
   }
-  def unhighlight(): Grid = {
+  def unHighlight(): Grid = {
     var grid = this
     for {
       row <- 0 until size
@@ -51,7 +51,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     for {
       row <- 0 until size
       col <- 0 until size
-    } if (grid.unhighlight().cell(row, col).value != gridnew.unhighlight().cell(row,col).value) bool = true
+    } if (grid.unHighlight().cell(row, col).value != gridnew.unHighlight().cell(row,col).value) bool = true
    bool
   }
 

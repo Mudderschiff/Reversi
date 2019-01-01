@@ -19,12 +19,10 @@ trait GridInterface {
   def finish(activePlayer: Int): Boolean
   def score(): (Int, Int)
   def checkChange(gridnew: GridInterface): Boolean
-  def unhighlight(): Grid
+  def unHighlight(): Grid
 }
 
 trait CellInterface {
   def value:Int
   def isSet: Boolean
-
-  override def toString: String = super.toString
 }

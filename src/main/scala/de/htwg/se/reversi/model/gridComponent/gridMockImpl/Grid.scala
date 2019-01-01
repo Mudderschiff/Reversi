@@ -2,6 +2,7 @@ package de.htwg.se.reversi.model.gridComponent.gridMockImpl
 
 import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface, gridBaseImpl}
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Turn
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 
 class Grid(var size:Int) extends GridInterface{
 
@@ -16,17 +17,11 @@ class Grid(var size:Int) extends GridInterface{
   def finish(activePlayer: Int): Boolean = false
 
   override def score(): (Int, Int) = (0,0)
-
-  override def checkChange(gridnew: GridInterface): Boolean = ???
-
+  override def checkChange(gridnew: GridInterface): Boolean = false
   override def unHighlight(): gridBaseImpl.Grid = ???
-
   override def getValidTurns(playerId: Int): List[Turn] = ???
-
   override def setTurn(turn: Turn, value: Int): gridBaseImpl.Grid = ???
-
   override def makeNextTurnKI(playerId: Int): gridBaseImpl.Grid = ???
-
   override def makeNextTurnRandom(playerId: Int): gridBaseImpl.Grid = ???
 }
 

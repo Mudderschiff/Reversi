@@ -8,7 +8,7 @@ import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
 import scala.io.StdIn.readLine
 
 object Reversi {
-  val injector: Injector = Guice.createInjector(new ReversiModule)
+  val injector: Injector  = Guice.createInjector(new ReversiModule)
   val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   val tui = new Tui(controller)
   val gui = new SwingGui(controller)

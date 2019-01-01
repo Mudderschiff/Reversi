@@ -1,6 +1,5 @@
-package model.playerComponent
+package de.htwg.se.reversi.model.playerComponent
 
-import de.htwg.se.reversi.model.playerComponent.Player
 import org.scalatest._
 
 class PlayerSpec extends WordSpec with Matchers {
@@ -10,6 +9,4 @@ class PlayerSpec extends WordSpec with Matchers {
       player.playerId should be(1)
     }
   }}
-
-
 }

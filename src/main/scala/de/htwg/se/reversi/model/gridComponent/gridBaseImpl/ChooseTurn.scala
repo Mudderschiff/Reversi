@@ -3,26 +3,30 @@ package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 import scala.util.Random
 import scala.collection.concurrent.TrieMap
 
-class ChooseTurn(size: Int) {
-  def getNextTurnR(turns:List[Turn]):Turn = {
-    var randNr = (new Random).nextInt()
+class ChooseTurn(grid: Grid) {
 
-    turns(randNr % turns.size)
+  def makeNextTurnRandom(player:Int):Grid = {
+    if(grid.getValidTurns(player).isEmpty) {
+      grid
+    } else {
+      val t = Random.shuffle(grid.getValidTurns(player)).head
+      grid.setTurnRC(player, t.toRow, t.toCol)
+    }
   }
 
-  def getNextTurnKI(turns:List[Turn], playerId:Int):Turn = {
+  def makeNextTurnKI(player:Int):Grid = {
     val turnsAnditsValue = TrieMap[Turn, Int]()
-    turnsAnditsValue ++= turns.map(turn => (turn, 0))
+    turnsAnditsValue ++= grid.getValidTurns(player).map(turn => (turn, 0))
 
     turnsAnditsValue.foreach(turn => {if (isWall(turn._1)) {turnsAnditsValue.replace(turn._1, turn._2, turn._2 + 1)}})
 
     val sorted = turnsAnditsValue.toSeq.sortBy(_._2).toMap
     //Todo: Hier unter den gleichwertigen noch eine Entscheidung treffen
-    sorted.head._1
+    grid.setTurnRC(player, sorted.head._1.toRow, sorted.head._1.toCol)
   }
 
   private def isWall(turn:Turn):Boolean = {
-    if(turn.toRow == 0 || turn.toRow == size || turn.toCol == 0 || turn.toCol == size) {
+    if(turn.toRow == 0 || turn.toRow == grid.size || turn.toCol == 0 || turn.toCol == grid.size) {
       true
     }
     else {

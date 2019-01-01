@@ -1,4 +1,4 @@
-package model.gridComponent.gridBaseImpl
+package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, GridCreator}

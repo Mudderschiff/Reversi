@@ -47,7 +47,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def checkChange(gridnew: GridInterface): Boolean = {
     var bool = false
-    var grid = this
+    val grid = this
     for {
       row <- 0 until size
       col <- 0 until size
@@ -71,11 +71,7 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     (black, white)
   }
 
-  def evaluateGame():Int = {
-   val (black, white) = score()
-    if (white > black) 1 else if (black > white) 2 else 0
-  }
-
+  def evaluateGame():Int = if (score()._2 > score()._1) 1 else if (score()._1 > score()._2) 2 else 0
 
   def setTurn(turn:Turn, value:Int):Grid = {
     var grid = this
@@ -117,30 +113,25 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   }
 
   def getValidTurns(playerId: Int): List[Turn] = {
-    if(playerId != 2 && playerId != 1) {
-      return Nil
-    }
+    if(playerId != 2 && playerId != 1) return Nil
+    if(currentValidTurns != Nil) return currentValidTurns
 
-    if(currentValidTurns != Nil) {
-      return currentValidTurns
-    }
-
-    var reval = new ListBuffer[Turn]
+    var retVal = new ListBuffer[Turn]
 
     for {
       row <- 0 until size
       col <- 0 until size
     } if(this.cell(row,col).value == playerId) {
-      lookup(row, col, playerId, this).foreach(i => reval += i)
-      lookdown(row, col, playerId, this).foreach(i => reval += i)
-      lookleft(row, col, playerId, this).foreach(i => reval += i)
-      lookright(row, col, playerId, this).foreach(i => reval += i)
-      lookupright(row, col, playerId, this).foreach(i => reval += i)
-      lookdownright(row, col, playerId, this).foreach(i => reval += i)
-      lookupleft(row, col, playerId, this).foreach(i => reval += i)
-      lookdownleft(row, col, playerId, this).foreach(i => reval += i)
+      lookup(row, col, playerId, this).foreach(i => retVal += i)
+      lookdown(row, col, playerId, this).foreach(i => retVal += i)
+      lookleft(row, col, playerId, this).foreach(i => retVal += i)
+      lookright(row, col, playerId, this).foreach(i => retVal += i)
+      lookupright(row, col, playerId, this).foreach(i => retVal += i)
+      lookdownright(row, col, playerId, this).foreach(i => retVal += i)
+      lookupleft(row, col, playerId, this).foreach(i => retVal += i)
+      lookdownleft(row, col, playerId, this).foreach(i => retVal += i)
     }
-    reval.toList
+    retVal.toList
   }
 
   private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
@@ -279,8 +270,8 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     None
   }
   
-  override def makeNextTurnRandom(playerId: Int): Grid = (new ChooseTurn(this)).makeNextTurnRandom(playerId)
-  override def makeNextTurnKI(playerId: Int): Grid = (new ChooseTurn(this)).makeNextTurnKI(playerId)
+  override def makeNextTurnRandom(playerId: Int): Grid = new ChooseTurn(this).makeNextTurnRandom(playerId)
+  override def makeNextTurnKI(playerId: Int): Grid = new ChooseTurn(this).makeNextTurnKI(playerId)
   override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 
   override def toString: String = {
@@ -289,11 +280,11 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     for {i <- 0 until size} if (i == 0) row.append("  " + i.toString) else row.append(" " + i.toString)
     row.append("\n")
 
-    val lineseparator = (" +-" + ("--" * (size - 1))) + "+\n"
+    val lineSeparator = (" +-" + ("--" * (size - 1))) + "+\n"
     val line = ("|" + (("x" + "|") * size)) + "\n"
-    for {i <- 0 until size } col.append(i.toString + line + lineseparator)
+    for {i <- 0 until size } col.append(i.toString + line + lineSeparator)
 
-    var box = row + lineseparator  + col
+    var box = row + lineSeparator  + col
     for {
       row <- 0 until size
       col <- 0 until size

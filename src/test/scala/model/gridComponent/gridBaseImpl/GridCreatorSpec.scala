@@ -1,5 +1,5 @@
 package model.gridComponent.gridBaseImpl
-/*
+
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, GridCreator}
 import org.scalatest.{Matchers, WordSpec}
@@ -49,4 +49,4 @@ class GridCreatorSpec extends WordSpec with Matchers {
 
     }
   }
-}*/
+}

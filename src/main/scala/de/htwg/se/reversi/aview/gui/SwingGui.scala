@@ -1,40 +1,38 @@
 package de.htwg.se.reversi.aview.gui
 
-import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, CandidatesChanged, CellChanged, ControllerInterface, Finished, GridSizeChanged}
-import javax.swing.{JPanel, UIManager}
+import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, CellChanged, ControllerInterface, Finished, GridSizeChanged}
 
 import scala.swing._
-import scala.swing.Swing.LineBorder
 import scala.swing.event._
 
 class CellClicked(val row: Int, val column: Int) extends Event
 
 class SwingGui(controller: ControllerInterface) extends Frame {
-
+  title = "HTWG Reversi"
   listenTo(controller)
 
-  title = "HTWG Reversi"
   var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.gridSize, controller.gridSize)
+  val scorelabel: Label = new Label {font = new Font("Verdana", 1, 36)}
+  val statusline = new TextField(controller.statusText, 20)
 
-  val scorelabel =
-    new Label {
-      font = new Font("Verdana", 1, 36)
-    }
+  contents = new BorderPanel {
+    add(scorepanel, BorderPanel.Position.North)
+    add(gridPanel, BorderPanel.Position.Center)
+    add(statusline, BorderPanel.Position.South)
+  }
+  visible = true
+  redraw()
 
-  def scorepanel = new FlowPanel() {
+  def scorepanel: FlowPanel = new FlowPanel() {
     scorelabel.text = "B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString
     contents += scorelabel
     listenTo(controller)
     reactions += {
-      case e: CellChanged => {
+      case e: CellChanged =>
         scorelabel.text = "B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString
         repaint
-      }
     }
   }
-
-
-
 
   def gridPanel: GridPanel = new GridPanel(1,1) {
     contents += new GridPanel(cells.length, cells.length) {
@@ -48,14 +46,6 @@ class SwingGui(controller: ControllerInterface) extends Frame {
         listenTo(cellPanel)
       }
     }
-  }
-  val statusline = new TextField(controller.statusText, 20)
-  controller.finish
-
-  contents = new BorderPanel {
-    add(scorepanel, BorderPanel.Position.North)
-    add(gridPanel, BorderPanel.Position.Center)
-    add(statusline, BorderPanel.Position.South)
   }
 
   menuBar = new MenuBar {
@@ -82,17 +72,13 @@ class SwingGui(controller: ControllerInterface) extends Frame {
       contents += new MenuItem(Action("Size 1*1") { controller.resize(1) })
       contents += new MenuItem(Action("Size 4*4") { controller.resize(4) })
       contents += new MenuItem(Action("Size 8*8") { controller.resize(8) })
-
     }
   }
-
-  visible = true
-  redraw()
 
   reactions += {
     case event: GridSizeChanged => resize(event.newSize)
     case event: CellChanged     => redraw()
-    case event: Finished => end
+    case event: Finished => end()
     case event: BotStatus => redraw()
   }
 

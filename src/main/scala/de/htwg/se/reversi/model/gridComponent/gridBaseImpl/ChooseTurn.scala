@@ -7,7 +7,7 @@ class ChooseTurn(grid: Grid) {
 
   def makeNextTurnRandom(player:Int):Grid = {
     if(grid.getValidTurns(player).isEmpty) {
-     grid
+      grid
     } else {
       val t = Random.shuffle(grid.getValidTurns(player)).head
       grid.setTurnRC(player, t.toRow, t.toCol)

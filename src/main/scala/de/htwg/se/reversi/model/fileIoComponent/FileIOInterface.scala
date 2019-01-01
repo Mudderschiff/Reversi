@@ -7,5 +7,4 @@ trait FileIOInterface {
   def loadPlayer: Int
   def save(grid:GridInterface):Unit
   def savePlayer(activePlayer: Int): Unit
-
 }

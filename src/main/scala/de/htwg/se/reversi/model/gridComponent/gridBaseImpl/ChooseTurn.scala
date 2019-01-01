@@ -22,7 +22,7 @@ class ChooseTurn(grid: Grid) {
 
     val sorted = turnsAnditsValue.toSeq.sortBy(_._2).toMap
     //Todo: Hier unter den gleichwertigen noch eine Entscheidung treffen
-    grid.setTurnRC(player, sorted.head._1.toRow, sorted.head._1.toCol);
+    grid.setTurnRC(player, sorted.head._1.toRow, sorted.head._1.toCol)
   }
 
   private def isWall(turn:Turn):Boolean = {

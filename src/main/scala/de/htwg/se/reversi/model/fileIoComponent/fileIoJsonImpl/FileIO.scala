@@ -7,6 +7,7 @@ import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
 import play.api.libs.json._
+import java.io._
 
 import scala.io.Source
 
@@ -25,7 +26,7 @@ class FileIO extends FileIOInterface {
       case _ =>
     }
     gridOption match {
-      case Some(grid) => {
+      case Some(grid) =>
         var _grid = grid
         for (index <- 0 until size * size) {
           val row = (json \\ "row") (index).as[Int]
@@ -35,16 +36,14 @@ class FileIO extends FileIOInterface {
           _grid = _grid.set(row, col, value)
         }
         gridOption=Some(_grid)
-      }
       case None =>
     }
     gridOption
   }
   override def save(grid: GridInterface): Unit = {
-    import java.io._
     val pw = new PrintWriter(new File("grid.json"))
     pw.write(Json.prettyPrint(gridToJson(grid)))
-    pw.close
+    pw.close()
   }
 
   override def loadPlayer: Int = {
@@ -55,30 +54,26 @@ class FileIO extends FileIOInterface {
   }
 
   override def savePlayer(activePlayer: Int): Unit = {
-    import java.io._
     val pw = new PrintWriter(new File("player.json"))
     pw.write(Json.prettyPrint(playerToJson(activePlayer)))
-    pw.close
+    pw.close()
   }
 
-  implicit val cellWrites = new Writes[CellInterface] {
-    def writes(cell: CellInterface) = Json.obj(
-      "value" -> cell.value,
-    )
-  }
-  def playerToJson(activePlayer: Int) = {
-    Json.obj(
-      "activePlayer" -> JsNumber(activePlayer)
-    )
+  implicit val cellWrites: Writes[CellInterface] with Object {
+    def writes(cell: CellInterface): JsObject
+  } = new Writes[CellInterface] {
+    def writes(cell: CellInterface): JsObject = Json.obj("value" -> cell.value)}
+  def playerToJson(activePlayer: Int): JsObject = {
+    Json.obj("activePlayer" -> JsNumber(activePlayer))
   }
 
-  def gridToJson(grid: GridInterface) = {
+  def gridToJson(grid: GridInterface): JsObject = {
     Json.obj(
       "grid" -> Json.obj(
         "size" -> JsNumber(grid.size),
         "cells" -> Json.toJson(
           for {
-            row <- 0 until grid.size;
+            row <- 0 until grid.size
             col <- 0 until grid.size
           } yield {
             Json.obj(

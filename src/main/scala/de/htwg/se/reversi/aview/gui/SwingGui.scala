@@ -1,7 +1,7 @@
 package de.htwg.se.reversi.aview.gui
 
 import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, CandidatesChanged, CellChanged, ControllerInterface, Finished, GridSizeChanged}
-import javax.swing.JPanel
+import javax.swing.{JPanel, UIManager}
 
 import scala.swing._
 import scala.swing.Swing.LineBorder
@@ -15,15 +15,27 @@ class SwingGui(controller: ControllerInterface) extends Frame {
 
   title = "HTWG Reversi"
   var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.gridSize, controller.gridSize)
-/*
- def scorepanel = new FlowPanel {
-    //logger.info("B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString)
-    contents += new Label("Score:")
-    val score = new TextComponent
-    score.text = "B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString
-    contents += score
+
+  val scorelabel =
+    new Label {
+      font = new Font("Verdana", 1, 36)
+    }
+
+  def scorepanel = new FlowPanel() {
+    scorelabel.text = "B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString
+    contents += scorelabel
+    listenTo(controller)
+    reactions += {
+      case e: CellChanged => {
+        scorelabel.text = "B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString
+        repaint
+      }
+    }
   }
-*/
+
+
+
+
   def gridPanel: GridPanel = new GridPanel(1,1) {
     contents += new GridPanel(cells.length, cells.length) {
       for {
@@ -41,7 +53,7 @@ class SwingGui(controller: ControllerInterface) extends Frame {
   controller.finish
 
   contents = new BorderPanel {
-    //add(scorepanel, BorderPanel.Position.North)
+    add(scorepanel, BorderPanel.Position.North)
     add(gridPanel, BorderPanel.Position.Center)
     add(statusline, BorderPanel.Position.South)
   }
@@ -49,8 +61,8 @@ class SwingGui(controller: ControllerInterface) extends Frame {
   menuBar = new MenuBar {
     contents += new Menu("File") {
       mnemonic = Key.F
-      contents += new MenuItem(Action("Empty") { controller.createEmptyGrid })
-      contents += new MenuItem(Action("New") { controller.createNewGrid })
+      contents += new MenuItem(Action("Empty") {controller.createEmptyGrid})
+      contents += new MenuItem(Action("New") {controller.createNewGrid})
       contents += new MenuItem(Action("Save") { controller.save })
       contents += new MenuItem(Action("Load") { controller.load })
       contents += new MenuItem(Action("Quit") { System.exit(0) })
@@ -79,7 +91,7 @@ class SwingGui(controller: ControllerInterface) extends Frame {
 
   reactions += {
     case event: GridSizeChanged => resize(event.newSize)
-    case event: CellChanged     => resize(controller.gridSize)
+    case event: CellChanged     => redraw()
     case event: Finished => end
     case event: BotStatus => redraw()
   }
@@ -87,19 +99,20 @@ class SwingGui(controller: ControllerInterface) extends Frame {
   def resize(gridSize: Int): Unit = {
     cells = Array.ofDim[CellPanel](controller.gridSize, controller.gridSize)
     contents = new BorderPanel {
-      //add(scorepanel, BorderPanel.Position.North)
+      add(scorepanel, BorderPanel.Position.North)
       add(gridPanel, BorderPanel.Position.Center)
       add(statusline, BorderPanel.Position.South)
     }
     redraw()
   }
   def redraw(): Unit = {
+    contents.head.revalidate()
+    contents.head.repaint()
     for {
       row <- 0 until controller.gridSize
       column <- 0 until controller.gridSize
     } cells(row)(column).redraw
     statusline.text = controller.statusText
-    repaint
   }
 
   def end(): Unit = {

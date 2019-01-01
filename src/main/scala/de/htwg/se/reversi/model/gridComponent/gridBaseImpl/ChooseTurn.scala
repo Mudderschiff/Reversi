@@ -6,8 +6,12 @@ import scala.collection.concurrent.TrieMap
 class ChooseTurn(grid: Grid) {
 
   def makeNextTurnRandom(player:Int):Grid = {
-    val t = Random.shuffle(grid.getValidTurns(player)).head
-    grid.setTurnRC(player, t.toRow, t.toCol)
+    if(grid.getValidTurns(player).isEmpty) {
+     grid
+    } else {
+      val t = Random.shuffle(grid.getValidTurns(player)).head
+      grid.setTurnRC(player, t.toRow, t.toCol)
+    }
   }
 
   def makeNextTurnKI(player:Int):Grid = {

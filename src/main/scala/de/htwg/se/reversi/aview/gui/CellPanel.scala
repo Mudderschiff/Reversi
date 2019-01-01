@@ -39,6 +39,7 @@ class CellPanel(row: Int, column: Int, controller: ControllerInterface) extends 
     reactions += {
       case e: CellChanged => {
         label.text = cellText(row, column)
+        if (!controller.cell(row,column).isSet) {background = UIManager.getColor(Button)}
         repaint
       }
       case MouseClicked(src, pt, mod, clicks, pops) => {

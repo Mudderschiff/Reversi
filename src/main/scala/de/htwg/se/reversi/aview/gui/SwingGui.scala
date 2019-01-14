@@ -1,10 +1,6 @@
 package de.htwg.se.reversi.aview.gui
 
-import java.awt.Color
-
 import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, CellChanged, ControllerInterface, Finished, GridSizeChanged}
-import javax.swing.JPanel
-
 import scala.swing._
 import scala.swing.event._
 
@@ -36,12 +32,11 @@ class SwingGui(controller: ControllerInterface) extends Frame {
         repaint
     }
   }
-
   def gridPanel: FlowPanel = new FlowPanel() {
     contents += new GridPanel(cells.length, cells.length) {
       for {
-        innerRow <- cells.indices
-        innerColumn <- cells.indices
+        innerRow <- 0 until controller.gridSize
+        innerColumn <- 0 until controller.gridSize
       } {
         val cellPanel = new CellPanel(innerRow, innerColumn, controller)
         cells(innerRow)(innerColumn) = cellPanel
@@ -95,8 +90,6 @@ class SwingGui(controller: ControllerInterface) extends Frame {
     redraw()
   }
   def redraw(): Unit = {
-    contents.head.revalidate()
-    contents.head.repaint()
     for {
       row <- 0 until controller.gridSize
       column <- 0 until controller.gridSize
@@ -108,11 +101,11 @@ class SwingGui(controller: ControllerInterface) extends Frame {
     val end = StringBuilder.newBuilder
     end.append(controller.statusText)
       if(controller.evaluateGame() == 1) {
-        end.append(" White Won")
+        end.append(" White Won:")
       } else if (controller.evaluateGame() == 2) {
-        end.append(" Black Won")
+        end.append(" Black Won:")
       } else {
-        end.append(" Draw")
+        end.append(" Draw:")
       }
     end.append(" Final Score: B: " + controller.score()._1.toString + " | W: " + controller.score()._2.toString)
     statusline.text = end.toString()

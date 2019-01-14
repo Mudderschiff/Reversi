@@ -17,12 +17,12 @@ class Grid(var size:Int) extends GridInterface{
   def finish(activePlayer: Int): Boolean = false
 
   override def score(): (Int, Int) = (0,0)
-  override def checkChange(gridnew: GridInterface): Boolean = false
-  override def unHighlight(): gridBaseImpl.Grid = ???
+  override def checkChange(playerId: Int, row: Int, col: Int): (Boolean,gridBaseImpl.Grid) = ???
   override def getValidTurns(playerId: Int): List[Turn] = ???
-  override def setTurn(turn: Turn, value: Int): gridBaseImpl.Grid = ???
   override def makeNextTurnKI(playerId: Int): gridBaseImpl.Grid = ???
   override def makeNextTurnRandom(playerId: Int): gridBaseImpl.Grid = ???
+
+  //override def unHighlight(): gridBaseImpl.Grid = ???
 }
 
 object EmptyCell extends CellInterface {

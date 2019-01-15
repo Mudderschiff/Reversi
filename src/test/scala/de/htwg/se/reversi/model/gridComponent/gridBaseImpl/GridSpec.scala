@@ -79,37 +79,41 @@ class GridSpec extends WordSpec with Matchers {
         turns(2) should be(Turn(4, 3, 2, 3, Direction.Up))
         turns(3) should be(Turn(4, 3, 4, 5, Direction.Right))
       }
-      "these turns are highlighted" in {
+      "and no turns for anything else" in {
+        freshGrid.getValidTurns(0).size should be(0)
+        freshGrid.getValidTurns(3).size should be(0)
+      }
+      "these turns are highlighted for player 2" in {
         var highlighted = freshGrid.highlight(2)
-        print(highlighted)
         highlighted.cell(2,3) should be(Cell(3))
         highlighted.cell(3,2) should be(Cell(3))
         highlighted.cell(4,5) should be(Cell(3))
         highlighted.cell(5,4) should be(Cell(3))
       }
-      "and no turns for anything else" in {
-        freshGrid.getValidTurns(0).size should be(0)
-        freshGrid.getValidTurns(3).size should be(0)
+      "reset turns for player 1" in {
+        var highlighted = freshGrid.highlight(2)
+        var highlight2 = highlighted.highlight(1)
+        highlight2.cell(2,3) should be(Cell(0))
+        highlight2.cell(3,2) should be(Cell(0))
+        highlight2.cell(4,5) should be(Cell(0))
+        highlight2.cell(5,4) should be(Cell(0))
       }
-      "these turns arent highlightet" in {
+      "test highlight downleft, upright, upleft, downright" in {
 
       }
       "test scenarios for DownLeft, UpRight, UpLeft, DownRight" in {
         var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,2,2,0,Direction.DownLeft))
+        grid.highlight(2).cell(2,0) should be(Cell(3))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,0,0,2,Direction.UpRight))
+        grid.highlight(2).cell(0,2) should be(Cell(3))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,2,0,0,Direction.UpLeft))
+        grid.highlight(2).cell(0,0) should be(Cell(3))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
+        grid.highlight(2).cell(2,2) should be(Cell(3))
       }
-    }
-    "highlight " should {
-
     }
   }
   "A Game is finished" when {

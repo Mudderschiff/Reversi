@@ -21,8 +21,8 @@ class Grid(var size:Int) extends GridInterface{
   override def unHighlight(): gridBaseImpl.Grid = ???
   override def getValidTurns(playerId: Int): List[Turn] = ???
   override def setTurn(turn: Turn, value: Int): gridBaseImpl.Grid = ???
-  override def makeNextTurnKI(playerId: Int): gridBaseImpl.Grid = ???
-  override def makeNextTurnRandom(playerId: Int): gridBaseImpl.Grid = ???
+
+  override def makeNextTurnBot(playerId: Int): gridBaseImpl.Grid = ???
 }
 
 object EmptyCell extends CellInterface {

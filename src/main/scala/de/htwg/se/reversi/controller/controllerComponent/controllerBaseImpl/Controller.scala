@@ -102,8 +102,9 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
 
   def bot(): Unit = {
     if(activePlayer == 2) {
-      if(grid.checkChange(grid.makeNextTurnRandom(activePlayer))) {
-        grid = grid.makeNextTurnRandom(activePlayer).highlight(1)
+      if(grid.checkChange(grid.makeNextTurnBot(activePlayer))) {
+        Thread.sleep(500)
+        grid = grid.makeNextTurnBot(activePlayer).highlight(1)
         changePlayer()
         gameStatus = SET_Bot
         publish(new CellChanged)

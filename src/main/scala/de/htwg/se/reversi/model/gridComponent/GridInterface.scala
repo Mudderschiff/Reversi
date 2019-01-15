@@ -14,8 +14,7 @@ trait GridInterface {
   def size: Int
   def evaluateGame():Int
   def highlight(playerId: Int): GridInterface
-  def makeNextTurnRandom(playerId:Int):Grid
-  def makeNextTurnKI(playerId: Int):Grid
+  def makeNextTurnBot(playerId: Int):Grid
   def finish(activePlayer: Int): Boolean
   def score(): (Int, Int)
   def checkChange(gridnew: GridInterface): Boolean

@@ -6,151 +6,6 @@ import org.scalatest.{Matchers, WordSpec}
 
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
-    "checkTurn" should {
-      val grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
-      val newgrid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(2)), Vector(Cell(3), Cell(1)))))
-      val ngrid = Grid(new Matrix[Cell](Vector(Vector(Cell(3), Cell(2)), Vector(Cell(0), Cell(1)))))
-      "return false if Grids didn't change" in {
-        //grid.checkChange(grid) should be(false)
-        //newgrid.checkChange(ngrid) should be(false)
-      }
-      "return true if Grids changed" in {
-        //grid.checkChange(newgrid) should be(true)
-      }
-    }
-    "function finish" should {
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      val tinyGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1)), Vector(Cell(1), Cell(2)))))
-      /*"finish if noturns available" in {
-        normalGrid.noturns should be(true)
-        normalGrid.finish should be(true)
-      }
-      "finish if nofields available" in {
-        tinyGrid.noturns should be(true)
-        tinyGrid.nofield should be(true)
-        tinyGrid.finish should be(true)
-      }*/
-
-    }
-    "function validTurns" should {
-      val freshGrid = new Grid(8).createNewGrid
-      var turns = freshGrid.getValidTurns(1)
-      "return for a fresh game these 4 possible turns for player1" in {
-        turns.head should be(Turn(3, 3, 5, 3, Direction.Down))
-        turns(1) should be(Turn(3, 3, 3, 5, Direction.Right))
-        turns(2) should be(Turn(4, 4, 2, 4, Direction.Up))
-        turns(3) should be(Turn(4, 4, 4, 2, Direction.Left))
-      }
-      "and these 4 turns for player2" in {
-        turns = freshGrid.getValidTurns(2)
-        turns.head should be(Turn(3, 4, 5, 4, Direction.Down))
-        turns(1) should be(Turn(3, 4, 3, 2, Direction.Left))
-        turns(2) should be(Turn(4, 3, 2, 3, Direction.Up))
-        turns(3) should be(Turn(4, 3, 4, 5, Direction.Right))
-      }
-      "and no turns for anything else" in {
-        freshGrid.getValidTurns(0).size should be(0)
-        freshGrid.getValidTurns(3).size should be(0)
-      }
-      "test scenarios for DownLeft, UpRight, UpLeft, DownRight" in {
-        var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,2,2,0,Direction.DownLeft))
-
-        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,0,0,2,Direction.UpRight))
-
-        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,2,0,0,Direction.UpLeft))
-
-        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
-      }
-    }
-    // test checkchange
-    /*
-    "function setTurn set all cell values from startpoint to endpoint to the given value in the given direction" should {
-      var grid = new Grid(4).createNewGrid
-      var turns = grid.getValidTurns(1)
-
-      var gridsettodown = grid.setTurn(turns.head,1)
-      var gridsettoright = grid.setTurn(turns(1),1)
-      var gridsettoup = grid.setTurn(turns(2),1)
-      var gridsettoleft = grid.setTurn(turns(3),1)
-      "set direction down by Player1" in {
-        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(1),Cell(0),Cell(0)))))
-        gridsettodown should be(settodownmanual)
-      }
-      "set direction right by Player1" in {
-        var settorightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        gridsettoright should be (settorightmanual)
-      }
-      "set direction up by Player1" in {
-        var settoupmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(1),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        gridsettoup should be(settoupmanual)
-      }
-      "set direction left by Player1" in {
-        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(1), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        gridsettoleft should be(settodownmanual)
-      }
-      "set direction down left by Player2" in {
-        var settodownleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(2), Cell(1),Cell(0),Cell(0)))))
-        var p2turns = gridsettoleft.getValidTurns(2)
-        gridsettodown.setTurn(p2turns(2),2) should be(settodownleftmanual)
-      }
-      "set direction up right by Player2" in {
-        var settouprightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(2)), Vector(Cell(0), Cell(1), Cell(2), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var p2turns = gridsettoright.getValidTurns(2)
-        gridsettoright.setTurn(p2turns(2),2) should be(settouprightmanual)
-      }
-      "set direction up left by Player2" in {
-        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var settoupleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(2),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var p2turns = gridbefore.getValidTurns(2)
-        gridbefore.setTurn(p2turns(2),2) should be(settoupleftmanual)
-      }
-      "set direction down right by Player2" in {
-        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var settodownrightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(2)))))
-        var p2turns = gridbefore.getValidTurns(2)
-        gridbefore.setTurn(p2turns(2),2) should be(settodownrightmanual)
-      }
-    }*/
-
-    "evaluating Winner" should {
-      val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
-      val white = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(1)), Vector(Cell(0), Cell(2)))))
-      val draw = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(1), Cell(1)))))
-      "Black schould win" in {
-        black.evaluateGame() should be(2)
-      }
-      "White should win" in {
-        white.evaluateGame() should be(1)
-      }
-      "Draw should occur" in {
-        draw.evaluateGame() should be(0)
-      }
-    }
-
-    "to be constructed" should {
-      "be created with the length of its edges as size. Practically relevant are size 1, 3, and 8" in {
-        val tinygrid = new Grid(1)
-        val smallGrid = new Grid(3)
-        val normalGrid = new Grid(8)
-        val bigGrid = new Grid(16)
-      }
-      "for test purposes only created with a Matrix of Cells" in {
-        val bigGrid = Grid(new Matrix(2, Cell(0)))
-        val testGrid = Grid(Matrix[Cell](Vector(Vector(Cell(0), Cell(0)), Vector(Cell(0), Cell(0)))))
-      }
-    }
     "created properly but empty" should {
       val tinygrid = new Grid(1)
       val smallGrid = new Grid(3)
@@ -172,11 +27,15 @@ class GridSpec extends WordSpec with Matchers {
     "prefilled with values 1 to n" should {
       val tinyGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(1)))))
       val smallGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(2)), Vector(Cell(3), Cell(4)))))
+      //val empty = tinyGrid.reset()
       "have the right values in the right places" in {
         smallGrid.cell(0, 0) should be(Cell(1))
         smallGrid.cell(0, 1) should be(Cell(2))
         smallGrid.cell(1, 0) should be(Cell(3))
         smallGrid.cell(1, 1) should be(Cell(4))
+      }
+      "values should be resetable" in {
+        tinyGrid.reset(0,0).cell(0,0) should be(Cell(0))
       }
       "have Houses with the right Cells" in {
         tinyGrid.row(0).cell(0) should be(Cell(1))
@@ -190,6 +49,101 @@ class GridSpec extends WordSpec with Matchers {
         smallGrid.col(0).cell(1) should be(Cell(3))
         smallGrid.col(1).cell(0) should be(Cell(2))
         smallGrid.col(1).cell(1) should be(Cell(4))
+      }
+    }
+    "to be constructed" should {
+      "be created with the length of its edges as size. Practically relevant are size 1, 3, and 8" in {
+        val tinygrid = new Grid(1)
+        val smallGrid = new Grid(3)
+        val normalGrid = new Grid(8)
+        val bigGrid = new Grid(16)
+      }
+      "for test purposes only created with a Matrix of Cells" in {
+        val bigGrid = Grid(new Matrix(2, Cell(0)))
+        val testGrid = Grid(Matrix[Cell](Vector(Vector(Cell(0), Cell(0)), Vector(Cell(0), Cell(0)))))
+      }
+    }
+    "In A Game" should {
+      val freshGrid = new Grid(8).createNewGrid
+      var turns = freshGrid.getValidTurns(1)
+      "return for a fresh game these 4 possible turns for player1" in {
+        turns.head should be(Turn(3, 3, 5, 3, Direction.Down))
+        turns(1) should be(Turn(3, 3, 3, 5, Direction.Right))
+        turns(2) should be(Turn(4, 4, 2, 4, Direction.Up))
+        turns(3) should be(Turn(4, 4, 4, 2, Direction.Left))
+      }
+      "and these 4 turns for player2" in {
+        turns = freshGrid.getValidTurns(2)
+        turns.head should be(Turn(3, 4, 5, 4, Direction.Down))
+        turns(1) should be(Turn(3, 4, 3, 2, Direction.Left))
+        turns(2) should be(Turn(4, 3, 2, 3, Direction.Up))
+        turns(3) should be(Turn(4, 3, 4, 5, Direction.Right))
+      }
+      "and no turns for anything else" in {
+        freshGrid.getValidTurns(0).size should be(0)
+        freshGrid.getValidTurns(3).size should be(0)
+      }
+      "these turns are highlighted for player 2" in {
+        var highlighted = freshGrid.highlight(2)
+        highlighted.cell(2,3) should be(Cell(3))
+        highlighted.cell(3,2) should be(Cell(3))
+        highlighted.cell(4,5) should be(Cell(3))
+        highlighted.cell(5,4) should be(Cell(3))
+      }
+      "reset turns for player 1" in {
+        var highlighted = freshGrid.highlight(2)
+        var highlight2 = highlighted.highlight(1)
+        highlight2.cell(2,3) should be(Cell(0))
+        highlight2.cell(3,2) should be(Cell(0))
+        highlight2.cell(4,5) should be(Cell(0))
+        highlight2.cell(5,4) should be(Cell(0))
+      }
+      "test highlight downleft, upright, upleft, downright" in {
+
+      }
+      "test scenarios for DownLeft, UpRight, UpLeft, DownRight" in {
+        var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
+        grid.highlight(2).cell(2,0) should be(Cell(3))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
+        grid.highlight(2).cell(0,2) should be(Cell(3))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
+        grid.highlight(2).cell(0,0) should be(Cell(3))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
+        grid.highlight(2).cell(2,2) should be(Cell(3))
+      }
+    }
+  }
+  "A Game is finished" when {
+    "function finish" should {
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      val tinyGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1)), Vector(Cell(1), Cell(2)))))
+      "Current PLayer has no available turns" in {
+        normalGrid.finish(2) should be(true)
+      }
+    }
+    "evaluating Winner" should {
+      val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
+      val white = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(1)), Vector(Cell(0), Cell(2)))))
+      val draw = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(1), Cell(1)))))
+      "Black schould win" in {
+        black.evaluateGame() should be(2)
+      }
+      "White should win" in {
+        white.evaluateGame() should be(1)
+      }
+      "Draw should occur" in {
+        draw.evaluateGame() should be(0)
       }
     }
   }

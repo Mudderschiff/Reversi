@@ -7,7 +7,6 @@ import scala.collection.mutable.ListBuffer
 case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def this(size:Int) = this(new Matrix[Cell](size, Cell(0)))
   val size:Int = cells.size
-  var currentValidTurns:List[Turn] = Nil
   def cell(row:Int, col:Int):Cell = cells.cell(row, col)
   def set(row:Int, col:Int, value:Int):Grid = copy(cells.replaceCell(row, col, Cell(value)))
   def reset(row:Int, col:Int):Grid = copy(cells.replaceCell(row, col, Cell(0)))
@@ -58,7 +57,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
     var grid = this
     getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn,playerId))
-    currentValidTurns = Nil
     grid
   }
 
@@ -115,7 +113,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
 
   def getValidTurns(playerId: Int): List[Turn] = {
     if(playerId != 2 && playerId != 1) return Nil
-    if(currentValidTurns != Nil) return currentValidTurns
 
     var retVal = new ListBuffer[Turn]
 

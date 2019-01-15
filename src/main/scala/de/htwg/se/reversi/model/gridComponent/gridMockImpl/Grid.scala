@@ -2,7 +2,6 @@ package de.htwg.se.reversi.model.gridComponent.gridMockImpl
 
 import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Turn
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
 
 class Grid(var size:Int) extends GridInterface{
 

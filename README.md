@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Gabri312/htwg.se.Reversi.svg?branch=master)](https://travis-ci.org/Gabri312/htwg.se.Reversi)
 
-[![Coverage Status](https://coveralls.io/repos/github/markoboger/de.htwg.se.SudokuInScala/badge.svg?branch=master)](https://coveralls.io/github/markoboger/de.htwg.se.SudokuInScala?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Gabri312/htwg.se.Reversi/badge.svg?branch=master)](https://coveralls.io/github/Gabri312/htwg.se.Reversi?branch=master)
 
 Reversi in Scala
 =========================

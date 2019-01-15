@@ -19,3 +19,5 @@ libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.6"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
+
+coverageExcludedPackages := "de.htwg.se.reversi.aview"

@@ -19,8 +19,6 @@ class Grid(var size:Int) extends GridInterface{
   override def score(): (Int, Int) = (0,0)
   override def checkChange(playerId: Int, row: Int, col: Int): (Boolean,gridBaseImpl.Grid) = ???
   override def getValidTurns(playerId: Int): List[Turn] = ???
-  override def setTurn(turn: Turn, value: Int): gridBaseImpl.Grid = ???
-
   override def makeNextTurnBot(playerId: Int): gridBaseImpl.Grid = ???
 }
 

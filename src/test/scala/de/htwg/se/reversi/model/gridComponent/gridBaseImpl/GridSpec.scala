@@ -6,40 +6,6 @@ import org.scalatest.{Matchers, WordSpec}
 
 class GridSpec extends WordSpec with Matchers {
   "A Grid is the playingfield of Reversi. A Grid" when {
-    "checkTurn" should {
-      val grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
-      val newgrid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(2)), Vector(Cell(3), Cell(1)))))
-      val ngrid = Grid(new Matrix[Cell](Vector(Vector(Cell(3), Cell(2)), Vector(Cell(0), Cell(1)))))
-      "return false if Grids didn't change" in {
-        //grid.checkChange(grid) should be(false)
-        //newgrid.checkChange(ngrid) should be(false)
-      }
-      "return true if Grids changed" in {
-        //grid.checkChange(newgrid) should be(true)
-      }
-    }
-    "function finish" should {
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      val tinyGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1)), Vector(Cell(1), Cell(2)))))
-      /*"finish if noturns available" in {
-        normalGrid.noturns should be(true)
-        normalGrid.finish should be(true)
-      }
-      "finish if nofields available" in {
-        tinyGrid.noturns should be(true)
-        tinyGrid.nofield should be(true)
-        tinyGrid.finish should be(true)
-      }*/
-
-    }
     "function validTurns" should {
       val freshGrid = new Grid(8).createNewGrid
       var turns = freshGrid.getValidTurns(1)
@@ -74,71 +40,6 @@ class GridSpec extends WordSpec with Matchers {
         grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
       }
     }
-    // test checkchange
-    /*
-    "function setTurn set all cell values from startpoint to endpoint to the given value in the given direction" should {
-      var grid = new Grid(4).createNewGrid
-      var turns = grid.getValidTurns(1)
-
-      var gridsettodown = grid.setTurn(turns.head,1)
-      var gridsettoright = grid.setTurn(turns(1),1)
-      var gridsettoup = grid.setTurn(turns(2),1)
-      var gridsettoleft = grid.setTurn(turns(3),1)
-      "set direction down by Player1" in {
-        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(1),Cell(0),Cell(0)))))
-        gridsettodown should be(settodownmanual)
-      }
-      "set direction right by Player1" in {
-        var settorightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        gridsettoright should be (settorightmanual)
-      }
-      "set direction up by Player1" in {
-        var settoupmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(1),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        gridsettoup should be(settoupmanual)
-      }
-      "set direction left by Player1" in {
-        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(1), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        gridsettoleft should be(settodownmanual)
-      }
-      "set direction down left by Player2" in {
-        var settodownleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(2), Cell(1),Cell(0),Cell(0)))))
-        var p2turns = gridsettoleft.getValidTurns(2)
-        gridsettodown.setTurn(p2turns(2),2) should be(settodownleftmanual)
-      }
-      "set direction up right by Player2" in {
-        var settouprightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(2)), Vector(Cell(0), Cell(1), Cell(2), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var p2turns = gridsettoright.getValidTurns(2)
-        gridsettoright.setTurn(p2turns(2),2) should be(settouprightmanual)
-      }
-      "set direction up left by Player2" in {
-        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var settoupleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(2),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var p2turns = gridbefore.getValidTurns(2)
-        gridbefore.setTurn(p2turns(2),2) should be(settoupleftmanual)
-      }
-      "set direction down right by Player2" in {
-        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var settodownrightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(2)))))
-        var p2turns = gridbefore.getValidTurns(2)
-        gridbefore.setTurn(p2turns(2),2) should be(settodownrightmanual)
-      }
-    }*/
-
-    "evaluating Winner" should {
-      val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
-      val white = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(1)), Vector(Cell(0), Cell(2)))))
-      val draw = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(1), Cell(1)))))
-      "Black schould win" in {
-        black.evaluateGame() should be(2)
-      }
-      "White should win" in {
-        white.evaluateGame() should be(1)
-      }
-      "Draw should occur" in {
-        draw.evaluateGame() should be(0)
-      }
-    }
-
     "to be constructed" should {
       "be created with the length of its edges as size. Practically relevant are size 1, 3, and 8" in {
         val tinygrid = new Grid(1)
@@ -190,6 +91,37 @@ class GridSpec extends WordSpec with Matchers {
         smallGrid.col(0).cell(1) should be(Cell(3))
         smallGrid.col(1).cell(0) should be(Cell(2))
         smallGrid.col(1).cell(1) should be(Cell(4))
+      }
+    }
+  }
+  "A Game is finished" when {
+    "function finish" should {
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      val tinyGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1)), Vector(Cell(1), Cell(2)))))
+      "Current PLayer has no available turns" in {
+        normalGrid.finish(2) should be(true)
+      }
+    }
+    "evaluating Winner" should {
+      val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
+      val white = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(1)), Vector(Cell(0), Cell(2)))))
+      val draw = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(1), Cell(1)))))
+      "Black schould win" in {
+        black.evaluateGame() should be(2)
+      }
+      "White should win" in {
+        white.evaluateGame() should be(1)
+      }
+      "Draw should occur" in {
+        draw.evaluateGame() should be(0)
       }
     }
   }

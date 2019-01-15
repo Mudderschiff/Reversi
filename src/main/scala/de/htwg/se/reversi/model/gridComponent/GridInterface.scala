@@ -6,7 +6,6 @@ trait GridInterface {
   def cell(row: Int, col: Int): CellInterface
   def set(row:Int, col:Int, value:Int): GridInterface
   def getValidTurns(playerId: Int): List[Turn]
-  def reset(row:Int, col:Int): GridInterface
   def createNewGrid: GridInterface
   def size: Int
   def evaluateGame():Int

@@ -2,7 +2,7 @@ package de.htwg.se.reversi.controller.controllerComponent
 
 object GameStatus extends Enumeration{
   type GameStatus = Value
-  val IDLE, RESIZE, SET_Player1, SET_Player2, SET_Bot,BOT_ENABLE, BOT_DISABLE, NEW, LOADED, COULDNOTLOAD, SAVED, CANDIDATES, FINISHED = Value
+  val IDLE, RESIZE, SET_Player1, SET_Player2, SET_Bot,BOT_ENABLE, BOT_DISABLE, NEW, LOADED, COULDNOTLOAD, SAVED, FINISHED = Value
 
   val map: Map[GameStatus, String] = Map[GameStatus, String](
     IDLE -> "",
@@ -13,7 +13,6 @@ object GameStatus extends Enumeration{
     BOT_ENABLE -> "Bot enabled (Player 2)",
     BOT_DISABLE -> "Bot disabled (Player 2)",
     RESIZE -> "Game was resized",
-    CANDIDATES -> "Showing candidates",
     FINISHED -> "Finished",
     LOADED ->"A new Game was loaded",
     COULDNOTLOAD -> "The file could not be loaded",

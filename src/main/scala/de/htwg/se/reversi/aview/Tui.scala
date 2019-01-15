@@ -1,6 +1,6 @@
 package de.htwg.se.reversi.aview
 
-import com.typesafe.scalalogging.{LazyLogging, Logger}
+import com.typesafe.scalalogging.{LazyLogging}
 import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus
 import de.htwg.se.reversi.controller.controllerComponent.{CellChanged, GridSizeChanged, Finished, BotStatus}

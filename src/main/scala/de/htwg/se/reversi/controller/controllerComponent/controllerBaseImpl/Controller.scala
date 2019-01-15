@@ -87,12 +87,13 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   }
 
   def set(row: Int, col: Int, playerId: Int): Unit = {
-    if(grid.checkChange(grid.setTurnRC(playerId,row,col))) {
+    val tuple = grid.checkChange(playerId,row,col)
+    if(tuple._1) {
       if (playerId == 1) {
-        grid = grid.setTurnRC(playerId,row,col).highlight(2)
+        grid = tuple._2.highlight(2)
         gameStatus = SET_Player1
       } else {
-        grid = grid.setTurnRC(playerId,row,col).highlight(1)
+        grid = tuple._2.highlight(1)
         gameStatus = SET_Player2
       }
       changePlayer()

@@ -7,7 +7,7 @@ import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 
-import scala.xml.{Elem, NodeSeq, PrettyPrinter}
+import scala.xml.{Elem, PrettyPrinter}
 
 class FileIO extends FileIOInterface {
 

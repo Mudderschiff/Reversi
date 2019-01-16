@@ -179,6 +179,10 @@ class GridSpec extends WordSpec with Matchers {
         gridbefore.setTurn(p2turns(2),2) should be(settodownrightmanual)
       }
     }
+    "toString shows" in {
+      var grid = new Grid(1).createNewGrid
+      grid.toString should be("\n  0\n +-+\n0| |\n +-+\n")
+    }
   }
   "A Game is finished" when {
     "function finish" should {

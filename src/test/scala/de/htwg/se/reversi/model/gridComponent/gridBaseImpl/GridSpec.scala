@@ -131,7 +131,7 @@ class GridSpec extends WordSpec with Matchers {
         freshGrid.checkChange(2,2,4)._1 should be(false)
       }
     }
-    "function setTurnRC set all cell values from startpoint to endpoint to the given value in the given direction" should {
+    "check all directions (up,down,left,right,upleft,upright,downleft,downright)" should {
       var grid = new Grid(4).createNewGrid
       var turns = grid.getValidTurns(1)
       print(turns)

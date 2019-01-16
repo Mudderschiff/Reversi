@@ -143,7 +143,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(up,col).value == playerId) return None
         if(grid.cell(up,col).value == 0 || grid.cell(up,col).value == 3) return Some(Turn(row,col,up,col,Direction.Up))
       }
-      None
     }
     None
   }
@@ -159,7 +158,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(down,col).value == playerId) return None
         if(grid.cell(down,col).value == 0 || grid.cell(down,col).value == 3) return Some(Turn(row,col,down,col,Direction.Down))
       }
-      None
     }
     None
   }
@@ -175,7 +173,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(row,right).value == playerId) return None
         if(grid.cell(row,right).value == 0 || grid.cell(row,right).value == 3) return Some(Turn(row,col,row,right,Direction.Right))
       }
-      None
     }
     None
   }
@@ -191,7 +188,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(row,left).value == playerId) return None
         if(grid.cell(row,left).value == 0 || grid.cell(row,left).value == 3) return Some(Turn(row,col,row,left,Direction.Left))
       }
-      None
     }
     None
   }
@@ -209,7 +205,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(up,right).value == playerId) return None
         if(grid.cell(up,right).value == 0 || grid.cell(up,right).value == 3) return Some(Turn(row,col,up,right,Direction.UpRight))
       }
-      None
     }
     None
   }
@@ -227,7 +222,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(up,left).value == playerId) return None
         if(grid.cell(up,left).value == 0 || grid.cell(up,left).value == 3) return Some(Turn(row,col,up,left, Direction.UpLeft))
       }
-      None
     }
     None
   }
@@ -245,7 +239,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(down,right).value == playerId) return None
         if(grid.cell(down,right).value == 0 || grid.cell(down,right).value == 3) return Some(Turn(row,col,down,right, Direction.DownRight))
       }
-      None
     }
     None
   }
@@ -263,7 +256,6 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
         if (grid.cell(down,left).value == playerId) return None
         if(grid.cell(down,left).value == 0 || grid.cell(down,left).value == 3) return Some(Turn(row,col,down,left,Direction.DownLeft))
       }
-      None
     }
     None
   }

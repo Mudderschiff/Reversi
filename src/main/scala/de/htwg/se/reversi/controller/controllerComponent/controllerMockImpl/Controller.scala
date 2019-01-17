@@ -45,4 +45,8 @@ class Controller(var grid: GridInterface) extends ControllerInterface {
   override def statusText: String = GameStatus.message(gameStatus)
 
   override def cell(row: Int, col: Int): CellInterface = grid.cell(row, col)
+
+  override def undo: Unit = ???
+
+  override def redo: Unit = ???
 }

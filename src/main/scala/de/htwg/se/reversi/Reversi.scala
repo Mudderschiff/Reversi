@@ -11,7 +11,7 @@ object Reversi {
   val injector: Injector  = Guice.createInjector(new ReversiModule)
   val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   val tui = new Tui(controller)
-  val gui = new SwingGui(controller)
+  //val gui = new SwingGui(controller)
   controller.createNewGrid()
 
   def main(args: Array[String]): Unit = {

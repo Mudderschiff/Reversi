@@ -55,6 +55,11 @@ class SwingGui(controller: ControllerInterface) extends Frame {
       contents += new MenuItem(Action("Load") { controller.load() })
       contents += new MenuItem(Action("Quit") { System.exit(0) })
     }
+    contents += new Menu("Edit") {
+      mnemonic = Key.E
+      contents += new MenuItem(Action("Undo") { controller.undo })
+      contents += new MenuItem(Action("Redo") { controller.redo })
+    }
 
     contents += new Menu("Bot") {
       mnemonic = Key.B

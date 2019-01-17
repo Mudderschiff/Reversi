@@ -95,7 +95,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
 
   def bot(): Unit = {
     if(activePlayer == 2) {
-      undoManager.doStep(new BotCommand(grid,this))
+      undoManager.doStep(new BotCommand(this))
       changePlayer()
       gameStatus = SET_Bot
       publish(new CellChanged)

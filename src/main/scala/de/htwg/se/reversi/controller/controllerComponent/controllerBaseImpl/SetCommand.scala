@@ -7,7 +7,6 @@ import de.htwg.se.reversi.util.Command
 class SetCommand(playerId: Int, row: Int, col: Int, controller: Controller) extends Command {
   var oldgrid = controller.grid
 
-
   override def doStep: Unit = {
     oldgrid = controller.grid
     val tuple = controller.grid.checkChange(playerId, row, col)
@@ -24,7 +23,10 @@ class SetCommand(playerId: Int, row: Int, col: Int, controller: Controller) exte
   }
 
 
-  override def undoStep: Unit = controller.grid = oldgrid
+  override def undoStep: Unit = {
+    controller.grid = oldgrid
+    controller.changePlayer()
+  }
 
   override def redoStep: Unit = {
     oldgrid = controller.grid

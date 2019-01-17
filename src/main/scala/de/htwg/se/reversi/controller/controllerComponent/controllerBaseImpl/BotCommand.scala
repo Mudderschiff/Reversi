@@ -3,17 +3,19 @@ import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 import de.htwg.se.reversi.util.Command
 
-class BotCommand(gridInterface: GridInterface, controller: Controller) extends Command {
+class BotCommand(controller: Controller) extends Command {
+  var botgrid = controller.grid.makeNextTurnBot(2).highlight(1)
   var oldgrid = controller.grid
-  var botgrid = controller.grid
 
-  override def doStep: Unit = {
-    oldgrid = gridInterface
-    botgrid = gridInterface.makeNextTurnBot(2)
-    controller.grid = botgrid
+  override def doStep: Unit = controller.grid = botgrid
+
+  override def undoStep: Unit = {
+    controller.changePlayer()
+    controller.grid = oldgrid
   }
 
-  override def undoStep: Unit = controller.grid = oldgrid
-
-  override def redoStep: Unit = controller.grid = botgrid
+  override def redoStep: Unit = {
+    controller.changePlayer()
+    controller.grid = botgrid
+  }
 }

@@ -72,6 +72,47 @@ class TuiSpec extends WordSpec with Matchers{
         controller.grid should be(p2)
       }
     }
+    "enable bot on e" in {
+      tui.processInputLine("e")
+      controller.botState() should be(true)
+    }
+    "disable bot on d" in {
+      tui.processInputLine("d")
+      controller.botState() should be(false)
+    }
+    /*
+    "set cells on input" in {
+      val p1small = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
+        Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
+        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
+      val p1smallafter = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(3), Cell(1), Cell(3)),
+        Vector(Cell(0), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(3), Cell(2), Cell(1), Cell(3)),
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
+      val p2small = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
+        Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
+        Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
+        Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
+      val p2smallafter = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
+        Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
+        Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
+        Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
+      //tui.processInputLine("+")
+      if (controller.activePlayer == 1) {
+        controller.grid = p1small
+        tui.processInputLine("02")
+        controller.grid should be(p1small)
+      } else {
+        controller.grid = p2small
+        tui.processInputLine("01")
+        controller.grid should be(p2small)
+      }
+    }*/
     "save on f" in {
       val normalGrid = Grid(new Matrix[Cell](Vector(
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
@@ -83,8 +124,7 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
       controller.grid = normalGrid
-      print(controller.grid)
-      controller.save()
+      tui.processInputLine("f")
       var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
       var playerjson = new File(System.getProperty("user.dir") + "/player.json")
       gridjson should exist
@@ -100,9 +140,8 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      controller.load()
+      tui.processInputLine("l")
       controller.grid should be(normalGrid)
-
     }
   }
 

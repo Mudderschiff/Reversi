@@ -3,6 +3,7 @@ package de.htwg.se.reversi.aview
 import de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix}
 import org.scalatest.{Matchers, WordSpec}
+import java.io.File
 
 class TuiSpec extends WordSpec with Matchers{
 
@@ -70,6 +71,38 @@ class TuiSpec extends WordSpec with Matchers{
       } else {
         controller.grid should be(p2)
       }
+    }
+    "save on f" in {
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      controller.grid = normalGrid
+      print(controller.grid)
+      controller.save()
+      var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
+      var playerjson = new File(System.getProperty("user.dir") + "/player.json")
+      gridjson should exist
+      playerjson should exist
+    }
+    "load a saved grid" in {
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      controller.load()
+      controller.grid should be(normalGrid)
+
     }
   }
 

@@ -40,9 +40,6 @@ class TuiSpec extends WordSpec with Matchers{
       }
 
     }
-    "resize" in {
-     ° //tui.processInputLine("")
-    }
   }
 
 }

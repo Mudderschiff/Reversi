@@ -25,6 +25,8 @@ trait ControllerInterface extends Publisher {
   def bot(): Unit
   def statusText: String
   def cell(row: Int, col: Int): CellInterface
+  def undo: Unit
+  def redo: Unit
 }
 
 class CellChanged extends Event

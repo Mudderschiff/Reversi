@@ -14,6 +14,8 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging {
     case "n"=> controller.createNewGrid()
     case "f" => controller.save()
     case "l" => controller.load()
+    case "z" => controller.undo
+    case "y" => controller.redo
     case "." => controller.resize(1)
     case "+" => controller.resize(4)
     case "#" => controller.resize(8)

@@ -9,6 +9,7 @@ import de.htwg.se.reversi.controller.controllerComponent._
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
 import de.htwg.se.reversi.model.playerComponent.Player
+import de.htwg.se.reversi.util.UndoManager
 
 import scala.swing.Publisher
 import scala.util.Random
@@ -18,6 +19,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   var gameStatus: GameStatus = IDLE
   val injector: Injector = Guice.createInjector(new ReversiModule)
   val fileIo: FileIOInterface = injector.instance[FileIOInterface]
+  private val undoManager = new UndoManager
 
   val player1 = Player(1)
   val player2 = Player(2)
@@ -87,23 +89,13 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   }
 
   def set(row: Int, col: Int, playerId: Int): Unit = {
-    val tuple = grid.checkChange(playerId,row,col)
-    if(tuple._1) {
-      if (playerId == 1) {
-        grid = tuple._2.highlight(2)
-        gameStatus = SET_Player1
-      } else {
-        grid = tuple._2.highlight(1)
-        gameStatus = SET_Player2
-      }
-      changePlayer()
-      publish(new CellChanged)
-    }
+    undoManager.doStep(new SetCommand(playerId,row,col, this))
+    publish(new CellChanged)
   }
 
   def bot(): Unit = {
     if(activePlayer == 2) {
-      grid = grid.makeNextTurnBot(activePlayer).highlight(1)
+      undoManager.doStep(new BotCommand(this))
       changePlayer()
       gameStatus = SET_Bot
       publish(new CellChanged)
@@ -135,4 +127,22 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
   def gridSize: Int = grid.size
   def statusText: String = GameStatus.message(gameStatus)
   def gridToString: String = grid.toString
+
+  def undo: Unit = {
+    if(botState()) {
+      undoManager.undoStep
+      undoManager.undoStep
+    } else {
+      undoManager.undoStep
+    }
+
+    gameStatus = UNDO
+    publish(new CellChanged)
+  }
+
+  def redo: Unit = {
+    undoManager.redoStep
+    gameStatus = REDO
+    publish(new CellChanged)
+  }
 }

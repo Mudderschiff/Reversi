@@ -19,6 +19,7 @@ class SwingGui(controller: ControllerInterface) extends Frame {
     add(gridPanel, BorderPanel.Position.Center)
     add(statusline, BorderPanel.Position.South)
   }
+  size = new Dimension(800,800)
   visible = true
   redraw()
 

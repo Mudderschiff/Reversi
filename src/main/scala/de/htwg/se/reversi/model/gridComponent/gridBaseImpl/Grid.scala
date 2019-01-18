@@ -260,8 +260,8 @@ case class Grid(private val cells:Matrix[Cell]) extends GridInterface {
     None
   }
 
-  override def makeNextTurnBot(playerId: Int): Grid = new ChooseTurn(this).makeNextTurnBot(playerId)
   override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
+  override def makeNextTurnBot(playerId: Int): GridInterface = (new Bot).makeTurn(this,playerId)
 
   override def toString: String = {
     val row, col = StringBuilder.newBuilder

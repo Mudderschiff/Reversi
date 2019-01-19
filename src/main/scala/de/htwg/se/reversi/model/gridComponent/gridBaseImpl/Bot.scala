@@ -40,11 +40,11 @@ case class Bot() {
   //1 1 2 2 2 2 1 1
   //5 1 4 4 4 4 1 5
 
-  private def region5(turn:Turn, index:Int):Boolean = {
+  private def region5(turn:Turn, maxIndex:Int):Boolean = {
     if((turn.toRow == 0 && turn.toCol == 0) ||
-      (turn.toRow == 0 && turn.toCol == index) ||
-      (turn.toRow == index && turn.toCol == 0) ||
-      (turn.toRow == index && turn.toCol == index)) {
+      (turn.toRow == 0 && turn.toCol == maxIndex) ||
+      (turn.toRow == maxIndex && turn.toCol == 0) ||
+      (turn.toRow == maxIndex && turn.toCol == maxIndex)) {
       true
     }
     else {
@@ -52,9 +52,9 @@ case class Bot() {
     }
   }
 
-  private def region4(turn:Turn, index:Int):Boolean = {
-    if(!region1(turn, index) && !region5(turn, index) &&
-      (turn.toRow == 0 || turn.toRow == index || turn.toCol == 0 || turn.toCol == index)) {
+  private def region4(turn:Turn, maxIndex:Int):Boolean = {
+    if(!region1(turn, maxIndex) && !region5(turn, maxIndex) &&
+      (turn.toRow == 0 || turn.toRow == maxIndex || turn.toCol == 0 || turn.toCol == maxIndex)) {
       true
     }
     else {
@@ -62,11 +62,11 @@ case class Bot() {
     }
   }
 
-  private def region3(turn:Turn, index:Int):Boolean = {
-    if(index < 7) {
+  private def region3(turn:Turn, maxIndex:Int):Boolean = {
+    if(maxIndex < 7) {
       false
     }
-    else if(turn.toRow > 1 && turn.toRow < index - 1 && turn.toCol > 1 && turn.toCol < index - 1) {
+    else if(turn.toRow > 1 && turn.toRow < maxIndex - 1 && turn.toCol > 1 && turn.toCol < maxIndex - 1) {
       true
     }
     else {
@@ -74,12 +74,12 @@ case class Bot() {
     }
   }
 
-  private def region2(turn:Turn, index:Int):Boolean = {
-    if(index < 7){
+  private def region2(turn:Turn, maxIndex:Int):Boolean = {
+    if(maxIndex < 7){
       false
     }
-    else if((!region1(turn, index) && (turn.toRow == 1 || turn.toRow == index - 1)) ||
-      (!region1(turn, index) && (turn.toCol == 1 || turn.toCol == index - 1))) {
+    else if((!region1(turn, maxIndex) && (turn.toRow == 1 || turn.toRow == maxIndex - 1)) ||
+      (!region1(turn, maxIndex) && (turn.toCol == 1 || turn.toCol == maxIndex - 1))) {
       true
     }
     else {
@@ -87,11 +87,11 @@ case class Bot() {
     }
   }
 
-  private def region1(turn:Turn, index:Int):Boolean = {
-    if((turn.toRow == 0 && (turn.toCol == 1 || turn.toCol == index - 1)) ||
-      (turn.toRow == 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == index || turn.toCol == index - 1)) ||
-      (turn.toRow == index - 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == index || turn.toCol == index - 1)) ||
-      (turn.toRow == index && (turn.toCol == 1 || turn.toCol == index - 1))) {
+  private def region1(turn:Turn, maxIndex:Int):Boolean = {
+    if((turn.toRow == 0 && (turn.toCol == 1 || turn.toCol == maxIndex - 1)) ||
+      (turn.toRow == 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == maxIndex || turn.toCol == maxIndex - 1)) ||
+      (turn.toRow == maxIndex - 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == maxIndex || turn.toCol == maxIndex - 1)) ||
+      (turn.toRow == maxIndex && (turn.toCol == 1 || turn.toCol == maxIndex - 1))) {
       true
     }
     else {

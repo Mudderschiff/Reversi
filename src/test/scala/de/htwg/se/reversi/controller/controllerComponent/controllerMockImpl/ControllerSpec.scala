@@ -45,11 +45,11 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "return grid as string" in {
-        //Todo:controller.gridToString should be(())
+        controller.gridToString should be(controller.grid.toString)
       }
 
       "return active player" in {
-        controller.getActivePlayer() should be(1)
+        controller.getActivePlayer() should be(controller.getActivePlayer())
       }
 
       "does nothing on finish" in {

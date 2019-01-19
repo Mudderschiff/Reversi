@@ -160,108 +160,68 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(0), Cell(0), Cell(0), Cell(0))))))
 
     }
-    "save on f json 8x8" in {
-      //controller = new Controller(new Grid(1))
-      //controller.createNewGrid()
-      //tui.processInputLine("f")
-      //controller = new Controller(new Grid(4))
-      //controller.createNewGrid()
-      //tui.processInputLine("f")
-      //controller = new Controller(new Grid(8))
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      controller.grid = normalGrid
+    "save and load 8x8 json" in {
+      controller = new Controller(new Grid(8))
       tui.processInputLine("f")
       var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
       var playerjson = new File(System.getProperty("user.dir") + "/player.json")
-      gridjson should exist
-      playerjson should exist
-    }
-    "load a saved grid json" in {
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
       tui.processInputLine("l")
-      controller.grid should be(normalGrid)
+      controller.grid should be(new Grid(8))
+      gridjson.delete()
+      playerjson.delete()
     }
-    "save on f xml test 8x8" in {
-      //controller = new Controller(new Grid(1))
-      //controller.fileIo = new fileIoXmlImpl.FileIO
-      //controller.createNewGrid()
-      //tui.processInputLine("f")
-      //controller = new Controller(new Grid(4))
-      //controller.fileIo = new fileIoXmlImpl.FileIO
-      //controller.createNewGrid()
-      //tui.processInputLine("f")
-      //controller = new Controller(new Grid(8))
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      controller.grid = normalGrid
-      controller.fileIo = new fileIoXmlImpl.FileIO
-      tui.processInputLine("f")
-      var gridxml = new File(System.getProperty("user.dir") + "/grid.xml")
-      var playerxml = new File(System.getProperty("user.dir") + "/player.xml")
-      gridxml should exist
-      playerxml should exist
-    }
-    "load a saved grid xml" in {
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      tui.processInputLine("l")
-      controller.grid should be(normalGrid)
-    }
-    "save on f 1x1 json" in {
+    "save and load 1x1 json" in {
       controller = new Controller(new Grid(1))
-      controller.createNewGrid()
       tui.processInputLine("f")
-      var gridxml = new File(System.getProperty("user.dir") + "/grid.xml")
-      var playerxml = new File(System.getProperty("user.dir") + "/player.xml")
-      gridxml should exist
-      playerxml should exist
+      var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
+      var playerjson = new File(System.getProperty("user.dir") + "/player.json")
+      tui.processInputLine("l")
+      controller.grid should be(new Grid(1))
+      gridjson.delete()
+      playerjson.delete()
     }
     "save on f 4x4 json" in {
       controller = new Controller(new Grid(4))
-      controller.createNewGrid()
       tui.processInputLine("f")
+      var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
+      var playerjson = new File(System.getProperty("user.dir") + "/player.json")
+      tui.processInputLine("l")
+      controller.grid should be(new Grid(4))
+      gridjson.delete()
+      playerjson.delete()
     }
-    "save on f 1x1 xml" in {
-      controller = new Controller(new Grid(1))
-      controller.createNewGrid()
+    "save and load 8x8 xml" in {
+      controller = new Controller(new Grid(8))
       controller.fileIo = new fileIoXmlImpl.FileIO
       tui.processInputLine("f")
+      var gridjson = new File(System.getProperty("user.dir") + "/grid.xml")
+      var playerjson = new File(System.getProperty("user.dir") + "/player.xml")
+      tui.processInputLine("l")
+      controller.grid should be(new Grid(8))
+      gridjson.delete()
+      playerjson.delete()
+    }
+    "save and load 1x1 xml" in {
+      controller = new Controller(new Grid(1))
+      controller.fileIo = new fileIoXmlImpl.FileIO
+      tui.processInputLine("f")
+      var gridjson = new File(System.getProperty("user.dir") + "/grid.xml")
+      var playerjson = new File(System.getProperty("user.dir") + "/player.xml")
+      tui.processInputLine("l")
+      controller.grid should be(new Grid(1))
+      gridjson.delete()
+      playerjson.delete()
     }
     "save on f 4x4 xml" in {
       controller = new Controller(new Grid(4))
-      controller.createNewGrid()
       controller.fileIo = new fileIoXmlImpl.FileIO
       tui.processInputLine("f")
+      var gridjson = new File(System.getProperty("user.dir") + "/grid.xml")
+      var playerjson = new File(System.getProperty("user.dir") + "/player.xml")
+      tui.processInputLine("l")
+      controller.grid should be(new Grid(4))
+      gridjson.delete()
+      playerjson.delete()
     }
   }
 

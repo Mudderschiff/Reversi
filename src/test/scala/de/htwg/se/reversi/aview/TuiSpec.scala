@@ -81,40 +81,14 @@ class TuiSpec extends WordSpec with Matchers{
       tui.processInputLine("d")
       controller.botState() should be(false)
     }
-    /*
-    "set cells on input" in {
-      val p1small = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
-        Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
-        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
-        Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
-      val p1smallafter = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(0), Cell(3), Cell(1), Cell(3)),
-        Vector(Cell(0), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(3), Cell(2), Cell(1), Cell(3)),
-        Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
-      val p2small = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
-        Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
-        Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
-        Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
-      val p2smallafter = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
-        Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
-        Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
-        Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
-      //tui.processInputLine("+")
-      if (controller.activePlayer == 1) {
-        controller.grid = p1small
-        tui.processInputLine("02")
-        controller.grid should be(p1small)
-      } else {
-        controller.grid = p2small
-        tui.processInputLine("01")
-        controller.grid should be(p2small)
-      }
-    }*/
-    "save on f" in {
+    "save on f json" in {
+      controller = new Controller(new Grid(1))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      controller = new Controller(new Grid(4))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      controller = new Controller(new Grid(8))
       val normalGrid = Grid(new Matrix[Cell](Vector(
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
@@ -145,6 +119,13 @@ class TuiSpec extends WordSpec with Matchers{
       controller.grid should be(normalGrid)
     }
     "save on f xml test" in {
+      controller = new Controller(new Grid(1))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      controller = new Controller(new Grid(4))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      controller = new Controller(new Grid(8))
       val normalGrid = Grid(new Matrix[Cell](Vector(
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
@@ -207,6 +188,52 @@ class TuiSpec extends WordSpec with Matchers{
         tui.processInputLine("y")
         controller.grid should be(p1after)
       }
+    }
+    "bot test" in {
+      val p1b = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
+        Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
+        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
+      controller.grid = p1b
+      val plb1 = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(0), Cell(1), Cell(2)),
+        Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
+        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
+      if(controller.getActivePlayer() == 2) controller.changePlayer()
+      tui.processInputLine("e")
+      tui.processInputLine("02")
+      controller.grid should be(plb1)
+      tui.processInputLine("z")
+      controller.grid should be(p1b)
+      tui.processInputLine("y")
+      tui.processInputLine("y")
+      controller.grid should be(plb1)
+      tui.processInputLine("d")
+    }
+    "set as player 2" in {
+      if(controller.getActivePlayer() == 1) controller.changePlayer()
+      val p1b = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
+        Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
+        Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
+        Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
+      controller.grid = p1b
+      tui.processInputLine("01")
+      controller.grid should be(Grid(new Matrix[Cell](Vector(
+        Vector(Cell(3), Cell(2), Cell(3), Cell(0)),
+        Vector(Cell(0), Cell(2), Cell(2), Cell(0)),
+        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0))))))
+      tui.processInputLine("z")
+      tui.processInputLine("y")
+      controller.grid should be(Grid(new Matrix[Cell](Vector(
+        Vector(Cell(3), Cell(2), Cell(3), Cell(0)),
+        Vector(Cell(0), Cell(2), Cell(2), Cell(0)),
+        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))))
+
     }
   }
 

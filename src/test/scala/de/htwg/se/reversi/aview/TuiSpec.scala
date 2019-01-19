@@ -174,6 +174,56 @@ class TuiSpec extends WordSpec with Matchers{
       tui.processInputLine("l")
       controller.grid should be(normalGrid)
     }
+    "finish when active player has no turns" in {
+      val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
+      controller.grid = black
+      controller.finish()
+      val white = Grid(new Matrix[Cell](Vector(Vector(Cell(1), Cell(1)), Vector(Cell(0), Cell(2)))))
+      controller.grid = white
+      controller.finish()
+      val draw = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(1), Cell(1)))))
+      controller.grid = draw
+      controller.finish()
+    }
+    "undo and redo moves on z an y" in {
+      if (controller.getActivePlayer() == 1) {
+        val p1before = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
+          Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
+          Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+          Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
+        val p1after = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(3), Cell(1), Cell(3)),
+          Vector(Cell(0), Cell(1), Cell(1), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
+        controller.grid = p1before
+        tui.processInputLine("02")
+        controller.grid should be(p1after)
+        tui.processInputLine("z")
+        controller.grid should be(p1before)
+        tui.processInputLine("y")
+        controller.grid should be(p1after)
+      } else {
+        val p2before = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
+          Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
+          Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
+        val p2after = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(3), Cell(2), Cell(3), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(2), Cell(0)),
+          Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
+        controller.grid = p2before
+        tui.processInputLine("01")
+        controller.grid should be(p2after)
+        tui.processInputLine("z")
+        controller.grid should be(p2before)
+        tui.processInputLine("y")
+        controller.grid should be(p2after)
+      }
+    }
   }
 
 }

@@ -20,12 +20,20 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.createEmptyGrid()
       controller.grid should be(new Grid(4))
       controller.createNewGrid()
-      if(controller.getActivePlayer() == 2) controller.changePlayer()
-      controller.grid should be(Grid(new Matrix[Cell](Vector(
-        Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
-        Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
-        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
-        Vector(Cell(0), Cell(3), Cell(0), Cell(0))))))
+      if(controller.getActivePlayer() == 2) {
+        controller.grid should be(Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
+          Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
+          Vector(Cell(0), Cell(0), Cell(3), Cell(0))))))
+      } else {
+        controller.grid should be(Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
+          Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
+          Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+          Vector(Cell(0), Cell(3), Cell(0), Cell(0))))))
+      }
+
     }
   }
 }

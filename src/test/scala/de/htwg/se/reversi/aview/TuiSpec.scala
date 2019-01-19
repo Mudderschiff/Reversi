@@ -81,80 +81,6 @@ class TuiSpec extends WordSpec with Matchers{
       tui.processInputLine("d")
       controller.botState() should be(false)
     }
-    "save on f json" in {
-      controller = new Controller(new Grid(1))
-      controller.createNewGrid()
-      tui.processInputLine("f")
-      controller = new Controller(new Grid(4))
-      controller.createNewGrid()
-      tui.processInputLine("f")
-      controller = new Controller(new Grid(8))
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      controller.grid = normalGrid
-      tui.processInputLine("f")
-      var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
-      var playerjson = new File(System.getProperty("user.dir") + "/player.json")
-      gridjson should exist
-      playerjson should exist
-    }
-    "load a saved grid json" in {
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      tui.processInputLine("l")
-      controller.grid should be(normalGrid)
-    }
-    "save on f xml test" in {
-      controller = new Controller(new Grid(1))
-      controller.createNewGrid()
-      tui.processInputLine("f")
-      controller = new Controller(new Grid(4))
-      controller.createNewGrid()
-      tui.processInputLine("f")
-      controller = new Controller(new Grid(8))
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      controller.fileIo = new fileIoXmlImpl.FileIO
-      tui.processInputLine("f")
-      var gridxml = new File(System.getProperty("user.dir") + "/grid.xml")
-      var playerxml = new File(System.getProperty("user.dir") + "/player.xml")
-      gridxml should exist
-      playerxml should exist
-    }
-    "load a saved grid xml" in {
-      val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
-      tui.processInputLine("l")
-      controller.grid should be(normalGrid)
-    }
     "finish when active player has no turns" in {
       val black = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(2)), Vector(Cell(0), Cell(1)))))
       controller.grid = black
@@ -167,7 +93,6 @@ class TuiSpec extends WordSpec with Matchers{
       controller.finish()
     }
     "undo and redo moves on z an y" in {
-      controller.changePlayer()
       if (controller.getActivePlayer() == 2) controller.changePlayer()
       if (controller.getActivePlayer() == 1) {
         val p1before = Grid(new Matrix[Cell](Vector(
@@ -234,6 +159,81 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
         Vector(Cell(0), Cell(0), Cell(0), Cell(0))))))
 
+    }
+    "save on f json" in {
+      controller = new Controller(new Grid(1))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      controller = new Controller(new Grid(4))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      //controller = new Controller(new Grid(8))
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      controller.grid = normalGrid
+      tui.processInputLine("f")
+      var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
+      var playerjson = new File(System.getProperty("user.dir") + "/player.json")
+      gridjson should exist
+      playerjson should exist
+    }
+    "load a saved grid json" in {
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      tui.processInputLine("l")
+      controller.grid should be(normalGrid)
+    }
+    "save on f xml test" in {
+      controller = new Controller(new Grid(1))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      controller = new Controller(new Grid(4))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      //controller = new Controller(new Grid(8))
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      controller.grid = normalGrid
+      controller.fileIo = new fileIoXmlImpl.FileIO
+      tui.processInputLine("f")
+      var gridxml = new File(System.getProperty("user.dir") + "/grid.xml")
+      var playerxml = new File(System.getProperty("user.dir") + "/player.xml")
+      gridxml should exist
+      playerxml should exist
+    }
+    "load a saved grid xml" in {
+      val normalGrid = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+      tui.processInputLine("l")
+      controller.grid should be(normalGrid)
     }
   }
 

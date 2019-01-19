@@ -208,23 +208,6 @@ class TuiSpec extends WordSpec with Matchers{
         controller.grid should be(p1after)
       }
     }
-    "set player 2" in {
-      if (controller.getActivePlayer() == 1) controller.changePlayer()
-      if (controller.getActivePlayer() == 2) {
-        controller.grid = Grid(new Matrix[Cell](Vector(
-          Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
-          Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
-          Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
-          Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
-        tui.processInputLine("01")
-        controller.grid = Grid(new Matrix[Cell](Vector(
-          Vector(Cell(3), Cell(2), Cell(3), Cell(0)),
-          Vector(Cell(0), Cell(2), Cell(2), Cell(0)),
-          Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
-          Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
-      }
-    }
-    "undo & redo bot test"
   }
 
 }

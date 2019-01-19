@@ -160,13 +160,13 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(0), Cell(0), Cell(0), Cell(0))))))
 
     }
-    "save on f json" in {
-      controller = new Controller(new Grid(1))
-      controller.createNewGrid()
-      tui.processInputLine("f")
-      controller = new Controller(new Grid(4))
-      controller.createNewGrid()
-      tui.processInputLine("f")
+    "save on f json 8x8" in {
+      //controller = new Controller(new Grid(1))
+      //controller.createNewGrid()
+      //tui.processInputLine("f")
+      //controller = new Controller(new Grid(4))
+      //controller.createNewGrid()
+      //tui.processInputLine("f")
       //controller = new Controller(new Grid(8))
       val normalGrid = Grid(new Matrix[Cell](Vector(
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
@@ -197,13 +197,15 @@ class TuiSpec extends WordSpec with Matchers{
       tui.processInputLine("l")
       controller.grid should be(normalGrid)
     }
-    "save on f xml test" in {
-      controller = new Controller(new Grid(1))
-      controller.createNewGrid()
-      tui.processInputLine("f")
-      controller = new Controller(new Grid(4))
-      controller.createNewGrid()
-      tui.processInputLine("f")
+    "save on f xml test 8x8" in {
+      //controller = new Controller(new Grid(1))
+      //controller.fileIo = new fileIoXmlImpl.FileIO
+      //controller.createNewGrid()
+      //tui.processInputLine("f")
+      //controller = new Controller(new Grid(4))
+      //controller.fileIo = new fileIoXmlImpl.FileIO
+      //controller.createNewGrid()
+      //tui.processInputLine("f")
       //controller = new Controller(new Grid(8))
       val normalGrid = Grid(new Matrix[Cell](Vector(
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
@@ -234,6 +236,32 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
       tui.processInputLine("l")
       controller.grid should be(normalGrid)
+    }
+    "save on f 1x1 json" in {
+      controller = new Controller(new Grid(1))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+      var gridxml = new File(System.getProperty("user.dir") + "/grid.xml")
+      var playerxml = new File(System.getProperty("user.dir") + "/player.xml")
+      gridxml should exist
+      playerxml should exist
+    }
+    "save on f 4x4 json" in {
+      controller = new Controller(new Grid(4))
+      controller.createNewGrid()
+      tui.processInputLine("f")
+    }
+    "save on f 1x1 xml" in {
+      controller = new Controller(new Grid(1))
+      controller.createNewGrid()
+      controller.fileIo = new fileIoXmlImpl.FileIO
+      tui.processInputLine("f")
+    }
+    "save on f 4x4 xml" in {
+      controller = new Controller(new Grid(4))
+      controller.createNewGrid()
+      controller.fileIo = new fileIoXmlImpl.FileIO
+      tui.processInputLine("f")
     }
   }
 

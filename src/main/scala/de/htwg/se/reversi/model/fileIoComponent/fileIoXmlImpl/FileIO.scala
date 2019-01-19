@@ -51,7 +51,7 @@ class FileIO extends FileIOInterface {
 
   def playerToXML(activePlayer: Int): Elem = <player>{activePlayer}</player>
 
-  def saveXML(grid:GridInterface):Unit = scala.xml.XML.save("grid.xml", gridToXml(grid))
+  //def saveXML(grid:GridInterface):Unit = scala.xml.XML.save("grid.xml", gridToXml(grid))
 
   def saveString(grid:GridInterface): Unit = {
     import java.io._

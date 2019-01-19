@@ -41,16 +41,10 @@ case class Bot() {
   //5 1 4 4 4 4 1 5
 
   private def region5(turn:Turn, size:Int):Boolean = {
-    if(turn.toRow == 0 && turn.toCol == 0) {
-      true
-    }
-    else if(turn.toRow == 0 && turn.toCol == size){
-      true
-    }
-    else if(turn.toRow == size && turn.toCol == 0){
-      true
-    }
-    else if(turn.toRow == size && turn.toCol == size){
+    if((turn.toRow == 0 && turn.toCol == 0) ||
+      (turn.toRow == 0 && turn.toCol == size) ||
+      (turn.toRow == size && turn.toCol == 0) ||
+      (turn.toRow == size && turn.toCol == size)) {
       true
     }
     else {
@@ -59,7 +53,8 @@ case class Bot() {
   }
 
   private def region4(turn:Turn, size:Int):Boolean = {
-    if(!region1(turn, size) && !region5(turn, size) && (turn.toRow == 0 || turn.toRow == size || turn.toCol == 0 || turn.toCol == size)) {
+    if(!region1(turn, size) && !region5(turn, size) &&
+      (turn.toRow == 0 || turn.toRow == size || turn.toCol == 0 || turn.toCol == size)) {
       true
     }
     else {
@@ -83,10 +78,8 @@ case class Bot() {
     if(size < 8){
       false
     }
-    else if(!region1(turn, size) && (turn.toRow == 1 || turn.toRow == size - 2)) {
-      true
-    }
-    else if(!region1(turn, size) && (turn.toCol == 1 || turn.toCol == size - 2)) {
+    else if((!region1(turn, size) && (turn.toRow == 1 || turn.toRow == size - 2)) ||
+      (!region1(turn, size) && (turn.toCol == 1 || turn.toCol == size - 2))) {
       true
     }
     else {
@@ -98,21 +91,14 @@ case class Bot() {
     if(size < 4) {
       false
     }
-    else if(turn.toRow == 0 && (turn.toCol == 1 || turn.toCol == size - 2)) {
-      true
-    }
-    else if(turn.toRow == 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == size -1 || turn.toCol == size -2)){
-      true
-    }
-    else if(turn.toRow == size - 2 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == size -1 || turn.toCol == size -2)){
-      true
-    }
-    else if(turn.toRow == size - 1 && (turn.toCol == 1 || turn.toCol == size - 2)) {
+    else if((turn.toRow == 0 && (turn.toCol == 1 || turn.toCol == size - 2)) ||
+      (turn.toRow == 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == size -1 || turn.toCol == size -2)) ||
+      (turn.toRow == size - 2 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == size -1 || turn.toCol == size -2)) ||
+      (turn.toRow == size - 1 && (turn.toCol == 1 || turn.toCol == size - 2))) {
       true
     }
     else {
       false
     }
   }
-
 }

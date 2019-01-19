@@ -77,6 +77,37 @@ class GridSpec extends WordSpec with Matchers {
         turns(2) should be(Turn(4, 3, 2, 3, Direction.Up))
         turns(3) should be(Turn(4, 3, 4, 5, Direction.Right))
       }
+      "test scenarios for DownLeft, UpRight, UpLeft, DownRight" in {
+        var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
+        grid.getValidTurns(2)(2) should be(Turn(0,2,2,0,Direction.DownLeft))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
+        grid.getValidTurns(2)(2) should be(Turn(2,0,0,2,Direction.UpRight))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
+        grid.getValidTurns(2)(2) should be(Turn(2,2,0,0,Direction.UpLeft))
+
+        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
+        grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
+      }
+      "special turn tests that are not covered yet" in {
+        val lookup = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(1), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(0), Cell(1)),
+          Vector(Cell(0), Cell(1), Cell(0), Cell(1))
+        )))
+        lookup.getValidTurns(1)(1) should be(Turn(3,1,1,1,Direction.Up))
+
+        val lookdown = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(1), Cell(0), Cell(1)),
+          Vector(Cell(0), Cell(1), Cell(0), Cell(2)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0))
+        )))
+        lookdown.getValidTurns(1).size should be(1)
+
+      }
       "and no turns for anything else" in {
         freshGrid.getValidTurns(0).size should be(0)
         freshGrid.getValidTurns(3).size should be(0)
@@ -108,19 +139,6 @@ class GridSpec extends WordSpec with Matchers {
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
         grid.highlight(2).cell(2,2) should be(Cell(3))
-      }
-      "test scenarios for DownLeft, UpRight, UpLeft, DownRight" in {
-        var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,2,2,0,Direction.DownLeft))
-
-        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,0,0,2,Direction.UpRight))
-
-        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,2,0,0,Direction.UpLeft))
-
-        grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
       }
       "valid Turn should be true" in {
         freshGrid.checkChange(2,2,3)._1 should be(true)

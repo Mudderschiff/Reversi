@@ -224,6 +224,7 @@ class TuiSpec extends WordSpec with Matchers{
           Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
       }
     }
+    "undo & redo bot test"
   }
 
 }

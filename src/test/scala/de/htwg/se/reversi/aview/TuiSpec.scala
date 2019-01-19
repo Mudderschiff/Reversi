@@ -186,6 +186,7 @@ class TuiSpec extends WordSpec with Matchers{
       controller.finish()
     }
     "undo and redo moves on z an y" in {
+      if (controller.getActivePlayer() == 2) controller.changePlayer()
       if (controller.getActivePlayer() == 1) {
         val p1before = Grid(new Matrix[Cell](Vector(
           Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
@@ -204,24 +205,24 @@ class TuiSpec extends WordSpec with Matchers{
         controller.grid should be(p1before)
         tui.processInputLine("y")
         controller.grid should be(p1after)
-      } else {
-        val p2before = Grid(new Matrix[Cell](Vector(
-          Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
-          Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
-          Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
-          Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
-        val p2after = Grid(new Matrix[Cell](Vector(
-          Vector(Cell(3), Cell(2), Cell(3), Cell(0)),
-          Vector(Cell(0), Cell(2), Cell(2), Cell(0)),
+      }
+    }
+    "set move and switch acordingly" in {
+      controller.enableBot()
+      if (controller.getActivePlayer() == 2) controller.changePlayer()
+      if (controller.getActivePlayer() == 1) {
+        val p1before = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
+          Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
           Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
-          Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
-        controller.grid = p2before
-        tui.processInputLine("01")
-        controller.grid should be(p2after)
-        tui.processInputLine("z")
-        controller.grid should be(p2before)
-        tui.processInputLine("y")
-        controller.grid should be(p2after)
+          Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
+        controller.grid = p1before
+        tui.processInputLine("02")
+        controller.grid should be(Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(1), Cell(2)),
+          Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
+          Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+          Vector(Cell(0), Cell(3), Cell(0), Cell(0))))))
       }
     }
   }

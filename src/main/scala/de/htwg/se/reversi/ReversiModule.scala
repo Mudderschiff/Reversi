@@ -15,7 +15,7 @@ class ReversiModule extends AbstractModule with ScalaModule {
   def configure():  Unit = {
     bindConstant().annotatedWith(Names.named("DefaultSize")).to(defaultSize)
     bind[GridInterface].to[Grid]
-    bind[ControllerInterface].to[controllerMockImpl.Controller]
+    bind[ControllerInterface].to[controllerBaseImpl.Controller]
 
     bind[GridInterface].annotatedWithName("tiny").toInstance(new Grid(1))
     bind[GridInterface].annotatedWithName("small").toInstance(new Grid(4))

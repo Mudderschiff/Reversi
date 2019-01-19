@@ -90,6 +90,32 @@ class GridSpec extends WordSpec with Matchers {
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
         grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
       }
+      "special turn tests that are not covered yet" in {
+        val lookdown = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(1), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(1), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(1), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0))
+        )))
+        lookdown.getValidTurns(1).size should be(0)
+
+        val lookright = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(1), Cell(2)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(1), Cell(2), Cell(1)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0))
+        )))
+        lookdown.getValidTurns(1).size should be(0)
+
+        val lookleft = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(2), Cell(1), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(1), Cell(2), Cell(1), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0))
+        )))
+        lookleft.getValidTurns(1).size should be(0)
+
+      }
       "and no turns for anything else" in {
         freshGrid.getValidTurns(0).size should be(0)
         freshGrid.getValidTurns(3).size should be(0)

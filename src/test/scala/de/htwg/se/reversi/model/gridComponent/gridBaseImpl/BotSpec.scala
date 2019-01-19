@@ -171,6 +171,60 @@ class BotSpec extends WordSpec with Matchers {
       }
     }
 
+    "in a running game with only one possible turn with the second worst value but another2" should {
+      val runninggame = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(2), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      )))
+      "choose a random turn out of the best value category and return a new grid" in {
+        val afterbot = runninggame.makeNextTurnBot(2)
+        val runninggameafter = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(2), Cell(2), Cell(2), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        )))
+        afterbot should be(runninggameafter)
+      }
+    }
+
+    "in a running game with only one possible turn with the second worst value but another3" should {
+      val runninggame = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(1), Cell(2), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      )))
+      "choose a random turn out of the best value category and return a new grid" in {
+        val afterbot = runninggame.makeNextTurnBot(2)
+        val runninggameafter = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(2), Cell(2), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+        )))
+        afterbot should be(runninggameafter)
+      }
+    }
+
     "in a running game with only one possible turn with the worst value" should {
 
       val runninggame = Grid(new Matrix[Cell](Vector(

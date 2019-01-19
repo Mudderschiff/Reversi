@@ -88,10 +88,7 @@ case class Bot() {
   }
 
   private def region1(turn:Turn, index:Int):Boolean = {
-    if(index < 3) {
-      false
-    }
-    else if((turn.toRow == 0 && (turn.toCol == 1 || turn.toCol == index - 1)) ||
+    if((turn.toRow == 0 && (turn.toCol == 1 || turn.toCol == index - 1)) ||
       (turn.toRow == 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == index || turn.toCol == index - 1)) ||
       (turn.toRow == index - 1 && (turn.toCol == 0 || turn.toCol == 1 || turn.toCol == index || turn.toCol == index - 1)) ||
       (turn.toRow == index && (turn.toCol == 1 || turn.toCol == index - 1))) {

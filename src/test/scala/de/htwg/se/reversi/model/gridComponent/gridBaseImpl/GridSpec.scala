@@ -129,7 +129,7 @@ class GridSpec extends WordSpec with Matchers {
           Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
           Vector(Cell(0), Cell(0), Cell(0), Cell(0))
         )))
-        lookdownright.getValidTurns(1).size should be(1)
+        lookdownright.getValidTurns(1).head should be(Turn(0,0,2,2,Direction.DownRight))
 
       }
       "and no turns for anything else" in {

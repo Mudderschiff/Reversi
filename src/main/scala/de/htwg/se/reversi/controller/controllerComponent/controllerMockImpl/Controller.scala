@@ -46,7 +46,7 @@ class Controller(var grid: GridInterface) extends ControllerInterface {
 
   override def cell(row: Int, col: Int): CellInterface = grid.cell(row, col)
 
-  override def undo: Unit = ???
+  override def undo: Unit = {}
 
-  override def redo: Unit = ???
+  override def redo: Unit = {}
 }

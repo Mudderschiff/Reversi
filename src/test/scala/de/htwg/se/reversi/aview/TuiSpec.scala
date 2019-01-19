@@ -176,12 +176,13 @@ class TuiSpec extends WordSpec with Matchers{
       }
     }
     "bot test" in {
-      controller.createNewGrid()
+      //controller.createNewGrid()
       val p1b = Grid(new Matrix[Cell](Vector(
         Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
         Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
         Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
         Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
+      controller.grid = p1b
       val plb1 = Grid(new Matrix[Cell](Vector(
         Vector(Cell(0), Cell(0), Cell(1), Cell(2)),
         Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
@@ -193,7 +194,27 @@ class TuiSpec extends WordSpec with Matchers{
       controller.grid should be(plb1)
       tui.processInputLine("z")
       controller.grid should be(p1b)
-      //if(controller.grid == controller.grid)
+      tui.processInputLine("y")
+      tui.processInputLine("y")
+      controller.grid should be(plb1)
+      tui.processInputLine("d")
+    }
+    "set as player 2" in {
+      //controller.createNewGrid()
+      if(controller.getActivePlayer() == 1) controller.changePlayer()
+      val p1b = Grid(new Matrix[Cell](Vector(
+        Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
+        Vector(Cell(3), Cell(1), Cell(2), Cell(0)),
+        Vector(Cell(0), Cell(2), Cell(1), Cell(3)),
+        Vector(Cell(0), Cell(0), Cell(3), Cell(0)))))
+      controller.grid = p1b
+      tui.processInputLine("01")
+      controller.grid should be(Grid(new Matrix[Cell](Vector(
+        Vector(Cell(3), Cell(2), Cell(3), Cell(0)),
+        Vector(Cell(0), Cell(2), Cell(2), Cell(0)),
+        Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0))))))
+
     }
   }
 

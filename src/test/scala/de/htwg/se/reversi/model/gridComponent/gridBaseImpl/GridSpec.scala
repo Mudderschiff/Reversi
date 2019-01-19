@@ -92,9 +92,9 @@ class GridSpec extends WordSpec with Matchers {
       }
       "special turn tests that are not covered yet" in {
         val lookdown = Grid(new Matrix[Cell](Vector(
-          Vector(Cell(0), Cell(1), Cell(0), Cell(0)),
-          Vector(Cell(0), Cell(1), Cell(0), Cell(0)),
-          Vector(Cell(0), Cell(1), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(1), Cell(0), Cell(1)),
+          Vector(Cell(0), Cell(1), Cell(0), Cell(2)),
+          Vector(Cell(0), Cell(1), Cell(0), Cell(1)),
           Vector(Cell(0), Cell(0), Cell(0), Cell(0))
         )))
         lookdown.getValidTurns(1).size should be(0)
@@ -105,7 +105,7 @@ class GridSpec extends WordSpec with Matchers {
           Vector(Cell(0), Cell(1), Cell(2), Cell(1)),
           Vector(Cell(0), Cell(0), Cell(0), Cell(0))
         )))
-        lookdown.getValidTurns(1).size should be(0)
+        lookright.getValidTurns(1).size should be(0)
 
         val lookleft = Grid(new Matrix[Cell](Vector(
           Vector(Cell(2), Cell(1), Cell(0), Cell(0)),
@@ -114,6 +114,22 @@ class GridSpec extends WordSpec with Matchers {
           Vector(Cell(0), Cell(0), Cell(0), Cell(0))
         )))
         lookleft.getValidTurns(1).size should be(0)
+
+        val lookupright = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(1), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(1), Cell(0)),
+          Vector(Cell(1), Cell(0), Cell(0), Cell(0))
+        )))
+        lookupright.getValidTurns(1).size should be(1)
+
+        val lookdownright = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(1), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(2), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0))
+        )))
+        lookdownright.getValidTurns(1).head should be(Turn(0,0,2,2,Direction.DownRight))
 
       }
       "and no turns for anything else" in {

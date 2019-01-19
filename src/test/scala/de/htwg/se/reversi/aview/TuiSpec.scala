@@ -186,6 +186,7 @@ class TuiSpec extends WordSpec with Matchers{
       controller.finish()
     }
     "undo and redo moves on z an y" in {
+      controller.changePlayer()
       if (controller.getActivePlayer() == 2) controller.changePlayer()
       if (controller.getActivePlayer() == 1) {
         val p1before = Grid(new Matrix[Cell](Vector(
@@ -205,24 +206,6 @@ class TuiSpec extends WordSpec with Matchers{
         controller.grid should be(p1before)
         tui.processInputLine("y")
         controller.grid should be(p1after)
-      }
-    }
-    "set move and switch acordingly" in {
-      controller.enableBot()
-      if (controller.getActivePlayer() == 2) controller.changePlayer()
-      if (controller.getActivePlayer() == 1) {
-        val p1before = Grid(new Matrix[Cell](Vector(
-          Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
-          Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
-          Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
-          Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
-        controller.grid = p1before
-        tui.processInputLine("02")
-        controller.grid should be(Grid(new Matrix[Cell](Vector(
-          Vector(Cell(0), Cell(0), Cell(1), Cell(2)),
-          Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
-          Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
-          Vector(Cell(0), Cell(3), Cell(0), Cell(0))))))
       }
     }
   }

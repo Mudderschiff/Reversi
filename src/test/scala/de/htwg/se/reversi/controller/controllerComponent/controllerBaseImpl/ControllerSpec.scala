@@ -1,8 +1,5 @@
 package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
 
-
-import java.io.File
-
 import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix}
 import org.scalatest.{Matchers, WordSpec}
 

@@ -28,7 +28,7 @@ class Controller(var grid: GridInterface) extends ControllerInterface {
 
   override def gridToString: String = grid.toString
 
-  override def getActivePlayer(): Int = getActivePlayer()
+  override def getActivePlayer(): Int = 1
 
   override def finish(): Unit = {}
 
@@ -46,7 +46,7 @@ class Controller(var grid: GridInterface) extends ControllerInterface {
 
   override def cell(row: Int, col: Int): CellInterface = grid.cell(row, col)
 
-  override def undo: Unit = ???
+  override def undo: Unit = {}
 
-  override def redo: Unit = ???
+  override def redo: Unit = {}
 }

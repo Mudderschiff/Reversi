@@ -126,7 +126,7 @@ class GridSpec extends WordSpec with Matchers {
         val lookdownright = Grid(new Matrix[Cell](Vector(
           Vector(Cell(1), Cell(0), Cell(0), Cell(0)),
           Vector(Cell(0), Cell(2), Cell(0), Cell(0)),
-          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(3), Cell(0)),
           Vector(Cell(0), Cell(0), Cell(0), Cell(0))
         )))
         lookdownright.getValidTurns(1).head should be(Turn(0,0,2,2,Direction.DownRight))

@@ -18,7 +18,7 @@ class Controller @Inject() (var grid: GridInterface) extends ControllerInterface
 
   var gameStatus: GameStatus = IDLE
   val injector: Injector = Guice.createInjector(new ReversiModule)
-  val fileIo: FileIOInterface = injector.instance[FileIOInterface]
+  var fileIo: FileIOInterface = injector.instance[FileIOInterface]
   private val undoManager = new UndoManager
 
   val player1 = Player(1)

@@ -24,3 +24,5 @@ class ReversiModule extends AbstractModule with ScalaModule {
     bind[FileIOInterface].to[fileIoJsonImpl.FileIO]
   }
 }
+
+

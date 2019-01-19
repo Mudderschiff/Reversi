@@ -232,7 +232,7 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(3), Cell(2), Cell(3), Cell(0)),
         Vector(Cell(0), Cell(2), Cell(2), Cell(0)),
         Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
-        Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))))
+        Vector(Cell(0), Cell(0), Cell(0), Cell(0))))))
 
     }
   }

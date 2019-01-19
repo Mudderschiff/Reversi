@@ -143,5 +143,13 @@ class BotSpec extends WordSpec with Matchers {
         afterbot should be(runninggameafter)
       }
     }
+
+    "a empty grid" should {
+      "do nothing" in {
+        val grid = new Grid(8)
+        val after = grid.makeNextTurnBot(1)
+        grid should be(after)
+      }
+    }
   }
 }

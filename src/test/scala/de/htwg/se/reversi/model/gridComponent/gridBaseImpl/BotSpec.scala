@@ -143,5 +143,32 @@ class BotSpec extends WordSpec with Matchers {
         afterbot should be(runninggameafter)
       }
     }
+
+    "a empty grid" should {
+      "do nothing" in {
+        val grid = new Grid(8)
+        val after = grid.makeNextTurnBot(1)
+        grid should be(after)
+      }
+    }
+
+    "a small grid" should {
+      "not do anything for region 3" in {
+        val small = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(2), Cell(1), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0))
+        )))
+        val after = Grid(new Matrix[Cell](Vector(
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(2), Cell(2), Cell(2), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0)),
+          Vector(Cell(0), Cell(0), Cell(0), Cell(0))
+        )))
+
+        small.makeNextTurnBot(2) should be(after)
+      }
+    }
   }
 }

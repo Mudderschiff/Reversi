@@ -50,7 +50,7 @@ case class Bot() {
     else if(turn.toRow == size && turn.toCol == 0){
       true
     }
-    else if(turn.toRow == size && turn.toCol == 0){
+    else if(turn.toRow == size && turn.toCol == size){
       true
     }
     else {

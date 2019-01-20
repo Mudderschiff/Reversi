@@ -1,29 +1,27 @@
 package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
-import scala.util.Random
-
-case class Bot() {
-  def makeTurn(grid:Grid, player:Int): Grid = {
+class Bot extends BotTemplate () {
+  override def makeTurn(grid:Grid, player:Int): Grid = {
     val turns = grid.getValidTurns(player)
 
     if(turns.filter(region5(_, grid.size - 1)).size > 0) {
-      val t = Random.shuffle(turns.filter(region5(_, grid.size - 1))).head
+      val t = getRandomTurn(turns.filter(region5(_, grid.size - 1)))
       grid.setTurnRC(player, t.toRow, t.toCol)
     }
     else if(turns.filter(region4(_, grid.size - 1)).size > 0) {
-      val t = Random.shuffle(turns.filter(region4(_, grid.size - 1))).head
+      val t = getRandomTurn(turns.filter(region4(_, grid.size - 1)))
       grid.setTurnRC(player, t.toRow, t.toCol)
     }
     else if(turns.filter(region3(_, grid.size - 1)).size > 0) {
-      val t = Random.shuffle(turns.filter(region3(_, grid.size - 1))).head
+      val t = getRandomTurn(turns.filter(region3(_, grid.size - 1)))
       grid.setTurnRC(player, t.toRow, t.toCol)
     }
     else if(turns.filter(region2(_, grid.size - 1)).size > 0) {
-      val t = Random.shuffle(turns.filter(region2(_, grid.size - 1))).head
+      val t = getRandomTurn(turns.filter(region2(_, grid.size - 1)))
       grid.setTurnRC(player, t.toRow, t.toCol)
     }
     else if(turns.filter(region1(_, grid.size - 1)).size > 0) {
-      val t = Random.shuffle(turns.filter(region1(_, grid.size - 1))).head
+      val t = getRandomTurn(turns.filter(region1(_, grid.size - 1)))
       grid.setTurnRC(player, t.toRow, t.toCol)
     }
     else {

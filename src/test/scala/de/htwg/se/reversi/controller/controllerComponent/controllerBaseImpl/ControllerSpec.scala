@@ -18,7 +18,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.statusText should be("A new game was created")
     }
     "set a cell" in {
-      controller.cell(0,0)
+      controller.cell(0, 0)
       controller.grid should be(new Grid(1))
     }
     "able to create empty and new grid 4x4" in {
@@ -26,7 +26,7 @@ class ControllerSpec extends WordSpec with Matchers {
       controller.createEmptyGrid()
       controller.grid should be(new Grid(4))
       controller.createNewGrid()
-      if(controller.getActivePlayer() == 2) {
+      if (controller.getActivePlayer() == 2) {
         controller.grid should be(Grid(new Matrix[Cell](Vector(
           Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
           Vector(Cell(3), Cell(1), Cell(2), Cell(0)),

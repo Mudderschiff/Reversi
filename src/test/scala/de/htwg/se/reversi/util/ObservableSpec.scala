@@ -1,7 +1,5 @@
 package de.htwg.se.reversi.util
 
-import java.security.KeyStore.TrustedCertificateEntry
-
 import org.scalatest.{Matchers, WordSpec}
 
 class ObservableSpec extends WordSpec with Matchers {
@@ -9,12 +7,16 @@ class ObservableSpec extends WordSpec with Matchers {
     val observable = new Observable
     val observer = new Observer {
       var updated: Boolean = false
+
       def isUpdated: Boolean = updated
-      override def update(): Unit = {updated = true}
+
+      override def update(): Unit = {
+        updated = true
+      }
     }
     "add an Observer" in {
       observable.add(observer)
-      observable.subscribers should contain (observer)
+      observable.subscribers should contain(observer)
     }
     "notify an Observer" in {
       observer.isUpdated should be(false)

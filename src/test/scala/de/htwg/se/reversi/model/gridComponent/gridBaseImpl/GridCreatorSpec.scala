@@ -1,7 +1,5 @@
 package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, GridCreator}
 import org.scalatest.{Matchers, WordSpec}
 
 class GridCreatorSpec extends WordSpec with Matchers {
@@ -13,27 +11,27 @@ class GridCreatorSpec extends WordSpec with Matchers {
         val smallGrid = creator.createGrid(4)
         val tinyGrid = creator.createGrid(2)
 
-        tinyGrid.cell(0,0) should be(Cell(1))
-        tinyGrid.cell(0,1) should be(Cell(2))
-        tinyGrid.cell(1,0) should be(Cell(2))
-        tinyGrid.cell(1,1) should be(Cell(1))
+        tinyGrid.cell(0, 0) should be(Cell(1))
+        tinyGrid.cell(0, 1) should be(Cell(2))
+        tinyGrid.cell(1, 0) should be(Cell(2))
+        tinyGrid.cell(1, 1) should be(Cell(1))
 
-        smallGrid.cell(0,0) should be(Cell(0))
-        smallGrid.cell(0,1) should be(Cell(0))
-        smallGrid.cell(0,2) should be(Cell(0))
-        smallGrid.cell(0,3) should be(Cell(0))
-        smallGrid.cell(1,0) should be(Cell(0))
-        smallGrid.cell(1,1) should be(Cell(1))
-        smallGrid.cell(1,2) should be(Cell(2))
-        smallGrid.cell(1,3) should be(Cell(0))
-        smallGrid.cell(2,1) should be(Cell(2))
-        smallGrid.cell(2,2) should be(Cell(1))
-        smallGrid.cell(2,3) should be(Cell(0))
-        smallGrid.cell(2,0) should be(Cell(0))
-        smallGrid.cell(3,0) should be(Cell(0))
-        smallGrid.cell(3,1) should be(Cell(0))
-        smallGrid.cell(3,2) should be(Cell(0))
-        smallGrid.cell(3,3) should be(Cell(0))
+        smallGrid.cell(0, 0) should be(Cell(0))
+        smallGrid.cell(0, 1) should be(Cell(0))
+        smallGrid.cell(0, 2) should be(Cell(0))
+        smallGrid.cell(0, 3) should be(Cell(0))
+        smallGrid.cell(1, 0) should be(Cell(0))
+        smallGrid.cell(1, 1) should be(Cell(1))
+        smallGrid.cell(1, 2) should be(Cell(2))
+        smallGrid.cell(1, 3) should be(Cell(0))
+        smallGrid.cell(2, 1) should be(Cell(2))
+        smallGrid.cell(2, 2) should be(Cell(1))
+        smallGrid.cell(2, 3) should be(Cell(0))
+        smallGrid.cell(2, 0) should be(Cell(0))
+        smallGrid.cell(3, 0) should be(Cell(0))
+        smallGrid.cell(3, 1) should be(Cell(0))
+        smallGrid.cell(3, 2) should be(Cell(0))
+        smallGrid.cell(3, 3) should be(Cell(0))
 
       }
     }

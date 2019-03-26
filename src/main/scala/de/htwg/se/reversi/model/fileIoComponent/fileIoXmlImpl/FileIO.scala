@@ -2,10 +2,10 @@ package de.htwg.se.reversi.model.fileIoComponent.fileIoXmlImpl
 
 import com.google.inject.Guice
 import com.google.inject.name.Names
-import net.codingwell.scalaguice.InjectorExtensions._
 import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.GridInterface
+import net.codingwell.scalaguice.InjectorExtensions._
 
 import scala.xml.{Elem, PrettyPrinter}
 
@@ -23,9 +23,9 @@ class FileIO extends FileIOInterface {
       case 8 => gridOption = Some(injector.instance[GridInterface](Names.named("normal")))
       case _ =>
     }
-    val cellNodes= file \\ "cell"
+    val cellNodes = file \\ "cell"
     gridOption match {
-      case Some(grid)=>
+      case Some(grid) =>
         var _grid = grid
         for (cell <- cellNodes) {
           val row: Int = (cell \ "@row").text.toInt
@@ -39,8 +39,31 @@ class FileIO extends FileIOInterface {
     gridOption
   }
 
-  def save(grid:GridInterface):Unit = saveString(grid)
+  def save(grid: GridInterface): Unit = saveString(grid)
 
+  def saveString(grid: GridInterface): Unit = {
+    import java.io._
+    val pw = new PrintWriter(new File("grid.xml"))
+    val prettyPrinter = new PrettyPrinter(120, 4)
+    val xml = prettyPrinter.format(gridToXml(grid))
+    pw.write(xml)
+    pw.close()
+  }
+
+  def gridToXml(grid: GridInterface): Elem = {
+    <grid size={grid.size.toString}>
+      {for {
+      row <- 0 until grid.size
+      col <- 0 until grid.size
+    } yield cellToXml(grid, row, col)}
+    </grid>
+  }
+
+  def cellToXml(grid: GridInterface, row: Int, col: Int): Elem = {
+    <cell row={row.toString} col={col.toString}>
+      {grid.cell(row, col).value}
+    </cell>
+  }
 
   override def loadPlayer: Int = {
     val file = scala.xml.XML.loadFile("player.xml")
@@ -49,31 +72,8 @@ class FileIO extends FileIOInterface {
 
   override def savePlayer(activePlayer: Int): Unit = scala.xml.XML.save("player.xml", playerToXML(activePlayer))
 
-  def playerToXML(activePlayer: Int): Elem = <player>{activePlayer}</player>
-
-  def saveString(grid:GridInterface): Unit = {
-    import java.io._
-    val pw = new PrintWriter(new File("grid.xml" ))
-    val prettyPrinter = new PrettyPrinter(120,4)
-    val xml = prettyPrinter.format(gridToXml(grid))
-    pw.write(xml)
-    pw.close()
-  }
-  def gridToXml(grid:GridInterface): Elem = {
-    <grid size ={grid.size.toString}>
-      {
-      for {
-        row <- 0 until grid.size
-        col <- 0 until grid.size
-      } yield cellToXml(grid, row, col)
-      }
-    </grid>
-  }
-
-  def cellToXml(grid:GridInterface, row:Int, col:Int): Elem = {
-    <cell row ={row.toString} col={col.toString}>
-      {grid.cell(row,col).value}
-    </cell>
-  }
+  def playerToXML(activePlayer: Int): Elem = <player>
+    {activePlayer}
+  </player>
 
 }

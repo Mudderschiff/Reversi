@@ -1,8 +1,8 @@
 package de.htwg.se.reversi.controller.controllerComponent
 
-object GameStatus extends Enumeration{
+object GameStatus extends Enumeration {
   type GameStatus = Value
-  val IDLE, RESIZE, SET_Player1, SET_Player2, SET_Bot,BOT_ENABLE, BOT_DISABLE, NEW, LOADED, COULDNOTLOAD, SAVED, FINISHED, UNDO, REDO = Value
+  val IDLE, RESIZE, SET_Player1, SET_Player2, SET_Bot, BOT_ENABLE, BOT_DISABLE, NEW, LOADED, COULDNOTLOAD, SAVED, FINISHED, UNDO, REDO = Value
 
   val map: Map[GameStatus, String] = Map[GameStatus, String](
     IDLE -> "",
@@ -14,12 +14,12 @@ object GameStatus extends Enumeration{
     BOT_DISABLE -> "Bot disabled (Player 2)",
     RESIZE -> "Game was resized",
     FINISHED -> "Finished",
-    LOADED ->"A new Game was loaded",
+    LOADED -> "A new Game was loaded",
     COULDNOTLOAD -> "The file could not be loaded",
-    SAVED ->  "The Game was saved",
+    SAVED -> "The Game was saved",
     UNDO -> "Undone one step",
     REDO -> "Redone one step"
   )
 
-  def message(gameStatus: GameStatus): String =  map(gameStatus)
+  def message(gameStatus: GameStatus): String = map(gameStatus)
 }

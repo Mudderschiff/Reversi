@@ -1,13 +1,13 @@
 package de.htwg.se.reversi.controller.controllerComponent.controllerMockImpl
 
-import de.htwg.se.reversi.controller.controllerComponent.{ ControllerInterface, GameStatus }
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus.GameStatus
-import de.htwg.se.reversi.model.gridComponent.{ CellInterface, GridInterface }
+import de.htwg.se.reversi.controller.controllerComponent.GameStatus.{GameStatus, _}
+import de.htwg.se.reversi.controller.controllerComponent.{ControllerInterface, GameStatus}
 import de.htwg.se.reversi.model.gridComponent.gridMockImpl.Grid
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
+import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
 
 class Controller(var grid: GridInterface) extends ControllerInterface {
   grid = new Grid(1)
+
   override def gridSize: Int = 1
 
   override def createEmptyGrid(): Unit = {}
@@ -22,9 +22,7 @@ class Controller(var grid: GridInterface) extends ControllerInterface {
 
   override def set(row: Int, col: Int, value: Int): Unit = {}
 
-  override def score(): (Int, Int) = (0,0)
-
-  override def gameStatus: GameStatus = IDLE
+  override def score(): (Int, Int) = (0, 0)
 
   override def gridToString: String = grid.toString
 
@@ -43,6 +41,8 @@ class Controller(var grid: GridInterface) extends ControllerInterface {
   override def bot(): Unit = {}
 
   override def statusText: String = GameStatus.message(gameStatus)
+
+  override def gameStatus: GameStatus = IDLE
 
   override def cell(row: Int, col: Int): CellInterface = grid.cell(row, col)
 

@@ -1,6 +1,5 @@
 package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
-import de.htwg.se.reversi.model.gridComponent.GridInterface
+
 import de.htwg.se.reversi.util.Command
 
 class BotCommand(controller: Controller) extends Command {

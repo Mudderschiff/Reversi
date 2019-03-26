@@ -1,13 +1,14 @@
 package de.htwg.se.reversi.model.fileIoComponent.fileIoJsonImpl
 
+import java.io._
+
 import com.google.inject.Guice
 import com.google.inject.name.Names
-import net.codingwell.scalaguice.InjectorExtensions._
 import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
+import net.codingwell.scalaguice.InjectorExtensions._
 import play.api.libs.json._
-import java.io._
 
 import scala.io.Source
 
@@ -35,36 +36,16 @@ class FileIO extends FileIOInterface {
           val value = (cell \ "value").as[Int]
           _grid = _grid.set(row, col, value)
         }
-        gridOption=Some(_grid)
+        gridOption = Some(_grid)
       case None =>
     }
     gridOption
   }
+
   override def save(grid: GridInterface): Unit = {
     val pw = new PrintWriter(new File("grid.json"))
     pw.write(Json.prettyPrint(gridToJson(grid)))
     pw.close()
-  }
-
-  override def loadPlayer: Int = {
-    val source: String = Source.fromFile("player.json").getLines.mkString
-    val json: JsValue = Json.parse(source)
-    val activePlayer = (json \ "activePlayer").get.toString.toInt
-    activePlayer
-  }
-
-  override def savePlayer(activePlayer: Int): Unit = {
-    val pw = new PrintWriter(new File("player.json"))
-    pw.write(Json.prettyPrint(playerToJson(activePlayer)))
-    pw.close()
-  }
-
-  implicit val cellWrites: Writes[CellInterface] with Object {
-    def writes(cell: CellInterface): JsObject
-  } = new Writes[CellInterface] {
-    def writes(cell: CellInterface): JsObject = Json.obj("value" -> cell.value)}
-  def playerToJson(activePlayer: Int): JsObject = {
-    Json.obj("activePlayer" -> JsNumber(activePlayer))
   }
 
   def gridToJson(grid: GridInterface): JsObject = {
@@ -87,6 +68,28 @@ class FileIO extends FileIOInterface {
     )
   }
 
+  override def loadPlayer: Int = {
+    val source: String = Source.fromFile("player.json").getLines.mkString
+    val json: JsValue = Json.parse(source)
+    val activePlayer = (json \ "activePlayer").get.toString.toInt
+    activePlayer
+  }
+
+  implicit val cellWrites: Writes[CellInterface] with Object {
+    def writes(cell: CellInterface): JsObject
+  } = new Writes[CellInterface] {
+    def writes(cell: CellInterface): JsObject = Json.obj("value" -> cell.value)
+  }
+
+  override def savePlayer(activePlayer: Int): Unit = {
+    val pw = new PrintWriter(new File("player.json"))
+    pw.write(Json.prettyPrint(playerToJson(activePlayer)))
+    pw.close()
+  }
+
+  def playerToJson(activePlayer: Int): JsObject = {
+    Json.obj("activePlayer" -> JsNumber(activePlayer))
+  }
 
 
 }

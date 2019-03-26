@@ -33,11 +33,11 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "does nothing on set" in {
-        controller.set(0,0,1) should be(())
+        controller.set(0, 0, 1) should be(())
       }
 
       "returns 0,0" in {
-        controller.score() should be((0,0))
+        controller.score() should be((0, 0))
       }
 
       "returns IDLE" in {
@@ -81,7 +81,7 @@ class ControllerSpec extends WordSpec with Matchers {
       }
 
       "get a cell" in {
-        controller.cell(0,0).value should be(0)
+        controller.cell(0, 0).value should be(0)
       }
 
       "does nothing on undo" in {

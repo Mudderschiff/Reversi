@@ -33,7 +33,7 @@ class GridSpec extends WordSpec with Matchers {
         smallGrid.cell(1, 1) should be(Cell(4))
       }
       "values should be resetable" in {
-        tinyGrid.reset(0,0).cell(0,0) should be(Cell(0))
+        tinyGrid.reset(0, 0).cell(0, 0) should be(Cell(0))
       }
       "have Houses with the right Cells" in {
         tinyGrid.row(0).cell(0) should be(Cell(1))
@@ -79,16 +79,16 @@ class GridSpec extends WordSpec with Matchers {
       }
       "test scenarios for DownLeft, UpRight, UpLeft, DownRight" in {
         var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,2,2,0,Direction.DownLeft))
+        grid.getValidTurns(2)(2) should be(Turn(0, 2, 2, 0, Direction.DownLeft))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,0,0,2,Direction.UpRight))
+        grid.getValidTurns(2)(2) should be(Turn(2, 0, 0, 2, Direction.UpRight))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
-        grid.getValidTurns(2)(2) should be(Turn(2,2,0,0,Direction.UpLeft))
+        grid.getValidTurns(2)(2) should be(Turn(2, 2, 0, 0, Direction.UpLeft))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.getValidTurns(2)(2) should be(Turn(0,0,2,2,Direction.DownRight))
+        grid.getValidTurns(2)(2) should be(Turn(0, 0, 2, 2, Direction.DownRight))
       }
       "special turn tests that are not covered yet" in {
         val lookdown = Grid(new Matrix[Cell](Vector(
@@ -138,85 +138,85 @@ class GridSpec extends WordSpec with Matchers {
       }
       "these turns are highlighted for player 2" in {
         var highlighted = freshGrid.highlight(2)
-        highlighted.cell(2,3) should be(Cell(3))
-        highlighted.cell(3,2) should be(Cell(3))
-        highlighted.cell(4,5) should be(Cell(3))
-        highlighted.cell(5,4) should be(Cell(3))
+        highlighted.cell(2, 3) should be(Cell(3))
+        highlighted.cell(3, 2) should be(Cell(3))
+        highlighted.cell(4, 5) should be(Cell(3))
+        highlighted.cell(5, 4) should be(Cell(3))
       }
       "reset turns for player 1" in {
         var highlighted = freshGrid.highlight(2)
         var highlight2 = highlighted.highlight(1)
-        highlight2.cell(2,3) should be(Cell(0))
-        highlight2.cell(3,2) should be(Cell(0))
-        highlight2.cell(4,5) should be(Cell(0))
-        highlight2.cell(5,4) should be(Cell(0))
+        highlight2.cell(2, 3) should be(Cell(0))
+        highlight2.cell(3, 2) should be(Cell(0))
+        highlight2.cell(4, 5) should be(Cell(0))
+        highlight2.cell(5, 4) should be(Cell(0))
       }
       "test highlight downleft, upright, upleft, downright" in {
         var grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(2)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.highlight(2).cell(2,0) should be(Cell(3))
+        grid.highlight(2).cell(2, 0) should be(Cell(3))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0)))))
-        grid.highlight(2).cell(0,2) should be(Cell(3))
+        grid.highlight(2).cell(0, 2) should be(Cell(3))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(1), Cell(2)))))
-        grid.highlight(2).cell(0,0) should be(Cell(3))
+        grid.highlight(2).cell(0, 0) should be(Cell(3))
 
         grid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1), Cell(0)), Vector(Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0)))))
-        grid.highlight(2).cell(2,2) should be(Cell(3))
+        grid.highlight(2).cell(2, 2) should be(Cell(3))
       }
       "valid Turn should be true" in {
-        freshGrid.checkChange(2,2,3)._1 should be(true)
+        freshGrid.checkChange(2, 2, 3)._1 should be(true)
       }
       "invalid Turn should be false" in {
-        freshGrid.checkChange(2,2,4)._1 should be(false)
+        freshGrid.checkChange(2, 2, 4)._1 should be(false)
       }
     }
     "check all directions (up,down,left,right,upleft,upright,downleft,downright)" should {
       var grid = new Grid(4).createNewGrid
       var turns = grid.getValidTurns(1)
       print(turns)
-      var gridsettodown = grid.checkChange(1,turns.head.toRow,turns.head.fromCol)
-      var gridsettoright = grid.checkChange(1,turns(1).fromRow,turns(1).toCol)
-      var gridsettoup = grid.checkChange(1,turns(2).toRow,turns(2).fromCol)
-      var gridsettoleft = grid.checkChange(1,turns(3).fromRow,turns(3).toCol)
+      var gridsettodown = grid.checkChange(1, turns.head.toRow, turns.head.fromCol)
+      var gridsettoright = grid.checkChange(1, turns(1).fromRow, turns(1).toCol)
+      var gridsettoup = grid.checkChange(1, turns(2).toRow, turns(2).fromCol)
+      var gridsettoleft = grid.checkChange(1, turns(3).fromRow, turns(3).toCol)
       "set direction down by Player1" in {
-        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(1),Cell(0),Cell(0)))))
+        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(0), Cell(0)))))
         gridsettodown should be(true, settodownmanual)
       }
       "set direction right by Player1" in {
-        var settorightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        gridsettoright should be (true, settorightmanual)
+        var settorightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
+        gridsettoright should be(true, settorightmanual)
       }
       "set direction up by Player1" in {
-        var settoupmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(1),Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var settoupmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
         gridsettoup should be(true, settoupmanual)
       }
       "set direction left by Player1" in {
-        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(1), Cell(1), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var settodownmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(1), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
         gridsettoleft should be(true, settodownmanual)
       }
 
       "set direction down left by Player2" in {
-        var settodownleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(2), Cell(1),Cell(0),Cell(0)))))
+        var settodownleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(2), Cell(1), Cell(0), Cell(0)))))
         var p2turns = gridsettoleft._2.getValidTurns(2)
-        gridsettodown._2.checkChange(2,p2turns(2).toRow,p2turns(2).toCol) should be(true, settodownleftmanual)
+        gridsettodown._2.checkChange(2, p2turns(2).toRow, p2turns(2).toCol) should be(true, settodownleftmanual)
       }
       "set direction up right by Player2" in {
-        var settouprightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(2)), Vector(Cell(0), Cell(1), Cell(2), Cell(1)), Vector(Cell(0), Cell(2), Cell(1),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var settouprightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(2)), Vector(Cell(0), Cell(1), Cell(2), Cell(1)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
         var p2turns = gridsettoright._2.getValidTurns(2)
-        gridsettoright._2.checkChange(2,p2turns(2).toRow,p2turns(2).toCol) should be(true, settouprightmanual)
+        gridsettoright._2.checkChange(2, p2turns(2).toRow, p2turns(2).toCol) should be(true, settouprightmanual)
       }
       "set direction up left by Player2" in {
-        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var settoupleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(2),Cell(0),Cell(0),Cell(0)), Vector(Cell(1), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(0)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
+        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(1), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
+        var settoupleftmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(0), Cell(0), Cell(0)), Vector(Cell(1), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(0)), Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
         var p2turns = gridbefore.getValidTurns(2)
-        gridbefore.setTurn(p2turns(2),2) should be(settoupleftmanual)
+        gridbefore.setTurn(p2turns(2), 2) should be(settoupleftmanual)
       }
       "set direction down right by Player2" in {
-        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(1),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(0)))))
-        var settodownrightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0),Cell(0),Cell(0),Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2),Cell(1)), Vector(Cell(0), Cell(0),Cell(0),Cell(2)))))
+        var gridbefore = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(1), Cell(1)), Vector(Cell(0), Cell(0), Cell(0), Cell(0)))))
+        var settodownrightmanual = Grid(new Matrix[Cell](Vector(Vector(Cell(0), Cell(0), Cell(0), Cell(0)), Vector(Cell(0), Cell(2), Cell(1), Cell(0)), Vector(Cell(0), Cell(1), Cell(2), Cell(1)), Vector(Cell(0), Cell(0), Cell(0), Cell(2)))))
         var p2turns = gridbefore.getValidTurns(2)
-        gridbefore.setTurn(p2turns(2),2) should be(settodownrightmanual)
+        gridbefore.setTurn(p2turns(2), 2) should be(settodownrightmanual)
       }
     }
     "toString shows" in {
@@ -227,14 +227,14 @@ class GridSpec extends WordSpec with Matchers {
   "A Game is finished" when {
     "function finish" should {
       val normalGrid = Grid(new Matrix[Cell](Vector(
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(0), Cell(2)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(0)),
-        Vector(Cell(1), Cell(1), Cell(1), Cell(1),Cell(1), Cell(1), Cell(1), Cell(1)))))
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(0), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(0), Cell(2)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(0)),
+        Vector(Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1), Cell(1)))))
       val tinyGrid = Grid(new Matrix[Cell](Vector(Vector(Cell(2), Cell(1)), Vector(Cell(1), Cell(2)))))
       "Current PLayer has no available turns" in {
         normalGrid.finish(2) should be(true)

@@ -1,32 +1,33 @@
 package de.htwg.se.reversi.aview
 
-import de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix}
-import org.scalatest.{Matchers, WordSpec}
-import de.htwg.se.reversi.model.fileIoComponent._
 import java.io.File
 
-class TuiSpec extends WordSpec with Matchers{
+import de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.reversi.model.fileIoComponent._
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix}
+import org.scalatest.{Matchers, WordSpec}
+
+class TuiSpec extends WordSpec with Matchers {
 
   "A Go Tui" should {
     val p1 = Grid(new Matrix[Cell](Vector(
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(3), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(1),Cell(2), Cell(3), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(3), Cell(2),Cell(1), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(3),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)))))
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(3), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(1), Cell(2), Cell(3), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(3), Cell(2), Cell(1), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(3), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)))))
     val p2 = Grid(new Matrix[Cell](Vector(
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(3),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(3), Cell(1),Cell(2), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(2),Cell(1), Cell(3), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(3), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)),
-      Vector(Cell(0), Cell(0), Cell(0), Cell(0),Cell(0), Cell(0), Cell(0), Cell(0)))))
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(3), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(3), Cell(1), Cell(2), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(2), Cell(1), Cell(3), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(3), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)),
+      Vector(Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0), Cell(0)))))
     var controller = new Controller(new Grid(8))
     val tui = new Tui(controller)
     "be able to make en empty grid on input q" in {
@@ -126,7 +127,7 @@ class TuiSpec extends WordSpec with Matchers{
         Vector(Cell(0), Cell(1), Cell(2), Cell(3)),
         Vector(Cell(3), Cell(2), Cell(1), Cell(0)),
         Vector(Cell(0), Cell(3), Cell(0), Cell(0)))))
-      if(controller.getActivePlayer() == 2) controller.changePlayer()
+      if (controller.getActivePlayer() == 2) controller.changePlayer()
       tui.processInputLine("e")
       tui.processInputLine("02")
       controller.grid should be(plb1)
@@ -138,7 +139,7 @@ class TuiSpec extends WordSpec with Matchers{
       tui.processInputLine("d")
     }
     "set as player 2" in {
-      if(controller.getActivePlayer() == 1) controller.changePlayer()
+      if (controller.getActivePlayer() == 1) controller.changePlayer()
       val p1b = Grid(new Matrix[Cell](Vector(
         Vector(Cell(0), Cell(3), Cell(0), Cell(0)),
         Vector(Cell(3), Cell(1), Cell(2), Cell(0)),

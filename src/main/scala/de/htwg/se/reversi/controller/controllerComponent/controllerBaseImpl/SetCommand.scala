@@ -1,6 +1,6 @@
 package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
 
+import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
 import de.htwg.se.reversi.util.Command
 
 

@@ -2,17 +2,16 @@ package de.htwg.se.reversi
 
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
-import net.codingwell.scalaguice.ScalaModule
 import de.htwg.se.reversi.controller.controllerComponent._
 import de.htwg.se.reversi.model.fileIoComponent._
-
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 import de.htwg.se.reversi.model.gridComponent.gridAdvancedImpl.Grid
+import net.codingwell.scalaguice.ScalaModule
 
 class ReversiModule extends AbstractModule with ScalaModule {
   val defaultSize: Int = 8
 
-  def configure():  Unit = {
+  def configure(): Unit = {
     bindConstant().annotatedWith(Names.named("DefaultSize")).to(defaultSize)
     bind[GridInterface].to[Grid]
     bind[ControllerInterface].to[controllerBaseImpl.Controller]

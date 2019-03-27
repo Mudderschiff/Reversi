@@ -22,18 +22,16 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
   }
 
   def setHighlight(turn: Turn): Grid = {
-    var grid = this
     turn.dir match {
-      case Direction.Up => grid = grid.set(turn.toRow, turn.fromCol, 3)
-      case Direction.Left => grid = grid.set(turn.fromRow, turn.toCol, 3)
-      case Direction.Down => grid = grid.set(turn.toRow, turn.fromCol, 3)
-      case Direction.Right => grid = grid.set(turn.fromRow, turn.toCol, 3)
-      case Direction.UpRight => grid = grid.set(turn.toRow, turn.toCol, 3)
-      case Direction.UpLeft => grid = grid.set(turn.toRow, turn.toCol, 3)
-      case Direction.DownRight => grid = grid.set(turn.toRow, turn.toCol, 3)
-      case Direction.DownLeft => grid = grid.set(turn.toRow, turn.toCol, 3)
+      case Direction.Up =>  set(turn.toRow, turn.fromCol, 3)
+      case Direction.Left =>  set(turn.fromRow, turn.toCol, 3)
+      case Direction.Down => set(turn.toRow, turn.fromCol, 3)
+      case Direction.Right => set(turn.fromRow, turn.toCol, 3)
+      case Direction.UpRight =>  set(turn.toRow, turn.toCol, 3)
+      case Direction.UpLeft =>  set(turn.toRow, turn.toCol, 3)
+      case Direction.DownRight =>  set(turn.toRow, turn.toCol, 3)
+      case Direction.DownLeft =>  set(turn.toRow, turn.toCol, 3)
     }
-    grid
   }
 
   def checkChange(playerId: Int, row: Int, col: Int): (Boolean, Grid) = {
@@ -48,7 +46,7 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
   }
 
   def unHighlight(grid: Grid): Grid = {
-    var newgrid = grid
+    var newgrid = grid.copy()
     for {
       row <- 0 until size
       col <- 0 until size
@@ -266,6 +264,7 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     } if (cell(row, col).value.equals(2)) black += 1 else if (cell(row, col).value.equals(1)) white += 1
     (black, white)
   }
+
 
   override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 

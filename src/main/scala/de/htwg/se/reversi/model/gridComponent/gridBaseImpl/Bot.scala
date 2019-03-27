@@ -1,7 +1,7 @@
 package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
 class Bot extends BotTemplate() {
-  
+
   override def makeTurn(grid: Grid, player: Int): Grid = {
     val turns = grid.getValidTurns(player)
 
@@ -42,7 +42,6 @@ class Bot extends BotTemplate() {
   private def region4(turn: Turn, maxIndex: Int): Boolean =
     if (!region1(turn, maxIndex) && !region5(turn, maxIndex) &&
       (turn.toRow == 0 || turn.toRow == maxIndex || turn.toCol == 0 || turn.toCol == maxIndex)) true else false
-
 
   private def region5(turn: Turn, maxIndex: Int): Boolean = if ((turn.toRow == 0 && turn.toCol == 0) ||
     (turn.toRow == 0 && turn.toCol == maxIndex) ||

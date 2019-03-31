@@ -19,6 +19,14 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     var grid = unHighlight(this)
     getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
     grid
+    /*
+    hier kann man leicht testen obs richtig copiert
+    val grid = unHighlight(this).copy()
+    val map = getValidTurns(playerId).map(turn => copy(grid.setHighlight(turn).cells))
+    println("map" + map)
+    // beim copieren wird immer nur das standard grid verwendet siehe unten für problem beschreibung
+    this // ist irrelevant wurde nur geschrieben damit ich schnell testen konnte hab nur das print kontroll ausgabe beachtet. this liefert sowieso nur das unveränderte grid
+     */
   }
 
   def setHighlight(turn: Turn): Grid = {
@@ -100,6 +108,55 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     }
     grid
   }
+/*
+  def setTurn(turn: Turn, value: Int): Grid = {
+    turn.dir match {
+    // reduce bildet die sume(finale Grid) aus allen grid (unnötig wenn richtig copiert wird)
+    // Problem hier ist die map in der map sind grids aufgelistet die jeweils die set methode für das standard grid benutzt haben
+    // was wir aber wollen ist das standard grid (this) "überschreiben" sodas der nächste set aufruf das upgedatete grid hat und nicht das stanndard grid
+    //Beispiel
+    //Grid: W B nach dem ersten set Grid: W B nächstes set sollte vorhäriges verwenden verwendet aber W B Grid ergebnis W B statt W B
+    //      B W                           W B                                                         B W               B W       W W
+                                                                                                                      W         W
+
+      case Direction.Down => turn.fromRow to turn.toRow map {set(_, turn.fromCol, value)} reduce((total, cur) => total.copy(cur.cells));
+      case Direction.Up => turn.toRow to turn.fromRow map {set(_, turn.fromCol, value)} reduce((total, cur) => total.copy(cur.cells));
+      case Direction.Left => turn.toCol to turn.fromCol map {set(turn.fromRow, _, value)} reduce((total, cur) => total.copy(cur.cells));
+      case Direction.Right => turn.fromCol to turn.toCol map {set(turn.fromRow, _, value)} reduce((total, cur) => total.copy(cur.cells));
+      case Direction.UpRight =>
+        val map = for {
+          i <- turn.fromRow to 0 by -1
+          j <- turn.fromCol to turn.toCol
+          if i >= turn.toRow && j <= turn.toCol
+        } {set(i,j, value)} //hier muss richtig copiert werden gleiches problem wie oben
+        map.last // wenns richtig kopiert sollte es reichen das letzte element anzuzeigen
+      case Direction.UpLeft =>
+        //var (i, j) = (turn.fromRow, turn.fromCol)
+        for {
+          i <- turn.fromRow to 0 by -1
+          j <- turn.fromCol to 0 by -1
+          if i >= turn.toRow && j >= turn.toCol
+        } {println("UpLeft: " + set(i,j, value))}
+        this
+      case Direction.DownRight =>
+        //var (i, j) = (turn.fromRow, turn.fromCol)
+        for {
+          i <- turn.fromRow to turn.toRow
+          j <- turn.fromCol to turn.toCol
+          if i <= turn.toRow && j <= turn.toCol
+        } {println("DownRight: " + set(i,j, value))}
+        this
+      case Direction.DownLeft =>
+        //var (i, j) = (turn.fromRow, turn.fromCol)
+        for {
+          i <- turn.fromRow to turn.toRow
+          j <- turn.fromCol to 0 by -1
+          if i <= turn.toRow && j >= turn.toCol
+        } {println("DownLeft:" + set(i,j, value))}
+        this
+    }
+  }
+*/
 
   def set(row: Int, col: Int, value: Int): Grid = copy(cells.replaceCell(row, col, Cell(value)))
 

@@ -60,45 +60,104 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     val map = getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row)
     recursiveSetTurnRC(map,this,playerId)
   }
+
   def recursiveSetTurnRC(list: List[Turn], grid: Grid, playerId: Int): Grid = if (list.nonEmpty) recursiveSetTurnRC(list.drop(1), grid.copy(grid.setTurn(list.head, playerId).cells),playerId) else grid
 
-  def setTurn(turn: Turn, value: Int): Grid = {
-    var grid = this
-    turn.dir match {
-      case Direction.Down => for (i <- turn.fromRow to turn.toRow) grid = grid.set(i, turn.fromCol, value)
-      case Direction.Up => for (i <- turn.toRow to turn.fromRow) grid = grid.set(i, turn.fromCol, value)
-      case Direction.Left => for (i <- turn.toCol to turn.fromCol) grid = grid.set(turn.fromRow, i, value)
-      case Direction.Right => for (i <- turn.fromCol to turn.toCol) grid = grid.set(turn.fromRow, i, value)
-      case Direction.UpRight =>
-        var (i, j) = (turn.fromRow, turn.fromCol)
-        while (i >= turn.toRow && j <= turn.toCol) {
-          grid = grid.set(i, j, value)
-          i -= 1
-          j += 1
-        }
-      case Direction.UpLeft =>
-        var (i, j) = (turn.fromRow, turn.fromCol)
-        while (i >= turn.toRow && j >= turn.toCol) {
-          grid = grid.set(i, j, value)
-          i -= 1
-          j -= 1
-        }
-      case Direction.DownRight =>
-        var (i, j) = (turn.fromRow, turn.fromCol)
-        while (i <= turn.toRow && j <= turn.toCol) {
-          grid = grid.set(i, j, value)
-          i += 1
-          j += 1
-        }
-      case Direction.DownLeft =>
-        var (i, j) = (turn.fromRow, turn.fromCol)
-        while (i <= turn.toRow && j >= turn.toCol) {
-          grid = grid.set(i, j, value)
-          i += 1
-          j -= 1
-        }
+  def setTurnD(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
+    if(i > turn.toRow) {
+      grid
     }
-    grid
+    else {
+      val newi = i+1
+      setTurnD(turn, value, newi, grid.set(i, turn.fromCol, value))
+    }
+  }
+
+  def setTurnU(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
+    if(i < turn.toRow) {
+      grid
+    }
+    else {
+      val newi = i-1
+      setTurnU(turn, value, newi, grid.set(i, turn.fromCol, value))
+    }
+  }
+
+  def setTurnL(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
+    if(i < turn.toCol) {
+      grid
+    }
+    else {
+      val newi = i-1
+      setTurnL(turn, value, newi, grid.set(turn.fromRow, i, value))
+    }
+  }
+
+  def setTurnR(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
+    if(i > turn.toCol) {
+      grid
+    }
+    else {
+      val newi = i+1
+      setTurnR(turn, value, newi, grid.set(turn.fromRow, i, value))
+    }
+  }
+
+  def setTurnUR(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
+    if(i < turn.toRow) {
+      grid
+    }
+    else {
+      val newi = i - 1
+      val newj = j + 1
+      setTurnUR(turn, value, newi, newj, grid.set(i, j, value))
+    }
+  }
+
+  def setTurnUL(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
+    if(i < turn.toRow) {
+      grid
+    }
+    else {
+      val newi = i - 1
+      val newj = j - 1
+      setTurnUL(turn, value, newi, newj, grid.set(i, j, value))
+    }
+  }
+
+  def setTurnDR(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
+    if(i > turn.toRow) {
+      grid
+    }
+    else {
+      val newi = i + 1
+      val newj = j + 1
+      setTurnDR(turn, value, newi, newj, grid.set(i, j, value))
+    }
+  }
+
+  def setTurnDL(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
+    if(i > turn.toRow) {
+      grid
+    }
+    else {
+      val newi = i + 1
+      val newj = j - 1
+      setTurnDL(turn, value, newi, newj, grid.set(i, j, value))
+    }
+  }
+
+  def setTurn(turn: Turn, value: Int): Grid = {
+    turn.dir match {
+      case Direction.Down => setTurnD(turn, value, turn.fromRow, this)
+      case Direction.Up => setTurnU(turn, value, turn.fromRow, this)
+      case Direction.Left => setTurnL(turn, value, turn.fromCol, this)
+      case Direction.Right => setTurnR(turn, value, turn.fromCol, this)
+      case Direction.UpRight => setTurnUR(turn, value, turn.fromRow, turn.fromCol, this)
+      case Direction.UpLeft => setTurnUL(turn, value, turn.fromRow, turn.fromCol, this)
+      case Direction.DownRight => setTurnDR(turn, value, turn.fromRow, turn.fromCol, this)
+      case Direction.DownLeft => setTurnDL(turn, value, turn.fromRow, turn.fromCol, this)
+    }
   }
 
   def set(row: Int, col: Int, value: Int): Grid = copy(cells.replaceCell(row, col, Cell(value)))
@@ -123,17 +182,6 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     }
     retVal.toList
   }
-
- /* private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
-    if (row == 0) return None
-    val up = row - 1
-    if (grid.cell(up, col).value != playerId && grid.cell(up, col).value != 0 && grid.cell(up, col).value != 3) {
-      for {
-        up1 <- up until 0 by -1
-      } if (grid.cell(up1, col).value != playerId) return None if (grid.cell(up1, col).value == 0 || grid.cell(up1, col).value == 3) return Some(Turn(row, col, up1, col, Direction.Up))
-    }
-    return None
-  }*/
 
   private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
     if (row == 0) return None

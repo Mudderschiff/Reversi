@@ -15,11 +15,9 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
 
   def finish(activePlayer: Int): Boolean = getValidTurns(activePlayer).isEmpty
 
-  def highlight(playerId: Int): Grid = {
-    var grid = unHighlight(this)
-    getValidTurns(playerId).foreach(turn => grid = grid.setHighlight(turn))
-    grid
-  }
+  def highlight(playerId: Int): Grid = recursiveHighlight(getValidTurns(playerId),unHighlight(this))
+
+  def recursiveHighlight(list: List[Turn], grid: Grid): Grid = if (list.nonEmpty) recursiveHighlight(list.drop(1) , grid.copy(grid.setHighlight(list.head).cells)) else grid
 
   def setHighlight(turn: Turn): Grid = {
     turn.dir match {
@@ -35,32 +33,34 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
   }
 
   def checkChange(playerId: Int, row: Int, col: Int): (Boolean, Grid) = {
-    var bool = false
     val grid = unHighlight(this)
     val newgrid = unHighlight(grid.setTurnRC(playerId, row, col))
-    for {
+    val rc = for {
       row <- 0 until size
       col <- 0 until size
-    } if (grid.cell(row, col).value != newgrid.cell(row, col).value) bool = true
-    (bool, newgrid)
+      if grid.cell(row, col).value != newgrid.cell(row, col).value
+    } yield true
+    if (rc.isEmpty) (false,newgrid) else (rc.head, newgrid)
   }
 
   def unHighlight(grid: Grid): Grid = {
-    var newgrid = grid.copy()
-    for {
+    val rc = for {
       row <- 0 until size
       col <- 0 until size
-    } if (newgrid.cell(row, col).value == 3) newgrid = newgrid.reset(row, col)
-    newgrid
+      if grid.cell(row, col).value == 3
+    } yield (row,col)
+    unHighlightRecursive(rc ,grid)
   }
+
+  def unHighlightRecursive(indexedSeq: IndexedSeq[(Int,Int)],grid: Grid): Grid = if (indexedSeq.nonEmpty) unHighlightRecursive(indexedSeq.drop(1), grid.copy(grid.reset(indexedSeq.head._1,indexedSeq.head._2).cells)) else grid
 
   def reset(row: Int, col: Int): Grid = copy(cells.replaceCell(row, col, Cell(0)))
 
-  def setTurnRC(playerId: Int, row: Int, col: Int): Grid = {
-    var grid = this
-    getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row).foreach(turn => grid = grid.setTurn(turn, playerId))
-    grid
+  def setTurnRC(playerId: Int, row: Int, col: Int): Grid =  {
+    val map = getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row)
+    recursiveSetTurnRC(map,this,playerId)
   }
+  def recursiveSetTurnRC(list: List[Turn], grid: Grid, playerId: Int): Grid = if (list.nonEmpty) recursiveSetTurnRC(list.drop(1), grid.copy(grid.setTurn(list.head, playerId).cells),playerId) else grid
 
   def setTurn(turn: Turn, value: Int): Grid = {
     var grid = this
@@ -112,17 +112,28 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
       row <- 0 until size
       col <- 0 until size
     } if (this.cell(row, col).value == playerId) {
-      lookup(row, col, playerId, this).foreach(i => retVal += i)
-      lookdown(row, col, playerId, this).foreach(i => retVal += i)
-      lookleft(row, col, playerId, this).foreach(i => retVal += i)
-      lookright(row, col, playerId, this).foreach(i => retVal += i)
-      lookupright(row, col, playerId, this).foreach(i => retVal += i)
-      lookdownright(row, col, playerId, this).foreach(i => retVal += i)
-      lookupleft(row, col, playerId, this).foreach(i => retVal += i)
-      lookdownleft(row, col, playerId, this).foreach(i => retVal += i)
+      lookup(row, col, playerId, this) foreach(retVal += _)
+      lookdown(row, col, playerId, this) foreach(retVal += _)
+      lookleft(row, col, playerId, this) foreach(retVal += _)
+      lookright(row, col, playerId, this) foreach(retVal += _)
+      lookupright(row, col, playerId, this) foreach(retVal += _)
+      lookdownright(row, col, playerId, this) foreach(retVal += _)
+      lookupleft(row, col, playerId, this) foreach(retVal += _)
+      lookdownleft(row, col, playerId, this) foreach(retVal += _)
     }
     retVal.toList
   }
+
+ /* private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (row == 0) return None
+    val up = row - 1
+    if (grid.cell(up, col).value != playerId && grid.cell(up, col).value != 0 && grid.cell(up, col).value != 3) {
+      for {
+        up1 <- up until 0 by -1
+      } if (grid.cell(up1, col).value != playerId) return None if (grid.cell(up1, col).value == 0 || grid.cell(up1, col).value == 3) return Some(Turn(row, col, up1, col, Direction.Up))
+    }
+    return None
+  }*/
 
   private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
     if (row == 0) return None
@@ -132,7 +143,6 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     if (grid.cell(up, col).value != playerId && grid.cell(up, col).value != 0 && grid.cell(up, col).value != 3) {
       while (up > 0) {
         up -= 1
-        if (grid.cell(up, col).value == playerId) return None
         if (grid.cell(up, col).value == 0 || grid.cell(up, col).value == 3) return Some(Turn(row, col, up, col, Direction.Up))
       }
     }

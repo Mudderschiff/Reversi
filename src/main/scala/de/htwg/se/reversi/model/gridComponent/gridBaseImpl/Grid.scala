@@ -17,7 +17,31 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
 
   def highlight(playerId: Int): Grid = recursiveHighlight(getValidTurns(playerId),unHighlight(this))
 
-  def recursiveHighlight(list: List[Turn], grid: Grid): Grid = if (list.nonEmpty) recursiveHighlight(list.drop(1) , grid.copy(grid.setHighlight(list.head).cells)) else grid
+  def recursiveHighlight(list: List[Turn], grid: Grid): Grid = if (list.nonEmpty) recursiveHighlight(list.drop(1), grid.setHighlight(list.head)) else grid
+
+  def unHighlightRecursive(indexedSeq: IndexedSeq[(Int, Int)], grid: Grid): Grid = if (indexedSeq.nonEmpty) unHighlightRecursive(indexedSeq.drop(1), grid.reset(indexedSeq.head._1, indexedSeq.head._2)) else grid
+
+  def reset(row: Int, col: Int): Grid = copy(cells.replaceCell(row, col, Cell(0)))
+
+  def set(row: Int, col: Int, value: Int): Grid = copy(cells.replaceCell(row, col, Cell(value)))
+
+  def cell(row: Int, col: Int): Cell = cells.cell(row, col)
+
+  def evaluateGame(): Int = if (score()._2 > score()._1) 1 else if (score()._1 > score()._2) 2 else 0
+
+  def score(): (Int, Int) = {
+    val black = for {
+      row <- 0 until size
+      col <- 0 until size
+      if cell(row, col).value.equals(2)
+    } yield (row, col)
+    val white = for {
+      row <- 0 until size
+      col <- 0 until size
+      if cell(row, col).value.equals(1)
+    } yield (row, col)
+    (black.size, white.size)
+  }
 
   def setHighlight(turn: Turn): Grid = {
     turn.dir match {
@@ -32,130 +56,96 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     }
   }
 
+  def unHighlight(grid: Grid): Grid = {
+    val rc = for {
+      row <- 0 until size
+      col <- 0 until size
+      if grid.cell(row, col).value == 3
+    } yield (row, col)
+    unHighlightRecursive(rc, grid)
+  }
+
   def checkChange(playerId: Int, row: Int, col: Int): (Boolean, Grid) = {
     val grid = unHighlight(this)
     val newgrid = unHighlight(grid.setTurnRC(playerId, row, col))
     if (grid == newgrid) (false,grid) else (true,newgrid)
   }
 
-  def unHighlight(grid: Grid): Grid = {
-    val rc = for {
-      row <- 0 until size
-      col <- 0 until size
-      if grid.cell(row, col).value == 3
-    } yield (row,col)
-    unHighlightRecursive(rc ,grid)
-  }
-
-  def unHighlightRecursive(indexedSeq: IndexedSeq[(Int,Int)],grid: Grid): Grid = if (indexedSeq.nonEmpty) unHighlightRecursive(indexedSeq.drop(1), grid.copy(grid.reset(indexedSeq.head._1,indexedSeq.head._2).cells)) else grid
-
-  def reset(row: Int, col: Int): Grid = copy(cells.replaceCell(row, col, Cell(0)))
+  def recursiveSetTurnRC(list: List[Turn], grid: Grid, playerId: Int): Grid = if (list.nonEmpty) recursiveSetTurnRC(list.drop(1), grid.setTurn(list.head, playerId), playerId) else grid
 
   def setTurnRC(playerId: Int, row: Int, col: Int): Grid =  {
-    val map = getValidTurns(playerId).filter(turn => turn.toCol == col && turn.toRow == row)
+    val map = getValidTurns(playerId) filter (turn => turn.toCol == col && turn.toRow == row)
     recursiveSetTurnRC(map,this,playerId)
-  }
-
-  def recursiveSetTurnRC(list: List[Turn], grid: Grid, playerId: Int): Grid = if (list.nonEmpty) recursiveSetTurnRC(list.drop(1), grid.copy(grid.setTurn(list.head, playerId).cells),playerId) else grid
-
-  def setTurnD(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
-    if(i > turn.toRow) {
-      grid
-    }
-    else {
-      val newi = i+1
-      setTurnD(turn, value, newi, grid.set(i, turn.fromCol, value))
-    }
-  }
-
-  def setTurnU(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
-    if(i < turn.toRow) {
-      grid
-    }
-    else {
-      val newi = i-1
-      setTurnU(turn, value, newi, grid.set(i, turn.fromCol, value))
-    }
-  }
-
-  def setTurnL(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
-    if(i < turn.toCol) {
-      grid
-    }
-    else {
-      val newi = i-1
-      setTurnL(turn, value, newi, grid.set(turn.fromRow, i, value))
-    }
-  }
-
-  def setTurnR(turn: Turn, value: Int, i: Int, grid: Grid): Grid = {
-    if(i > turn.toCol) {
-      grid
-    }
-    else {
-      val newi = i+1
-      setTurnR(turn, value, newi, grid.set(turn.fromRow, i, value))
-    }
-  }
-
-  def setTurnUR(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
-    if(i < turn.toRow) {
-      grid
-    }
-    else {
-      val newi = i - 1
-      val newj = j + 1
-      setTurnUR(turn, value, newi, newj, grid.set(i, j, value))
-    }
-  }
-
-  def setTurnUL(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
-    if(i < turn.toRow) {
-      grid
-    }
-    else {
-      val newi = i - 1
-      val newj = j - 1
-      setTurnUL(turn, value, newi, newj, grid.set(i, j, value))
-    }
-  }
-
-  def setTurnDR(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
-    if(i > turn.toRow) {
-      grid
-    }
-    else {
-      val newi = i + 1
-      val newj = j + 1
-      setTurnDR(turn, value, newi, newj, grid.set(i, j, value))
-    }
-  }
-
-  def setTurnDL(turn: Turn, value: Int, i: Int, j: Int, grid: Grid): Grid = {
-    if(i > turn.toRow) {
-      grid
-    }
-    else {
-      val newi = i + 1
-      val newj = j - 1
-      setTurnDL(turn, value, newi, newj, grid.set(i, j, value))
-    }
   }
 
   def setTurn(turn: Turn, value: Int): Grid = {
     turn.dir match {
-      case Direction.Down => setTurnD(turn, value, turn.fromRow, this)
-      case Direction.Up => setTurnU(turn, value, turn.fromRow, this)
-      case Direction.Left => setTurnL(turn, value, turn.fromCol, this)
-      case Direction.Right => setTurnR(turn, value, turn.fromCol, this)
-      case Direction.UpRight => setTurnUR(turn, value, turn.fromRow, turn.fromCol, this)
-      case Direction.UpLeft => setTurnUL(turn, value, turn.fromRow, turn.fromCol, this)
-      case Direction.DownRight => setTurnDR(turn, value, turn.fromRow, turn.fromCol, this)
-      case Direction.DownLeft => setTurnDL(turn, value, turn.fromRow, turn.fromCol, this)
+      case Direction.Down => setTurnUpDown(turn.fromRow, turn.toRow, turn.fromCol, value, this)
+      case Direction.Up => setTurnUpDown(turn.toRow, turn.fromRow, turn.fromCol, value, this)
+      case Direction.Left => setTurnLeftRight(turn.toCol, turn.fromCol, turn.fromRow, value, this)
+      case Direction.Right => setTurnLeftRight(turn.fromCol, turn.toCol, turn.fromRow, value, this)
+      case Direction.UpRight =>
+        val map = (turn.fromRow to turn.toRow by -1).zip(turn.fromCol to turn.toCol)
+        setTurnRest(map, value, this)
+      case Direction.UpLeft =>
+        val map = (turn.fromRow to turn.toRow by -1).zip(turn.fromCol to turn.toCol by -1)
+        setTurnRest(map, value, this)
+      case Direction.DownRight =>
+        val map = (turn.fromRow to turn.toRow).zip(turn.fromCol to turn.toCol)
+        setTurnRest(map, value, this)
+      case Direction.DownLeft =>
+        val map = (turn.fromRow to turn.toRow).zip(turn.fromCol to turn.toCol by -1)
+        setTurnRest(map, value, this)
     }
   }
 
-  def set(row: Int, col: Int, value: Int): Grid = copy(cells.replaceCell(row, col, Cell(value)))
+  def setTurnUpDown(beginn: Int, end: Int, col: Int, playerId: Int, grid: Grid): Grid = {
+    if (beginn <= end) {
+      val newgrid = grid.set(beginn, col, playerId)
+      setTurnUpDown(beginn + 1, end, col, playerId, newgrid)
+    } else grid
+  }
+
+  def setTurnLeftRight(beginn: Int, end: Int, row: Int, playerId: Int, grid: Grid): Grid = {
+    if (beginn <= end) {
+      val newgrid = grid.set(row, beginn, playerId)
+      setTurnLeftRight(beginn + 1, end, row, playerId, newgrid)
+    } else grid
+  }
+
+  def setTurnRest(index: IndexedSeq[(Int, Int)], playerId: Int, grid: Grid): Grid = {
+    if (index.nonEmpty) {
+      val newgrid = grid.set(index.head._1, index.head._2, playerId)
+      setTurnRest(index.drop(1), playerId, newgrid)
+    } else grid
+  }
+
+  /*
+    def getValidTurns(playerId: Int): List[Turn] = {
+      if (playerId != 2 && playerId != 1) return Nil
+      val map = for {
+        row <- 0 until size
+        col <- 0 until size
+        if this.cell(row, col).value == playerId
+      } yield (row,col)
+      getValidTurnsRecursive(map, new ListBuffer[Turn], playerId)
+    }
+
+    def getValidTurnsRecursive(index: IndexedSeq[(Int,Int)],list: ListBuffer[Turn], playerId: Int): List[Turn] = {
+      if(list.nonEmpty) {
+        lookup(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        lookdown(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        lookleft(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        lookright(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        lookupright(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        lookdownright(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        lookupleft(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        lookdownleft(index.head._1, index.head._2, playerId, this) foreach {up => list += up}
+        print("list: " + list)
+        getValidTurnsRecursive(index.drop(1),list,playerId)
+      } else list.toList
+    }
+  */
 
   def getValidTurns(playerId: Int): List[Turn] = {
     if (playerId != 2 && playerId != 1) return Nil
@@ -166,14 +156,14 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
       row <- 0 until size
       col <- 0 until size
     } if (this.cell(row, col).value == playerId) {
-      lookup(row, col, playerId, this) foreach(retVal += _)
-      lookdown(row, col, playerId, this) foreach(retVal += _)
-      lookleft(row, col, playerId, this) foreach(retVal += _)
-      lookright(row, col, playerId, this) foreach(retVal += _)
-      lookupright(row, col, playerId, this) foreach(retVal += _)
-      lookdownright(row, col, playerId, this) foreach(retVal += _)
-      lookupleft(row, col, playerId, this) foreach(retVal += _)
-      lookdownleft(row, col, playerId, this) foreach(retVal += _)
+      lookup(row, col, playerId, this) foreach (retVal += _)
+      lookdown(row, col, playerId, this) foreach (retVal += _)
+      lookleft(row, col, playerId, this) foreach (retVal += _)
+      lookright(row, col, playerId, this) foreach (retVal += _)
+      lookupright(row, col, playerId, this) foreach (retVal += _)
+      lookdownright(row, col, playerId, this) foreach (retVal += _)
+      lookupleft(row, col, playerId, this) foreach (retVal += _)
+      lookdownleft(row, col, playerId, this) foreach (retVal += _)
     }
     retVal.toList
   }
@@ -270,7 +260,7 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     None
   }
 
-  def cell(row: Int, col: Int): Cell = cells.cell(row, col)
+
 
   private def lookdownleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
     if (row == grid.size - 1 || col == 0) return None
@@ -286,23 +276,7 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     }
     None
   }
-
-  def evaluateGame(): Int = if (score()._2 > score()._1) 1 else if (score()._1 > score()._2) 2 else 0
-
-  def score(): (Int, Int) = {
-    val black = for {
-      row <- 0 until size
-      col <- 0 until size
-      if cell(row, col).value.equals(2)
-    } yield (row,col)
-    val white = for {
-      row <- 0 until size
-      col <- 0 until size
-      if cell(row, col).value.equals(1)
-    } yield (row,col)
-    (black.size,white.size)
-  }
-
+  
   override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 
   override def makeNextTurnBot(playerId: Int): GridInterface = (new Bot).makeTurn(this, playerId)

@@ -276,7 +276,7 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     }
     None
   }
-  
+
   override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)
 
   override def makeNextTurnBot(playerId: Int): GridInterface = (new Bot).makeTurn(this, playerId)

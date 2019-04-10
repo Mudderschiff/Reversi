@@ -1,6 +1,6 @@
 package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
 
-case class Turn(var fromRow: Int, var fromCol: Int, var toRow: Int, var toCol: Int, var dir: Direction.Value)
+case class Turn(fromRow: Int, fromCol: Int, toRow: Int, toCol: Int, dir: Direction.Value)
 
 object Direction extends Enumeration {
   type Direction = Value

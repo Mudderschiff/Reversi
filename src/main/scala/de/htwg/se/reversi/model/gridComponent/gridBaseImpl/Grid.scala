@@ -10,7 +10,6 @@ import scala.util.{Failure, Success}
 
 case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
   val size: Int = cells.size
-  //var turns = new ListBuffer[Option[Turn]]()
 
   def this(size: Int) = this(new Matrix[Cell](size, Cell(0)))
 
@@ -117,6 +116,7 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     } else grid
   }
 
+
   def getValidTurns(playerId: Int): List[Turn] = {
     if (playerId != 2 && playerId != 1) return Nil
     var retVal = new ListBuffer[Turn]
@@ -124,100 +124,43 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
       row <- 0 until size
       col <- 0 until size
     } if (this.cell(row, col).value == playerId) {
-      Await.result(lookup(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
-      Await.result(lookdown(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
-      Await.result(lookleft(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
-      Await.result(lookright(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
-      Await.result(lookupright(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
-      Await.result(lookdownright(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
-      Await.result(lookupleft(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
-      Await.result(lookdownleft(row, col, playerId, this).map(option => option.map(retVal += _)),Duration.Inf)
+      val f = Future(
+        lookup(row, col, playerId, this).map(option => option.map(retVal += _)),
+        lookdown(row, col, playerId, this).map(option => option.map(retVal += _)),
+        lookleft(row, col, playerId, this).map(option => option.map(retVal += _)),
+        lookright(row, col, playerId, this).map(option => option.map(retVal += _)),
+        lookupright(row, col, playerId, this).map(option => option.map(retVal += _)),
+        lookdownright(row, col, playerId, this).map(option => option.map(retVal += _)),
+        lookupleft(row, col, playerId, this).map(option => option.map(retVal += _)),
+        lookdownleft(row, col, playerId, this).map(option => option.map(retVal += _))
+      )
+      Await.result(f,Duration.Inf)
     }
     retVal.toList
   }
 
-/*
-
-    def getValidTurns(playerId: Int): List[Turn] = if (playerId != 2 && playerId != 1) List() else
-      getValidTurnsRecursive(rowcol(playerId), List(), playerId)
 
 
-  def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], playerId: Int): List[Turn] = {
+  /*
+def getValidTurns(playerId: Int): List[Turn] = if (playerId != 2 && playerId != 1) List() else
+    getValidTurnsRecursive(rowcol(playerId), List(), playerId)
 
-    if (index.nonEmpty) {
-      val f0 =  lookup(index.head._1, index.head._2, playerId, this)
-      val f1 =  lookdown(index.head._1, index.head._2, playerId, this)
-      val f2 =  lookleft(index.head._1, index.head._2, playerId, this)
-      val f3 =   lookright(index.head._1, index.head._2, playerId, this)
-      val f4 = lookupright(index.head._1, index.head._2, playerId, this)
-      val f5 = lookdownright(index.head._1, index.head._2, playerId, this)
-      val f6 = lookupleft(index.head._1, index.head._2, playerId, this)
-      val f7 = lookdownleft(index.head._1, index.head._2, playerId, this)
-      val r0 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      val r1 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      val r2 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      val r3 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      val r4 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      val r5 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      val r6 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      val r7 = for {o0 <- f0} yield for {r0 <- o0} yield r0
-      turns.+=(Await.result(r0,Duration.Inf))
-      turns.+=(Await.result(r1,Duration.Inf))
-      turns.+=(Await.result(r2,Duration.Inf))
-      turns.+=(Await.result(r3,Duration.Inf))
-      turns.+=(Await.result(r4,Duration.Inf))
-      turns.+=(Await.result(r5,Duration.Inf))
-      turns.+=(Await.result(r6,Duration.Inf))
-      turns.+=(Await.result(r7,Duration.Inf))
-      //map.+=(wait)
-      /*
-      r0 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      r1 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      r2 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      r3 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      r4 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      r5 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      r6 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      r7 onComplete {
-        case Success(e) => map.+=(e)
-      }
-      */
 
-      getValidTurnsRecursive(index.drop(1), list ::: turns.flatten.toList, playerId)
-    } else list
+def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], playerId: Int): List[Turn] = {
+  if (index.nonEmpty) {
+    val map = List(
+      lookup(index.head._1, index.head._2, playerId, this),
+      lookdown(index.head._1, index.head._2, playerId, this),
+      lookleft(index.head._1, index.head._2, playerId, this),
+      lookright(index.head._1, index.head._2, playerId, this),
+      lookupright(index.head._1, index.head._2, playerId, this),
+      lookdownright(index.head._1, index.head._2, playerId, this),
+      lookupleft(index.head._1, index.head._2, playerId, this),
+      lookdownleft(index.head._1, index.head._2, playerId, this)
+    ).flatten
+    getValidTurnsRecursive(index.drop(1), list ::: map, playerId)
+  } else list
   }
-  */
-
-/*
-  def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], playerId: Int): List[Turn] = {
-    if (index.nonEmpty) {
-      val map = List(
-        lookup(index.head._1, index.head._2, playerId, this),
-        lookdown(index.head._1, index.head._2, playerId, this),
-        lookleft(index.head._1, index.head._2, playerId, this),
-        lookright(index.head._1, index.head._2, playerId, this),
-        lookupright(index.head._1, index.head._2, playerId, this),
-        lookdownright(index.head._1, index.head._2, playerId, this),
-        lookupleft(index.head._1, index.head._2, playerId, this),
-        lookdownleft(index.head._1, index.head._2, playerId, this)
-      ).flatten
-      getValidTurnsRecursive(index.drop(1), list ::: map, playerId)
-    } else list
-    }
 */
   private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
     if (row == 0) return Future.successful(None)

@@ -21,4 +21,7 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
 
+libraryDependencies += "com.typesafe.akka" %% "akka-http"   % "10.1.8"
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.19"
+
 coverageExcludedPackages := "de.htwg.se.reversi.aview.gui;de.htwg.se.reversi.Reversi"

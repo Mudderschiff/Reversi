@@ -116,7 +116,7 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
     } else grid
   }
 
-
+/*
   def getValidTurns(playerId: Int): List[Turn] = {
     if (playerId != 2 && playerId != 1) return Nil
     var retVal = new ListBuffer[Turn]
@@ -125,23 +125,23 @@ case class Grid(private val cells: Matrix[Cell]) extends GridInterface {
       col <- 0 until size
     } if (this.cell(row, col).value == playerId) {
       val f = Future(
-        lookup(row, col, playerId, this).map(option => option.map(retVal += _)),
-        lookdown(row, col, playerId, this).map(option => option.map(retVal += _)),
-        lookleft(row, col, playerId, this).map(option => option.map(retVal += _)),
-        lookright(row, col, playerId, this).map(option => option.map(retVal += _)),
-        lookupright(row, col, playerId, this).map(option => option.map(retVal += _)),
-        lookdownright(row, col, playerId, this).map(option => option.map(retVal += _)),
-        lookupleft(row, col, playerId, this).map(option => option.map(retVal += _)),
-        lookdownleft(row, col, playerId, this).map(option => option.map(retVal += _))
+        Future(lookup(row, col, playerId, this)).map(option => option.map(retVal += _)),
+        Future(lookdown(row, col, playerId, this)).map(option => option.map(retVal += _)),
+        Future(lookleft(row, col, playerId, this)).map(option => option.map(retVal += _)),
+        Future(lookright(row, col, playerId, this)).map(option => option.map(retVal += _)),
+        Future(lookupright(row, col, playerId, this)).map(option => option.map(retVal += _)),
+        Future(lookdownright(row, col, playerId, this)).map(option => option.map(retVal += _)),
+        Future(lookupleft(row, col, playerId, this)).map(option => option.map(retVal += _)),
+        Future(lookdownleft(row, col, playerId, this)).map(option => option.map(retVal += _))
       )
       Await.result(f,Duration.Inf)
     }
     retVal.toList
   }
 
+*/
 
 
-  /*
 def getValidTurns(playerId: Int): List[Turn] = if (playerId != 2 && playerId != 1) List() else
     getValidTurnsRecursive(rowcol(playerId), List(), playerId)
 
@@ -161,63 +161,63 @@ def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], play
     getValidTurnsRecursive(index.drop(1), list ::: map, playerId)
   } else list
   }
-*/
-  private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (row == 0) return Future.successful(None)
+
+  private def lookup(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (row == 0) return None
     val up = row - 1
     if (grid.cell(up, col).value != playerId && grid.cell(up, col).value != 0 && grid.cell(up, col).value != 3)
       for {
         up <- up until 0 by -1
-      } if (grid.cell(up - 1, col).value == playerId) return Future.successful(None) else if (grid.cell(up - 1, col).value == 0 ||
-        grid.cell(up - 1, col).value == 3) return Future.successful(Some(Turn(row, col, up - 1, col, Direction.Up)))
-    Future.successful(None)
+      } if (grid.cell(up - 1, col).value == playerId) return None else if (grid.cell(up - 1, col).value == 0 ||
+        grid.cell(up - 1, col).value == 3) return Some(Turn(row, col, up - 1, col, Direction.Up))
+    None
   }
 
-  private def lookdown(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (row == grid.size - 1) return Future.successful(None)
+  private def lookdown(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (row == grid.size - 1) return None
     val down = row + 1
     if (grid.cell(down, col).value != playerId && grid.cell(down, col).value != 0 && grid.cell(down, col).value != 3) {
       for {
         down <- down until grid.size - 1
-      } if (grid.cell(down + 1, col).value == playerId) return Future.successful(None) else if (grid.cell(down + 1, col).value == 0 ||
-        grid.cell(down + 1, col).value == 3) return Future.successful(Some(Turn(row, col, down + 1, col, Direction
-        .Down)))
+      } if (grid.cell(down + 1, col).value == playerId) return None else if (grid.cell(down + 1, col).value == 0 ||
+        grid.cell(down + 1, col).value == 3) return Some(Turn(row, col, down + 1, col, Direction
+        .Down))
     }
-    Future.successful(None)
+    None
   }
 
-  private def lookright(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (col == grid.size - 1) return Future.successful(None)
+  private def lookright(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (col == grid.size - 1) return None
 
     val right = col + 1
 
     if (grid.cell(row, right).value != playerId && grid.cell(row, right).value != 0 && grid.cell(row, right).value != 3) {
       for {
         right <- right until grid.size - 1
-      } if (grid.cell(row, right + 1).value == playerId) return Future.successful(None) else if (grid.cell(row, right + 1).value == 0 ||
-        grid.cell(row, right + 1).value == 3) return Future.successful(Some(Turn(row, col, row, right + 1, Direction
-        .Right)))
+      } if (grid.cell(row, right + 1).value == playerId) return None else if (grid.cell(row, right + 1).value == 0 ||
+        grid.cell(row, right + 1).value == 3) return Some(Turn(row, col, row, right + 1, Direction
+        .Right))
     }
-    Future.successful(None)
+    None
   }
 
-  private def lookleft(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (col == 0) return Future.successful(None)
+  private def lookleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (col == 0) return None
 
     val left = col - 1
 
     if (grid.cell(row, left).value != playerId && grid.cell(row, left).value != 0 && grid.cell(row, left).value != 3) {
       for {
         left <- left until 0 by -1
-      } if (grid.cell(row, left - 1).value == playerId) return Future.successful(None) else if (grid.cell(row, left - 1).value == 0 ||
-        grid.cell(row, left - 1).value == 3) return Future.successful(Some(Turn(row, col, row, left - 1, Direction
-        .Left)))
+      } if (grid.cell(row, left - 1).value == playerId) return None else if (grid.cell(row, left - 1).value == 0 ||
+        grid.cell(row, left - 1).value == 3) return Some(Turn(row, col, row, left - 1, Direction
+        .Left))
     }
-    Future.successful(None)
+    None
   }
 
-  private def lookupright(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (row == 0 || col == grid.size - 1) return Future.successful(None)
+  private def lookupright(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (row == 0 || col == grid.size - 1) return None
 
     val up = row - 1
     val right = col + 1
@@ -226,15 +226,15 @@ def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], play
       for {
         up <- up until 0 by -1
         right <- right until grid.size - 1
-      } if (grid.cell(up - 1, right + 1).value == playerId) return Future.successful(None) else if (grid.cell(up - 1, right + 1).value == 0
-        || grid.cell(up - 1, right + 1).value == 3) return Future.successful(Some(Turn(row, col, up - 1, right + 1,
-        Direction.UpRight)))
+      } if (grid.cell(up - 1, right + 1).value == playerId) return None else if (grid.cell(up - 1, right + 1).value == 0
+        || grid.cell(up - 1, right + 1).value == 3) return Some(Turn(row, col, up - 1, right + 1,
+        Direction.UpRight))
     }
-    Future.successful(None)
+    None
   }
 
-  private def lookupleft(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (row == 0 || col == 0) return Future.successful(None)
+  private def lookupleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (row == 0 || col == 0) return None
 
     val up = row - 1
     val left = col - 1
@@ -243,15 +243,15 @@ def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], play
       for {
         up <- up until 0 by -1
         left <- left until 0 by -1
-      } if (grid.cell(up - 1, left - 1).value == playerId) return Future.successful(None) else if (grid.cell(up - 1, left - 1).value == 0
-        || grid.cell(up - 1, left - 1).value == 3) return Future.successful(Some(Turn(row, col, up - 1, left - 1,
-        Direction.UpLeft)))
+      } if (grid.cell(up - 1, left - 1).value == playerId) return None else if (grid.cell(up - 1, left - 1).value == 0
+        || grid.cell(up - 1, left - 1).value == 3) return Some(Turn(row, col, up - 1, left - 1,
+        Direction.UpLeft))
     }
-    Future.successful(None)
+    None
   }
 
-  private def lookdownright(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (row == grid.size - 1 || col == grid.size - 1) return Future.successful(None)
+  private def lookdownright(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (row == grid.size - 1 || col == grid.size - 1) return None
 
     val down = row + 1
     val right = col + 1
@@ -261,17 +261,17 @@ def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], play
       for {
         down <- down until grid.size - 1
         right <- right until grid.size - 1
-      } if (grid.cell(down + 1, right + 1).value == playerId) return Future.successful(None) else if (grid.cell(down + 1, right + 1).value
-        == 0 || grid.cell(down + 1, right + 1).value == 3) return Future.successful(Some(Turn(row, col, down + 1,
+      } if (grid.cell(down + 1, right + 1).value == playerId) return None else if (grid.cell(down + 1, right + 1).value
+        == 0 || grid.cell(down + 1, right + 1).value == 3) return Some(Turn(row, col, down + 1,
         right + 1, Direction
-        .DownRight)))
+        .DownRight))
     }
-    Future.successful(None)
+    None
   }
 
 
-  private def lookdownleft(row: Int, col: Int, playerId: Int, grid: Grid): Future[Option[Turn]] = {
-    if (row == grid.size - 1 || col == 0) return Future.successful(None)
+  private def lookdownleft(row: Int, col: Int, playerId: Int, grid: Grid): Option[Turn] = {
+    if (row == grid.size - 1 || col == 0) return None
 
     val down = row + 1
     val left = col - 1
@@ -281,11 +281,11 @@ def getValidTurnsRecursive(index: IndexedSeq[(Int, Int)], list: List[Turn], play
       for {
         down <- down until grid.size - 1
         left <- left until 0 by -1
-      } if (grid.cell(down + 1, left - 1).value == playerId) return Future.successful(None) else if (grid.cell(down + 1, left - 1).value
-        == 0 || grid.cell(down + 1, left - 1).value == 3) return Future.successful(Some(Turn(row, col, down + 1, left
-        - 1, Direction.DownLeft)))
+      } if (grid.cell(down + 1, left - 1).value == playerId) return None else if (grid.cell(down + 1, left - 1).value
+        == 0 || grid.cell(down + 1, left - 1).value == 3) return Some(Turn(row, col, down + 1, left
+        - 1, Direction.DownLeft))
     }
-    Future.successful(None)
+    None
   }
 
   override def createNewGrid: GridInterface = (new GridCreator).createGrid(size)

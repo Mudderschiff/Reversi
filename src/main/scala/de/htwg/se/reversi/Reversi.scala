@@ -10,8 +10,8 @@ import scala.io.StdIn.readLine
 object Reversi {
   val injector: Injector = Guice.createInjector(new ReversiModule)
   val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
-  //val tui = new Tui(controller)
-  //val gui = new SwingGui(controller)
+  val tui = new Tui(controller)
+  val gui = new SwingGui(controller)
   controller.createNewGrid()
   val server = new WebServer(controller)
 
@@ -20,7 +20,7 @@ object Reversi {
 
     do {
       input = readLine()
-      //tui.processInputLine(input)
+      tui.processInputLine(input)
     } while (input != "q")
   }
 }

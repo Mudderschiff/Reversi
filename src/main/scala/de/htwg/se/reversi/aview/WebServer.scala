@@ -1,71 +1,51 @@
 package de.htwg.se.reversi.aview
-import akka.actor.ActorSystem
-import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
-import akka.stream.ActorMaterializer
-import com.typesafe.scalalogging.LazyLogging
-import akka.actor.{Actor, ActorSystem, Props, ActorLogging}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.pattern.ask
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import spray.json.DefaultJsonProtocol._
-import scala.concurrent.Future
+
+import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import de.htwg.se.reversi.controller.controllerComponent._
 
 import scala.swing.Reactor
 
-class Auction extends Actor with ActorLogging {
-  var bids = List.empty[Bid]
+class Auction(controller: ControllerInterface) extends Actor with ActorLogging with Reactor {
+  listenTo(controller)
   def receive = {
-    case bid @ Bid(userId, offer) =>
-      bids = bids :+ bid
-      log.info(s"Bid complete: $userId, $offer")
-    case GetBids => sender() ! Bids(bids)
+    case (row,column) =>
+      controller.set(row.asInstanceOf[Int], column.asInstanceOf[Int], controller.getActivePlayer())
+      log.info(s"Cell Set:" + row + " " + column)
+    case GetGrid => sender() ! controller.gridToString
     case _ => log.info("Invalid message")
   }
 }
+case object GetGrid
 
-case class Bid(row: String, col: Int)
-case object GetBids
-case class Bids(bids: List[Bid])
-
-
-class WebServer(controller: ControllerInterface) extends Reactor{
-    listenTo(controller)
-    // these are from spray-json
-    implicit val bidFormat = jsonFormat2(Bid)
-    implicit val bidsFormat = jsonFormat1(Bids)
-
+class WebServer(controller: ControllerInterface) {
       implicit val system = ActorSystem()
       implicit val materializer = ActorMaterializer()
       // needed for the future flatMap/onComplete in the end
-      implicit val executionContext = system.dispatcher
+      //implicit val executionContext = system.dispatcher
 
-      val auction = system.actorOf(Props[Auction], "auction")
+      val auction = system.actorOf(Props(new Auction(controller)), "auction")
 
       val route =
         path("") {
           put {
             parameter("row".as[Int], "col".as[Int]) { (row, column) =>
-              // place a bid, fire-and-forget
-              controller.set(row, column, controller.getActivePlayer())
-              //auction ! Bid(user, bid)
+              auction ! (row, column)
               complete((StatusCodes.Accepted, "cell set"))
             }
           } ~
             get {
-              //implicit val timeout: Timeout = 5.seconds
-
-              // query the actor for the current auction state
-              //val bids: Future[Bids] = (auction ? GetBids).mapTo[Bids]
-              //complete(bids)
-              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + controller.gridToString +"</pre>"))
+              implicit val timeout: Timeout = 5.seconds
+              val grid: Future[String] = (auction ? GetGrid).mapTo[String]
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + Await.result(grid, Duration.Inf) +"</pre>"))
             }
         }
 

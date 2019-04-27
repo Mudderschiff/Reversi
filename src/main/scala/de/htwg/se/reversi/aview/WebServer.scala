@@ -16,9 +16,6 @@ import akka.util.Timeout
 import spray.json.DefaultJsonProtocol._
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.io.StdIn
-
-import scala.io.StdIn
 import de.htwg.se.reversi.controller.controllerComponent._
 
 import scala.swing.Reactor
@@ -55,18 +52,20 @@ class WebServer(controller: ControllerInterface) extends Reactor{
       val route =
         path("") {
           put {
-            parameter("bid".as[Int], "user") { (bid, user) =>
+            parameter("row".as[Int], "col".as[Int]) { (row, column) =>
               // place a bid, fire-and-forget
-              auction ! Bid(user, bid)
-              complete((StatusCodes.Accepted, "bid placed"))
+              controller.set(row, column, controller.getActivePlayer())
+              //auction ! Bid(user, bid)
+              complete((StatusCodes.Accepted, "cell set"))
             }
           } ~
             get {
-              implicit val timeout: Timeout = 5.seconds
+              //implicit val timeout: Timeout = 5.seconds
 
               // query the actor for the current auction state
-              val bids: Future[Bids] = (auction ? GetBids).mapTo[Bids]
-              complete(bids)
+              //val bids: Future[Bids] = (auction ? GetBids).mapTo[Bids]
+              //complete(bids)
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + controller.gridToString +"</pre>"))
             }
         }
 

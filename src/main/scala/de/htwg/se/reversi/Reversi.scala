@@ -4,12 +4,16 @@ import com.google.inject.{Guice, Injector}
 import de.htwg.se.reversi.aview.Tui
 import de.htwg.se.reversi.aview.gui.SwingGui
 import de.htwg.se.reversi.aview.WebServer
+import de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
+import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
+
 import scala.io.StdIn.readLine
 
 object Reversi {
   val injector: Injector = Guice.createInjector(new ReversiModule)
-  val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+  //val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
+  val controller = new Controller(new Grid(8))
   val tui = new Tui(controller)
   val gui = new SwingGui(controller)
   val server = new WebServer(controller)

@@ -30,7 +30,7 @@ class WebServer(controller: ControllerInterface) {
       implicit val system = ActorSystem()
       implicit val materializer = ActorMaterializer()
       // needed for the future flatMap/onComplete in the end
-      //implicit val executionContext = system.dispatcher
+      implicit val executionContext = system.dispatcher
 
       val auction = system.actorOf(Props(new Auction(controller)), "auction")
 
@@ -39,7 +39,7 @@ class WebServer(controller: ControllerInterface) {
           put {
             parameter("row".as[Int], "col".as[Int]) { (row, column) =>
               auction ! (row, column)
-              complete((StatusCodes.Accepted, "cell set"))
+              complete((StatusCodes.Accepted, "cell set\n"))
             }
           } ~
             get {
@@ -50,15 +50,12 @@ class WebServer(controller: ControllerInterface) {
         }
 
       val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
-      println("Server online at http://localhost:8080/")
-  /*
-      println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
-  if (StdIn.readLine() == "q") {
+
+  def unbind = {
     bindingFuture
       .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => system.terminate()) // and shutdown when done
+      .onComplete(_ => system.terminate()) // and shut
 
   }
-  */
 
 }

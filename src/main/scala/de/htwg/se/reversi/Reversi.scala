@@ -12,8 +12,9 @@ object Reversi {
   val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   val tui = new Tui(controller)
   val gui = new SwingGui(controller)
-  controller.createNewGrid()
   val server = new WebServer(controller)
+  controller.createNewGrid()
+
 
   def main(args: Array[String]): Unit = {
     var input: String = ""
@@ -22,5 +23,6 @@ object Reversi {
       input = readLine()
       tui.processInputLine(input)
     } while (input != "q")
+    server.unbind
   }
 }

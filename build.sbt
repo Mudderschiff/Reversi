@@ -25,4 +25,6 @@ libraryDependencies += "com.typesafe.akka" %% "akka-http"   % "10.1.8"
 libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.19"
 //libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.8"
 
+libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.8"
+
 coverageExcludedPackages := "de.htwg.se.reversi.aview.gui;de.htwg.se.reversi.Reversi"

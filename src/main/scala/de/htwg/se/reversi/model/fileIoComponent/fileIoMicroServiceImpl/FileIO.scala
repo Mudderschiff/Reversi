@@ -11,13 +11,12 @@ import net.codingwell.scalaguice.InjectorExtensions._
 import play.api.libs.json._
 
 import scala.io.Source.fromURL
-import akka.http.scaladsl.model._
-import akka.util.ByteString
-import akka.http.scaladsl.model._
-import HttpMethods._
-import HttpProtocols._
-import MediaTypes._
-import HttpCharsets._
+import org.apache.http.entity.ByteArrayEntity
+import org.apache.http.impl.client.{BasicResponseHandler}
+import org.apache.http.HttpHeaders
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.impl.client.HttpClients
+
 
 class FileIO extends FileIOInterface {
 
@@ -93,8 +92,13 @@ class FileIO extends FileIOInterface {
   }
 
   def sendJson(url: String, content: String): Unit = {
-    val data = ByteString(content)
-    HttpRequest(POST, uri = Uri(url), entity = HttpEntity(`application/json`, data))
+
+    val client = HttpClients.createDefault()
+    val post = new HttpPost(url)
+    post.addHeader(HttpHeaders.CONTENT_TYPE, "application/json")
+    val entity = new ByteArrayEntity(content.getBytes("UTF-8"))
+    post.setEntity(entity)
+    val result = client.execute(post, new BasicResponseHandler())
   }
 
 }

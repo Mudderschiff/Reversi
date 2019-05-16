@@ -15,7 +15,6 @@ import scala.swing.Publisher
 import scala.util.Random
 
 class Controller @Inject()(var grid: GridInterface) extends ControllerInterface with Publisher {
-
   val injector: Injector = Guice.createInjector(new ReversiModule)
   val player1 = Player(1)
   val player2 = Player(2)

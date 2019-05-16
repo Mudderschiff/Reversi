@@ -20,7 +20,8 @@ class ReversiModule extends AbstractModule with ScalaModule {
     bind[GridInterface].annotatedWithName("small").toInstance(new Grid(4))
     bind[GridInterface].annotatedWithName("normal").toInstance(new Grid(8))
     //bind[FileIOInterface].to[fileIoXmlImpl.FileIO]
-    bind[FileIOInterface].to[fileIoJsonImpl.FileIO]
+    //bind[FileIOInterface].to[fileIoJsonImpl.FileIO]
+    bind[FileIOInterface].to[fileIoMicroServiceImpl.FileIO]
   }
 }
 

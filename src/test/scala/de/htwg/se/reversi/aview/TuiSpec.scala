@@ -163,7 +163,7 @@ class TuiSpec extends WordSpec with Matchers {
     }
     "save and load 8x8 json" in {
       controller.grid = new Grid(8)
-      controller.fileIo = new fileIoXmlImpl.FileIO
+      controller.fileIo = new fileIoJsonImpl.FileIO
       tui.processInputLine("f")
       var gridjson = new File(System.getProperty("user.dir") + "/grid.json")
       var playerjson = new File(System.getProperty("user.dir") + "/player.json")

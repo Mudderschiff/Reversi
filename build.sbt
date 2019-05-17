@@ -2,7 +2,6 @@ name := "Reversi in Scala"
 organization := "de.htwg.se"
 version := "0.3.1"
 scalaVersion := "2.12.7"
-scalacOptions += "-feature"
 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
@@ -23,7 +22,6 @@ libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
 
 libraryDependencies += "com.typesafe.akka" %% "akka-http"   % "10.1.8"
 libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.19"
-//libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.8"
 
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.8"
 

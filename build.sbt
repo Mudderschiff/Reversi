@@ -1,7 +1,14 @@
+enablePlugins(JavaAppPackaging, AshScriptPlugin)
+
 name := "Reversi in Scala"
 organization := "de.htwg.se"
-version := "0.3.1"
+version := "2.0"
 scalaVersion := "2.12.7"
+
+dockerBaseImage := "openjdk:8-jre-alpine"
+packageName in Docker := "reversi"
+dockerExposedPorts := Seq(8080)
+
 
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.5"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"

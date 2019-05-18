@@ -2,6 +2,7 @@ package de.htwg.se.reversi.aview
 
 import com.typesafe.scalalogging.LazyLogging
 import de.htwg.se.reversi.controller.controllerComponent._
+import scala.util.Try
 
 import scala.swing.Reactor
 
@@ -22,13 +23,16 @@ class Tui(controller: ControllerInterface) extends Reactor with LazyLogging {
       controller.enableBot()
       if (controller.botState()) controller.bot()
     case "d" => controller.disableBot()
-    case _ => input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
-      case row :: column :: Nil =>
-        controller.set(row, column, controller.getActivePlayer())
-        if (controller.botState()) controller.bot()
-        controller.finish()
-      case _ =>
-    }
+    case _ =>
+      if (Try(input.toInt).isSuccess) {
+        input.toList.filter(c => c != ' ').map(c => c.toString.toInt) match {
+          case row :: column :: Nil =>
+            controller.set(row, column, controller.getActivePlayer())
+            if (controller.botState()) controller.bot()
+            controller.finish()
+          case _ => println("to long")
+        }
+      }
   }
 
   reactions += {

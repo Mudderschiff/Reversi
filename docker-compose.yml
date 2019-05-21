@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  reversi:
+    image: reversi:2.0
+    network_mode: host
+    ports:
+      - "8080:8080"
+  microservice:
+    image: microservice:0.2
+    network_mode: host
+    ports:
+      - "8070:8070"

@@ -22,7 +22,7 @@ class FileIO extends FileIOInterface {
 
   override def load: Option[GridInterface] = {
     var gridOption: Option[GridInterface] = None
-    val source: String = fromURL("http://0.0.0.0:8070/load_grid").mkString
+    val source: String = fromURL("http://localhost:8070/load_grid").mkString
     val json: JsValue = Json.parse(source)
     val size = (json \ "grid" \ "size").get.toString.toInt
     val injector = Guice.createInjector(new ReversiModule)
@@ -50,7 +50,7 @@ class FileIO extends FileIOInterface {
 
   override def save(grid: GridInterface): Unit = {
     val json = gridToJson(grid)
-    sendJson("http://0.0.0.0:8070/save_grid", json.toString())
+    sendJson("http://localhost:8070/save_grid", json.toString())
   }
 
   def gridToJson(grid: GridInterface): JsObject = {
@@ -74,7 +74,7 @@ class FileIO extends FileIOInterface {
   }
 
   override def loadPlayer: Int = {
-    fromURL("http://0.0.0.0:8070/load_player").mkString.toInt
+    fromURL("http://localhost:8070/load_player").mkString.toInt
   }
 
   implicit val cellWrites: Writes[CellInterface] with Object {
@@ -84,7 +84,7 @@ class FileIO extends FileIOInterface {
   }
 
   override def savePlayer(activePlayer: Int): Unit = {
-    sendJson("http://0.0.0.0:8070/save_player", activePlayer.toString)
+    sendJson("http://localhost:8070/save_player", activePlayer.toString)
   }
 
   def playerToJson(activePlayer: Int): JsObject = {

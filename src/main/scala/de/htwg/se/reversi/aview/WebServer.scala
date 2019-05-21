@@ -34,22 +34,36 @@ class WebServer(controller: ControllerInterface) {
 
       val auction = system.actorOf(Props(new Auction(controller)), "auction")
 
-      val route =
-        path("") {
+      val route = {
+        path("reversi") {
           put {
             parameter("row".as[Int], "col".as[Int]) { (row, column) =>
               auction ! (row, column)
               complete((StatusCodes.Accepted, "cell set\n"))
             }
-          } ~
+          }~
             get {
               implicit val timeout: Timeout = 5.seconds
               val grid: Future[String] = (auction ? GetGrid).mapTo[String]
               complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + Await.result(grid, Duration.Inf) +"</pre>"))
             }
+        }~
+        path("reversi" / "save") {
+          get {
+            controller.save()
+            complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + controller.gridToString +"</pre>"))
+          }
+        }~
+        path("reversi" / "load") {
+          get {
+            controller.load()
+            complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + controller.gridToString +"</pre>"))
+          }
         }
+      }
 
-      val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 8080)
+
+      val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
 
   def unbind = {
     bindingFuture

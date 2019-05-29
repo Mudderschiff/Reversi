@@ -11,7 +11,7 @@ import net.codingwell.scalaguice.ScalaModule
 class ReversiModule extends AbstractModule with ScalaModule {
   val defaultSize: Int = 8
 
-  def configure(): Unit = {
+  override def configure(): Unit = {
     bindConstant().annotatedWith(Names.named("DefaultSize")).to(defaultSize)
     bind[GridInterface].to[Grid]
     bind[ControllerInterface].to[controllerBaseImpl.Controller]

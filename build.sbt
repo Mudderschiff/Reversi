@@ -32,4 +32,9 @@ libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.19"
 
 libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.8"
 
+libraryDependencies ++= Seq(
+  "com.typesafe.slick" %% "slick" % "3.0.0",
+  "org.slf4j" % "slf4j-nop" % "1.6.4"
+)
+
 coverageExcludedPackages := "de.htwg.se.reversi.aview.gui;de.htwg.se.reversi.Reversi"

@@ -20,7 +20,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http"   % "10.1.8",
   "com.typesafe.akka" %% "akka-stream" % "2.5.19",
   "org.apache.httpcomponents" % "httpclient" % "4.5.8",
-  "com.typesafe.slick" %% "slick" % "3.3.0"
+  "com.typesafe.slick" %% "slick" % "3.3.0",
+  "com.h2database" % "h2" % "1.4.199"
 )
 
 coverageExcludedPackages := "de.htwg.se.reversi.aview.gui;de.htwg.se.reversi.Reversi"

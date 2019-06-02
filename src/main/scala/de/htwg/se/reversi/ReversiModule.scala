@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.name.Names
 import de.htwg.se.reversi.controller.controllerComponent._
 import de.htwg.se.reversi.model.fileIoComponent._
+import de.htwg.se.reversi.model.daoComponent._
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 import de.htwg.se.reversi.model.gridComponent.gridAdvancedImpl.Grid
 import net.codingwell.scalaguice.ScalaModule
@@ -22,6 +23,7 @@ class ReversiModule extends AbstractModule with ScalaModule {
     //bind[FileIOInterface].to[fileIoXmlImpl.FileIO]
     //bind[FileIOInterface].to[fileIoJsonImpl.FileIO]
     bind[FileIOInterface].to[fileIoMicroServiceImpl.FileIO]
+    bind[DAOInterface].to[slickImpl.gridDao]
   }
 }
 

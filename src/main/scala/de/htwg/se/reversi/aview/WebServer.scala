@@ -59,10 +59,28 @@ class WebServer(controller: ControllerInterface) {
             controller.load()
             complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + controller.gridToString +"</pre>"))
           }
-        }
+        }~
+        path("reversi" / "loadDB") {
+          get {
+            val list = controller.getAllGrids.mkString(", ")
+            complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" +  list +"</pre>"))
+          }
+        }~
+        path("reversi" / "saveDB") {
+          get {
+            controller.saveGrid(controller.gridToString,controller.getActivePlayer())
+            complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>saved</pre>"))
+            complete((StatusCodes.Accepted, "saved\n"))
+          }
+        }~
+        path("reversi" / "deletegrid") {
+          put {
+            parameter("id".as[Int]) { id =>
+              complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<pre>" + controller.deleteGridById(id)  + "</pre>"))
+            }
+          }
+          }
       }
-
-
       val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
 
   def unbind = {

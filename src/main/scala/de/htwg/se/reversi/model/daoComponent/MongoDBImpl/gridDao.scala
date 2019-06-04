@@ -1,3 +1,4 @@
+/*
 package de.htwg.se.reversi.model.daoComponent.MongoDBImpl
 import de.htwg.se.reversi.model.daoComponent.DAOInterface
 import de.htwg.se.reversi.model.gridComponent.GridInterface
@@ -13,3 +14,4 @@ class gridDao extends DAOInterface {
 
   override def deleteGridById(id: String): Boolean = ???
 }
+*/

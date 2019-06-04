@@ -3,7 +3,7 @@ package de.htwg.se.reversi.model.daoComponent.slickImpl
 import de.htwg.se.reversi.model.daoComponent.DAOInterface
 import de.htwg.se.reversi.model.gridComponent.GridInterface
 import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
-import slick.dbio.DBIOAction
+
 import slick.jdbc.H2Profile.api._
 import slick.lifted.ProvenShape
 
@@ -14,6 +14,7 @@ import scala.concurrent.duration.Duration
 class gridDao extends DAOInterface {
   private val grids = TableQuery[Grids]
   val db = Database.forConfig("h2mem1")
+  Await.result(db.run(DBIO.seq(grids.schema.create)),Duration.Inf)
 
   override def getGridById(id: Int): (Int, Int, String) = {
     val query = db.run(grids.filter(_.id === id).result.headOption)
@@ -25,13 +26,9 @@ class gridDao extends DAOInterface {
     Await.result(query,Duration.Inf).toList
   }
 
-  override def saveGrid(grid: GridInterface, player: ControllerInterface): Unit = {
-    db.run(grids += (0,player.getActivePlayer(),grid.toString))
+  override def saveGrid(grid: String, player: Int): Unit = {
+    db.run(grids += (0,player,grid))
   }
-
-  /*override def deleteGrid(grid: GridInterface): Boolean = {
-    false
-  }*/
 
   override def deleteGridById(id: Int): Boolean = {
     val query = db.run(grids.filter(_.id === id).delete) map { _ > 0}

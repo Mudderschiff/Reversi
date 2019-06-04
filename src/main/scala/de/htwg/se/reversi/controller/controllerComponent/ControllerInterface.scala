@@ -48,6 +48,14 @@ trait ControllerInterface extends Publisher {
   def undo: Unit
 
   def redo: Unit
+
+  def getGridById(id: Int): (Int, Int, String)
+
+  def getAllGrids: List[(Int,Int, String)]
+
+  def deleteGridById(id: Int): Boolean
+
+  def saveGrid(grid: String, player: Int): Unit
 }
 
 class CellChanged extends Event

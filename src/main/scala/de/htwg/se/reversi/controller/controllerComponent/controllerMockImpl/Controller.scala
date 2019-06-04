@@ -49,4 +49,12 @@ class Controller(var grid: GridInterface) extends ControllerInterface {
   override def undo: Unit = {}
 
   override def redo: Unit = {}
+
+  override def deleteGridById(id: Int): Boolean = false
+
+  override def getAllGrids: List[(Int, Int, String)] = List()
+
+  override def getGridById(id: Int): (Int, Int, String) = (1,1, grid.toString)
+
+  def saveGrid(grid: String, player: Int): Unit = {}
 }

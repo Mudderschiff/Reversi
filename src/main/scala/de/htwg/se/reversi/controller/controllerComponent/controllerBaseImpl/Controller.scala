@@ -5,6 +5,7 @@ import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.se.reversi.ReversiModule
 import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
 import de.htwg.se.reversi.controller.controllerComponent._
+import de.htwg.se.reversi.model.daoComponent.DAOInterface
 import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
 import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
 import de.htwg.se.reversi.model.playerComponent.Player
@@ -21,6 +22,7 @@ class Controller @Inject()(var grid: GridInterface) extends ControllerInterface 
   private val undoManager = new UndoManager
   var gameStatus: GameStatus = IDLE
   var fileIo: FileIOInterface = injector.instance[FileIOInterface]
+  var db: DAOInterface = injector.instance[DAOInterface]
   var activePlayer: Int = randomActivePlayer()
   var botPlayer = false
 
@@ -151,4 +153,13 @@ class Controller @Inject()(var grid: GridInterface) extends ControllerInterface 
     gameStatus = REDO
     publish(new CellChanged)
   }
+
+  def saveGrid(grid: String, player: Int): Unit = db.saveGrid(grid,activePlayer)
+
+  def getGridById(id: Int): (Int, Int, String)  = db.getGridById(id)
+
+  def getAllGrids: List[(Int,Int, String)] = db.getAllGrids
+
+  def deleteGridById(id: Int): Boolean = db.deleteGridById(id)
+
 }

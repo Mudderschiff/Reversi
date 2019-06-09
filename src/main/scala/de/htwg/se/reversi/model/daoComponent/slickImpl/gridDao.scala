@@ -1,9 +1,6 @@
 package de.htwg.se.reversi.model.daoComponent.slickImpl
 
 import de.htwg.se.reversi.model.daoComponent.DAOInterface
-import de.htwg.se.reversi.model.gridComponent.GridInterface
-import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
-
 import slick.jdbc.H2Profile.api._
 import slick.lifted.ProvenShape
 
@@ -14,7 +11,7 @@ import scala.concurrent.duration.Duration
 class gridDao extends DAOInterface {
   private val grids = TableQuery[Grids]
   val db = Database.forConfig("h2mem1")
-  Await.result(db.run(DBIO.seq(grids.schema.create)),Duration.Inf)
+  db.run(DBIO.seq(grids.schema.create))
 
   override def getGridById(id: Int): (Int, Int, String) = {
     val query = db.run(grids.filter(_.id === id).result.headOption)

@@ -2,14 +2,11 @@ package de.htwg.se.reversi.model.daoComponent.MongoDBImpl
 
 import de.htwg.se.reversi.model.daoComponent.DAOInterface
 import org.mongodb.scala.{MongoClient, MongoCollection, MongoDatabase}
-import org.mongodb.scala._
-import org.mongodb.scala.bson.ObjectId
 import org.mongodb.scala.bson.codecs.Macros._
 import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
 import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
 import org.mongodb.scala.model.Filters._
 
-//import org.mongodb.scala.Helpers._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration

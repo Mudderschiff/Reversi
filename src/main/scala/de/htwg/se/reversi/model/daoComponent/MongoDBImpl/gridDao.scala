@@ -19,11 +19,11 @@ class gridDao extends DAOInterface {
   // Create Codec. Codec is used to convert case class to BSON
   val codecRegistry = fromRegistries(fromProviders(classOf[Grid]), DEFAULT_CODEC_REGISTRY )
 
-  //val mongoClient: MongoClient = MongoClient("mongodb://localhost:1234")
   val mongoClient: MongoClient = MongoClient()
   val database: MongoDatabase = mongoClient.getDatabase("grids").withCodecRegistry(codecRegistry)
   val collection: MongoCollection[Grid] = database.getCollection("grid")
-  val counter: MongoCollection[Document] = database.getCollection("counters")
+
+  var inc = 0
 
   override def getGridById(id: Int): (Int, Int, String) = {
     Await.result(collection.find(equal("_id", id)).first().toFuture(),Duration.Inf).get()
@@ -34,19 +34,16 @@ class gridDao extends DAOInterface {
   }
 
   override def saveGrid(grid: String, player: Int): Unit = {
-   // collection.insertOne("_id" -> "pdoc")
-    Await.result(collection.insertOne(Grid(new ObjectId, player, grid)).toFuture(), Duration.Inf)
+    inc += 1
+    Await.result(collection.insertOne(Grid(inc, player, grid)).toFuture(), Duration.Inf)
   }
 
   override def deleteGridById(id: Int): Boolean = {
-    false
+    Await.result(collection.deleteOne(equal("_id", id)).toFuture(),Duration.Inf).wasAcknowledged()
   }
 }
 
 
-case class Grid(_id: ObjectId,player: Int, grid: String) {
-  def get(): (Int, Int, String) = (_id.toString.toInt,player,grid)
-  //def getid(): Int = _id.toString.toInt
-  //def getplayer(): Int = player
-  //def getstring(): String = grid
+case class Grid(_id: Int,player: Int, grid: String) {
+  def get(): (Int, Int, String) = (_id ,player,grid)
 }

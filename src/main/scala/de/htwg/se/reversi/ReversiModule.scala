@@ -23,7 +23,7 @@ class ReversiModule extends AbstractModule with ScalaModule {
     //bind[FileIOInterface].to[fileIoXmlImpl.FileIO]
     //bind[FileIOInterface].to[fileIoJsonImpl.FileIO]
     bind[FileIOInterface].to[fileIoMicroServiceImpl.FileIO]
-    bind[DAOInterface].to[slickImpl.gridDao]
+    bind[DAOInterface].to[MongoDBImpl.gridDao]
   }
 }
 

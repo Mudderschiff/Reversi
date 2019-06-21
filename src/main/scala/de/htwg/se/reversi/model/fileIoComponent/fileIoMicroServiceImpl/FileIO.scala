@@ -16,13 +16,14 @@ import org.apache.http.impl.client.{BasicResponseHandler}
 import org.apache.http.HttpHeaders
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.impl.client.HttpClients
+import org.apache.http.client.methods.HttpGet
 
 
 class FileIO extends FileIOInterface {
 
   override def load: Option[GridInterface] = {
     var gridOption: Option[GridInterface] = None
-    val source: String = fromURL("http://localhost:8070/load_grid").mkString
+    val source: String = getJson("http://localhost:8070/load_grid")//fromURL("http://localhost:8070/load_grid").mkString
     val json: JsValue = Json.parse(source)
     val size = (json \ "grid" \ "size").get.toString.toInt
     val injector = Guice.createInjector(new ReversiModule)
@@ -74,7 +75,8 @@ class FileIO extends FileIOInterface {
   }
 
   override def loadPlayer: Int = {
-    fromURL("http://localhost:8070/load_player").mkString.toInt
+    getJson("http://localhost:8070/load_player").toInt
+    //fromURL("http://localhost:8070/load_player").mkString.toInt
   }
 
   implicit val cellWrites: Writes[CellInterface] with Object {
@@ -100,5 +102,19 @@ class FileIO extends FileIOInterface {
     post.setEntity(entity)
     val result = client.execute(post, new BasicResponseHandler())
   }
+
+  def getJson(url: String): String = {
+    val httpClient = HttpClients.createDefault()
+    val httpResponse = httpClient.execute(new HttpGet(url))
+    val entity = httpResponse.getEntity
+    var content = ""
+    if (entity != null) {
+      val inputStream = entity.getContent
+      content = io.Source.fromInputStream(inputStream).getLines.mkString
+      inputStream.close
+    }
+    content
+  }
+
 
 }

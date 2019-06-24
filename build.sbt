@@ -1,4 +1,4 @@
-enablePlugins(JavaAppPackaging, AshScriptPlugin)
+enablePlugins(JavaAppPackaging, AshScriptPlugin, GatlingPlugin)
 
 name := "Reversi in Scala"
 organization := "de.htwg.se"
@@ -22,7 +22,9 @@ libraryDependencies ++= Seq(
   "org.apache.httpcomponents" % "httpclient" % "4.5.8",
   "com.typesafe.slick" %% "slick" % "3.3.0",
   "com.h2database" % "h2" % "1.4.199",
-  "org.mongodb.scala" %% "mongo-scala-driver" % "2.6.0"
+  "org.mongodb.scala" %% "mongo-scala-driver" % "2.6.0",
+  "io.gatling.highcharts" % "gatling-charts-highcharts" % "2.3.0" % "test",
+  "io.gatling"            % "gatling-test-framework"    % "2.3.0" % "test"
 )
 
 coverageExcludedPackages := "de.htwg.se.reversi.aview.gui;de.htwg.se.reversi.Reversi"

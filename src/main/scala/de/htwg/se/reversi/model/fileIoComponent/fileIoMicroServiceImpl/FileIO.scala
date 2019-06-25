@@ -26,7 +26,7 @@ class FileIO extends FileIOInterface {
 
   override def load: Option[GridInterface] = {
     var gridOption: Option[GridInterface] = None
-    val source: String = getJson("http://localhost:8070/load_grid").get//fromURL("http://localhost:8070/load_grid").mkString
+    val source: String = fromURL("http://localhost:8070/load_grid").mkString
     val json: JsValue = Json.parse(source)
     val size = (json \ "grid" \ "size").get.toString.toInt
     val injector = Guice.createInjector(new ReversiModule)

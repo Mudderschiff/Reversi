@@ -1,8 +1,4 @@
 package de.htwg.se.reversi.model.daoComponent
-import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
-import de.htwg.se.reversi.model.gridComponent.GridInterface
-
-import scala.concurrent.Future
 
 trait DAOInterface {
   def getGridById(id: Int): (Int, Int, String)

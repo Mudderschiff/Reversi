@@ -15,7 +15,7 @@ object Reversi {
   val controller: ControllerInterface = injector.getInstance(classOf[ControllerInterface])
   val tui = new Tui(controller)
   val gui = new SwingGui(controller)
-  val server = new WebServer(controller)
+  //val server = new WebServer(controller)
   controller.createNewGrid()
 
 
@@ -26,6 +26,6 @@ object Reversi {
       input = readLine()
       tui.processInputLine(input)
     } while (input != "q")
-    server.unbind
+    //server.unbind
   }
 }

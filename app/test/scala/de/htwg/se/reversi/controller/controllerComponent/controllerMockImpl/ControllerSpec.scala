@@ -1,7 +1,7 @@
-package de.htwg.se.reversi.controller.controllerComponent.controllerMockImpl
+package de.htwg.wt.reversi.controller.controllerComponent.controllerMockImpl
 
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus
-import de.htwg.se.reversi.model.gridComponent.gridMockImpl.Grid
+import de.htwg.wt.reversi.controller.controllerComponent.GameStatus
+import de.htwg.wt.reversi.model.gridComponent.gridMockImpl.Grid
 import org.scalatest.{Matchers, WordSpec}
 
 class ControllerSpec extends WordSpec with Matchers {

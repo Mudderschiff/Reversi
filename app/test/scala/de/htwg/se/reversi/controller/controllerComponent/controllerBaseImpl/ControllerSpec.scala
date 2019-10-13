@@ -1,6 +1,6 @@
-package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
+package de.htwg.wt.reversi.controller.controllerComponent.controllerBaseImpl
 
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix}
+import de.htwg.wt.reversi.model.gridComponent.gridBaseImpl.{Cell, Grid, Matrix}
 import org.scalatest.{Matchers, WordSpec}
 
 class ControllerSpec extends WordSpec with Matchers {

@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
+package de.htwg.wt.reversi.model.gridComponent.gridBaseImpl
 
 import scala.util.Random
 

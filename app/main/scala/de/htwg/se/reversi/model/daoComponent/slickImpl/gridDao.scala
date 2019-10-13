@@ -1,6 +1,6 @@
-package de.htwg.se.reversi.model.daoComponent.slickImpl
+package de.htwg.wt.reversi.model.daoComponent.slickImpl
 
-import de.htwg.se.reversi.model.daoComponent.DAOInterface
+import de.htwg.wt.reversi.model.daoComponent.DAOInterface
 import slick.jdbc.H2Profile.api._
 import slick.lifted.ProvenShape
 

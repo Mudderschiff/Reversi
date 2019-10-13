@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
+package de.htwg.wt.reversi.model.gridComponent.gridBaseImpl
 
 case class GridCreator() {
   def createGrid(size: Int): Grid = if (size % 2 != 0) new Grid(size) else initGrid(new Grid(size))

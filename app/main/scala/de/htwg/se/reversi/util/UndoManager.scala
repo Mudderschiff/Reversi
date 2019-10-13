@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.util
+package de.htwg.wt.reversi.util
 
 class UndoManager {
   private var undoStack: List[Command] = Nil

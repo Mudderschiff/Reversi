@@ -1,3 +1,3 @@
-package de.htwg.se.reversi.model.playerComponent
+package de.htwg.wt.reversi.model.playerComponent
 
 case class Player(playerId: Int) { }

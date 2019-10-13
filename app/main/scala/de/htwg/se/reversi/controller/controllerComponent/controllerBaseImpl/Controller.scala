@@ -1,15 +1,15 @@
-package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
+package de.htwg.wt.reversi.controller.controllerComponent.controllerBaseImpl
 
 import com.google.inject.name.Names
 import com.google.inject.{Guice, Inject, Injector}
-import de.htwg.se.reversi.ReversiModule
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
-import de.htwg.se.reversi.controller.controllerComponent._
-import de.htwg.se.reversi.model.daoComponent.DAOInterface
-import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
-import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
-import de.htwg.se.reversi.model.playerComponent.Player
-import de.htwg.se.reversi.util.UndoManager
+import de.htwg.wt.reversi.ReversiModule
+import de.htwg.wt.reversi.controller.controllerComponent.GameStatus._
+import de.htwg.wt.reversi.controller.controllerComponent._
+import de.htwg.wt.reversi.model.daoComponent.DAOInterface
+import de.htwg.wt.reversi.model.fileIoComponent.FileIOInterface
+import de.htwg.wt.reversi.model.gridComponent.{CellInterface, GridInterface}
+import de.htwg.wt.reversi.model.playerComponent.Player
+import de.htwg.wt.reversi.util.UndoManager
 import net.codingwell.scalaguice.InjectorExtensions._
 
 import scala.swing.Publisher

@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.util
+package de.htwg.wt.reversi.util
 
 class TestObject extends Observer {
   def update(): Unit = println("Ping")

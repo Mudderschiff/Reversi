@@ -1,12 +1,12 @@
-package de.htwg.se.reversi
+package de.htwg.wt.reversi
 
 import com.google.inject.{Guice, Injector}
-import de.htwg.se.reversi.aview.Tui
-import de.htwg.se.reversi.aview.gui.SwingGui
-import de.htwg.se.reversi.aview.WebServer
-import de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.reversi.controller.controllerComponent.ControllerInterface
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Grid
+import de.htwg.wt.reversi.aview.Tui
+import de.htwg.wt.reversi.aview.gui.SwingGui
+import de.htwg.wt.reversi.aview.WebServer
+import de.htwg.wt.reversi.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.wt.reversi.controller.controllerComponent.ControllerInterface
+import de.htwg.wt.reversi.model.gridComponent.gridBaseImpl.Grid
 
 import scala.io.StdIn.readLine
 

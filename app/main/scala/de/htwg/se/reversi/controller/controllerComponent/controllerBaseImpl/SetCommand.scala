@@ -1,7 +1,7 @@
-package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
+package de.htwg.wt.reversi.controller.controllerComponent.controllerBaseImpl
 
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus._
-import de.htwg.se.reversi.util.Command
+import de.htwg.wt.reversi.controller.controllerComponent.GameStatus._
+import de.htwg.wt.reversi.util.Command
 
 
 class SetCommand(playerId: Int, row: Int, col: Int, controller: Controller) extends Command {

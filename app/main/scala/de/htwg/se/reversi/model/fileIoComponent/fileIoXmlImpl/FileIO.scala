@@ -1,10 +1,10 @@
-package de.htwg.se.reversi.model.fileIoComponent.fileIoXmlImpl
+package de.htwg.wt.reversi.model.fileIoComponent.fileIoXmlImpl
 
 import com.google.inject.Guice
 import com.google.inject.name.Names
-import de.htwg.se.reversi.ReversiModule
-import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
-import de.htwg.se.reversi.model.gridComponent.GridInterface
+import de.htwg.wt.reversi.ReversiModule
+import de.htwg.wt.reversi.model.fileIoComponent.FileIOInterface
+import de.htwg.wt.reversi.model.gridComponent.GridInterface
 import net.codingwell.scalaguice.InjectorExtensions._
 
 import scala.xml.{Elem, PrettyPrinter}

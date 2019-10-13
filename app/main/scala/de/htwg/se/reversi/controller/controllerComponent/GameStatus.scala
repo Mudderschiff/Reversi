@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.controller.controllerComponent
+package de.htwg.wt.reversi.controller.controllerComponent
 
 object GameStatus extends Enumeration {
   type GameStatus = Value

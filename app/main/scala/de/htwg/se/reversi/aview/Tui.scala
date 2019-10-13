@@ -1,7 +1,7 @@
-package de.htwg.se.reversi.aview
+package de.htwg.wt.reversi.aview
 
 import com.typesafe.scalalogging.LazyLogging
-import de.htwg.se.reversi.controller.controllerComponent._
+import de.htwg.wt.reversi.controller.controllerComponent._
 import scala.util.Try
 
 import scala.swing.Reactor

@@ -1,12 +1,12 @@
-package de.htwg.se.reversi
+package de.htwg.wt.reversi
 
 import com.google.inject.AbstractModule
 import com.google.inject.name.Names
-import de.htwg.se.reversi.controller.controllerComponent._
-import de.htwg.se.reversi.model.fileIoComponent._
-import de.htwg.se.reversi.model.daoComponent._
-import de.htwg.se.reversi.model.gridComponent.GridInterface
-import de.htwg.se.reversi.model.gridComponent.gridAdvancedImpl.Grid
+import de.htwg.wt.reversi.controller.controllerComponent._
+import de.htwg.wt.reversi.model.fileIoComponent._
+import de.htwg.wt.reversi.model.daoComponent._
+import de.htwg.wt.reversi.model.gridComponent.GridInterface
+import de.htwg.wt.reversi.model.gridComponent.gridAdvancedImpl.Grid
 import net.codingwell.scalaguice.ScalaModule
 
 class ReversiModule extends AbstractModule with ScalaModule {

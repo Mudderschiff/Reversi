@@ -1,12 +1,12 @@
-package de.htwg.se.reversi.model.fileIoComponent.fileIoJsonImpl
+package de.htwg.wt.reversi.model.fileIoComponent.fileIoJsonImpl
 
 import java.io._
 
 import com.google.inject.Guice
 import com.google.inject.name.Names
-import de.htwg.se.reversi.ReversiModule
-import de.htwg.se.reversi.model.fileIoComponent.FileIOInterface
-import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
+import de.htwg.wt.reversi.ReversiModule
+import de.htwg.wt.reversi.model.fileIoComponent.FileIOInterface
+import de.htwg.wt.reversi.model.gridComponent.{CellInterface, GridInterface}
 import net.codingwell.scalaguice.InjectorExtensions._
 import play.api.libs.json._
 

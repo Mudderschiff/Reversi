@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.aview
+package de.htwg.wt.reversi.aview
 import akka.http.scaladsl.model._
 import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import akka.http.scaladsl.Http
@@ -10,7 +10,7 @@ import akka.util.Timeout
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
-import de.htwg.se.reversi.controller.controllerComponent._
+import de.htwg.wt.reversi.controller.controllerComponent._
 
 import scala.swing.Reactor
 

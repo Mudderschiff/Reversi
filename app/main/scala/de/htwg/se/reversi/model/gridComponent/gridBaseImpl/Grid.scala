@@ -1,6 +1,6 @@
-package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
+package de.htwg.wt.reversi.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.reversi.model.gridComponent.GridInterface
+import de.htwg.wt.reversi.model.gridComponent.GridInterface
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.{Await, Future}

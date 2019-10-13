@@ -1,9 +1,9 @@
-package de.htwg.se.reversi.controller.controllerComponent.controllerMockImpl
+package de.htwg.wt.reversi.controller.controllerComponent.controllerMockImpl
 
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus.{GameStatus, _}
-import de.htwg.se.reversi.controller.controllerComponent.{ControllerInterface, GameStatus}
-import de.htwg.se.reversi.model.gridComponent.gridMockImpl.Grid
-import de.htwg.se.reversi.model.gridComponent.{CellInterface, GridInterface}
+import de.htwg.wt.reversi.controller.controllerComponent.GameStatus.{GameStatus, _}
+import de.htwg.wt.reversi.controller.controllerComponent.{ControllerInterface, GameStatus}
+import de.htwg.wt.reversi.model.gridComponent.gridMockImpl.Grid
+import de.htwg.wt.reversi.model.gridComponent.{CellInterface, GridInterface}
 
 class Controller(var grid: GridInterface) extends ControllerInterface {
   grid = new Grid(1)

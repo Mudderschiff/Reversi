@@ -1,7 +1,7 @@
-package de.htwg.se.reversi.aview.gui
+package de.htwg.wt.reversi.aview.gui
 
-import de.htwg.se.reversi.controller.controllerComponent.{CellChanged, ControllerInterface}
-import de.htwg.se.reversi.model.gridComponent.CellInterface
+import de.htwg.wt.reversi.controller.controllerComponent.{CellChanged, ControllerInterface}
+import de.htwg.wt.reversi.model.gridComponent.CellInterface
 import javax.swing.UIManager
 
 import scala.swing._

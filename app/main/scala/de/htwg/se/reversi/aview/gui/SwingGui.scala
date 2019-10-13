@@ -1,6 +1,6 @@
-package de.htwg.se.reversi.aview.gui
+package de.htwg.wt.reversi.aview.gui
 
-import de.htwg.se.reversi.controller.controllerComponent._
+import de.htwg.wt.reversi.controller.controllerComponent._
 
 import scala.swing._
 import scala.swing.event._

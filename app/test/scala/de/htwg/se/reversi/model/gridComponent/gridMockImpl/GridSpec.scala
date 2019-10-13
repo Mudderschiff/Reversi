@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.model.gridComponent.gridMockImpl
+package de.htwg.wt.reversi.model.gridComponent.gridMockImpl
 
 import org.scalatest.{Matchers, WordSpec}
 

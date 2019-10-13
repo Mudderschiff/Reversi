@@ -1,7 +1,7 @@
-package de.htwg.se.reversi.controller.controllerComponent
+package de.htwg.wt.reversi.controller.controllerComponent
 
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus.GameStatus
-import de.htwg.se.reversi.model.gridComponent.CellInterface
+import de.htwg.wt.reversi.controller.controllerComponent.GameStatus.GameStatus
+import de.htwg.wt.reversi.model.gridComponent.CellInterface
 
 import scala.swing.Publisher
 import scala.swing.event.Event

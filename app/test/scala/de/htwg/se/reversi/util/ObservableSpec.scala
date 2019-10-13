@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.util
+package de.htwg.wt.reversi.util
 
 import org.scalatest.{Matchers, WordSpec}
 

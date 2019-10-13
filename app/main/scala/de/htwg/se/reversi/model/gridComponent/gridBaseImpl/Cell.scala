@@ -1,6 +1,6 @@
-package de.htwg.se.reversi.model.gridComponent.gridBaseImpl
+package de.htwg.wt.reversi.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.reversi.model.gridComponent.CellInterface
+import de.htwg.wt.reversi.model.gridComponent.CellInterface
 
 case class Cell(value: Int) extends CellInterface {
   def isSet: Boolean = value != 0 & value != 3

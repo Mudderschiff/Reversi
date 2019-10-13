@@ -27,4 +27,4 @@ libraryDependencies ++= Seq(
   "io.gatling"            % "gatling-test-framework"    % "2.3.0" % "test"
 )
 
-coverageExcludedPackages := "de.htwg.se.reversi.aview.gui;de.htwg.se.reversi.Reversi"
+coverageExcludedPackages := "de.htwg.wt.reversi.aview.gui;de.htwg.wt.reversi.Reversi"

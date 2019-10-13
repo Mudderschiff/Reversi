@@ -1,4 +1,4 @@
-package de.htwg.se.reversi.model.daoComponent
+package de.htwg.wt.reversi.model.daoComponent
 
 trait DAOInterface {
   def getGridById(id: Int): (Int, Int, String)

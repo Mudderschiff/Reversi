@@ -1,6 +1,6 @@
-package de.htwg.se.reversi.model.gridComponent
+package de.htwg.wt.reversi.model.gridComponent
 
-import de.htwg.se.reversi.model.gridComponent.gridBaseImpl.Turn
+import de.htwg.wt.reversi.model.gridComponent.gridBaseImpl.Turn
 
 trait GridInterface {
   def cell(row: Int, col: Int): CellInterface

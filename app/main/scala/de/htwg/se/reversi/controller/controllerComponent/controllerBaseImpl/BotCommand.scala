@@ -1,6 +1,6 @@
-package de.htwg.se.reversi.controller.controllerComponent.controllerBaseImpl
+package de.htwg.wt.reversi.controller.controllerComponent.controllerBaseImpl
 
-import de.htwg.se.reversi.util.Command
+import de.htwg.wt.reversi.util.Command
 
 class BotCommand(controller: Controller) extends Command {
   var botgrid = controller.grid.makeNextTurnBot(2).highlight(1)

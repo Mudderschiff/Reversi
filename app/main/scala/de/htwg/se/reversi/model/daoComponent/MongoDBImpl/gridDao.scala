@@ -1,7 +1,7 @@
-package de.htwg.se.reversi.model.daoComponent.MongoDBImpl
+package de.htwg.wt.reversi.model.daoComponent.MongoDBImpl
 
 import com.mongodb.BasicDBObject
-import de.htwg.se.reversi.model.daoComponent.DAOInterface
+import de.htwg.wt.reversi.model.daoComponent.DAOInterface
 import org.mongodb.scala.{MongoClient, MongoCollection, MongoDatabase}
 import org.mongodb.scala.bson.codecs.Macros._
 import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY

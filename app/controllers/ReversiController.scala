@@ -9,7 +9,7 @@ import de.htwg.se.reversi.controller.controllerComponent.GameStatus
 @Singleton
 class ReversiController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
   val gameController = Reversi.controller
-  def reversiAsText =  gameController.gridToString + GameStatus.message(gameController.gameStatus)
+  //def reversiAsText =  gameController.gridToString + GameStatus.message(gameController.gameStatus)
 
   def about= Action {
     Ok(views.html.index())
@@ -17,7 +17,11 @@ class ReversiController @Inject()(cc: ControllerComponents) extends AbstractCont
 
 
   def reversi = Action {
-    Ok(reversiAsText)
+    Ok(views.html.reversi(gameController))
+  }
+  def set(row: Int, col: Int) = Action {
+    gameController.set(row,col,gameController.getActivePlayer())
+    Ok(views.html.reversi(gameController))
   }
 
 }

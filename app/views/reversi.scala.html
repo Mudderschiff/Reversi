@@ -4,10 +4,10 @@
 @col_type(row : Int,col: Int) = @{
     val value = controller.cell(row,col).value
     value match {
-        case 1 => "one"
-        case 2 => "two"
-        case 3 => "candidate"
-        case _ => "given"
+        case 1 => "-one"
+        case 2 => "-two"
+        case 3 => "-candidate"
+        case _ => ""
     }
 }
 
@@ -16,8 +16,9 @@
         <div class="game">
         @for(row <- 0 until size) {
             @for(col <- 0 until size) {
-                <span class="@{"cell-"+col_type(row,col)}"></span>
-            }
+                <span class="@{"cell"+col_type(row,col)}">
+
+                </span>}
             <div class="clear"></div>
         }
         </div>

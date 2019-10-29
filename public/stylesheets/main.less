@@ -1,0 +1,45 @@
+.gamecontainer {
+  height: 100%;
+  width: 100%;
+  margin: 1em;
+  display:flex;
+}
+
+.game {
+  border-style: ridge;
+  border-width: 0.05em;
+  border-spacing: 0px;
+  border-color: #f6f6FF;
+  padding: 0.05em;
+  margin:auto;
+  width: auto;
+}
+
+.clear {
+  clear:both;
+}
+
+.cell {
+  display: inline-block;
+  float:left;
+  border-style: solid;
+  border-width: 0.05em;
+  background-color: #E0E0FF;
+  border-color: #f6f6FF;
+  width: 1.2em;
+  height: 1.2em;
+  margin:0.1em;
+  text-align: center;
+  &-one {
+    background-color:white;
+  }
+  &-two {
+    background-color:black;
+  }
+  &-given {
+    background-color:#C8C8FF;
+  }
+  &-candidate {
+    background-color:#C0FFC0;
+  }
+}

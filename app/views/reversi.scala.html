@@ -1,21 +1,23 @@
 @(controller:de.htwg.se.reversi.controller.controllerComponent.ControllerInterface)
 
 @size= @{ controller.gridSize }
+@col_type(row : Int,col: Int) = @{
+    val value = controller.cell(row,col).value
+    value match {
+        case 1 => "one"
+        case 2 => "two"
+        case 3 => "candidate"
+        case _ => "given"
+    }
+}
 
 @main("HTWG Reversi") {
     <div class="gamecontainer">
         <div class="game">
         @for(row <- 0 until size) {
-            <div class="house size@size">
             @for(col <- 0 until size) {
-                <span class="cell">
-                    <span class="@{"number"}">
-                    @{if(controller.cell(row, col).value != 0) {controller.cell(row,col).toString.take(1)} else "_"}
-                    </span>
-
-                </span>
+                <span class="@{"cell-"+col_type(row,col)}"></span>
             }
-            </div>
             <div class="clear"></div>
         }
         </div>

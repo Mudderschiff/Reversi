@@ -6,9 +6,11 @@
 
 GET     /                           controllers.ReversiController.reversi
 
-GET     /about                      controllers.ReversiController.about
+GET     /about/                     controllers.ReversiController.about
 
 GET     /set/:row/:col/             controllers.ReversiController.set(row:Int, col: Int)
+
+GET     /new/                       controllers.ReversiController.newgame
 
 
 # Map static resources from the /public folder to the /assets URL path

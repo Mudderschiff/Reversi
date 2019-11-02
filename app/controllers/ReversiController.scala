@@ -24,4 +24,9 @@ class ReversiController @Inject()(cc: ControllerComponents) extends AbstractCont
     Ok(views.html.reversi(gameController))
   }
 
+  def newgame() = Action {
+    gameController.createNewGrid()
+    Ok(views.html.reversi(gameController))
+  }
+
 }

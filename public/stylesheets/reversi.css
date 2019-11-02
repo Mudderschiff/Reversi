@@ -1,0 +1,39 @@
+.gamecontainer {
+  height: 100%;
+  width: 100%;
+  margin: 1em;
+  display: flex;
+  font: normal bold 40px "Verdana", Geneva, sans-serif;
+}
+.game {
+  border: 0.05em ridge #f6f6FF;
+  padding: 0.05em;
+  margin: auto;
+  width: auto;
+}
+.clear {
+  clear: both;
+}
+.cell,
+.cell-one,
+.cell-two,
+.cell-candidate {
+  display: inline-block;
+  float: left;
+  border: 0.05em solid #f6f6FF;
+  background-color: #E0E0FF;
+  width: 1.2em;
+  height: 1.2em;
+  margin: 0.1em;
+  text-align: center;
+}
+.cell-one {
+  background-color: white;
+}
+.cell-two {
+  background-color: black;
+}
+.cell-candidate {
+  background-color: #C0FFC0;
+}
+/*# sourceMappingURL=reversi.css.map */

@@ -9,24 +9,29 @@ import de.htwg.se.reversi.controller.controllerComponent.GameStatus
 @Singleton
 class ReversiController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
   val gameController = Reversi.controller
-  //def reversiAsText =  gameController.gridToString + GameStatus.message(gameController.gameStatus)
+  def message = GameStatus.message(gameController.gameStatus)
 
-  def about= Action {
+  def about= Action { implicit request =>
     Ok(views.html.index())
   }
 
 
-  def reversi = Action {
-    Ok(views.html.reversi(gameController))
+  def reversi = Action { implicit request =>
+    Ok(views.html.reversi(gameController, message))
   }
-  def set(row: Int, col: Int) = Action {
+  def set(row: Int, col: Int) = Action {implicit request =>
     gameController.set(row,col,gameController.getActivePlayer())
-    Ok(views.html.reversi(gameController))
+    Ok(views.html.reversi(gameController, message))
+  }
+  def resize(size: Int) = Action {implicit request =>
+    gameController.resize(size)
+    Ok(views.html.reversi(gameController, message))
   }
 
-  def newgame() = Action {
+  def newgame() = Action {implicit request =>
     gameController.createNewGrid()
-    Ok(views.html.reversi(gameController))
+    Ok(views.html.reversi(gameController, message))
   }
+
 
 }

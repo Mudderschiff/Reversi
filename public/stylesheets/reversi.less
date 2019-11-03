@@ -1,16 +1,40 @@
+@selectors: 4,8;
+
 .gamecontainer {
-  height: 100%;
-  width: 100%;
-  margin: 1em;
-  display:flex;
-  font: normal bold 40px "Verdana",Geneva, sans-serif;
+  position: absolute;
+  width: 40%;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
 }
 
 .game {
-  border: 0.05em ridge #f6f6FF;
-  padding: 0.05em;
-  margin:auto;
-  width: auto;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  each(@selectors, {
+    a:first-child:nth-last-child(@{value}),
+    a:first-child:nth-last-child(@{value}) ~ a {
+      width: if(@value = 4, 25%, 12.5%);
+      height: 100%;
+    }
+    div:first-child:nth-last-child(@{value}),
+    div:first-child:nth-last-child(@{value}) ~ div {
+      height: if(@value = 4, 25%, 12.5%);
+      width: 100%;
+    }
+  });
+  a:only-child, div:only-child{
+    width: 100%;
+    height: 100%;
+  }
+
 }
 
 .clear {
@@ -22,9 +46,6 @@
   float:left;
   border: 0.05em solid #f6f6FF;
   background-color: #E0E0FF;
-  width: 1.2em;
-  height: 1.2em;
-  margin:0.1em;
   text-align: center;
   &-one {
     &:extend(.cell);
@@ -38,4 +59,13 @@
     &:extend(.cell);
     background-color:#C0FFC0;
   }
+}
+
+.alert {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  margin: 0;
 }

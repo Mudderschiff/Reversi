@@ -1,15 +1,45 @@
 .gamecontainer {
-  height: 100%;
-  width: 100%;
-  margin: 1em;
-  display: flex;
-  font: normal bold 40px "Verdana", Geneva, sans-serif;
+  position: absolute;
+  width: 40%;
+  margin: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.gamecontainer:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
 }
 .game {
-  border: 0.05em ridge #f6f6FF;
-  padding: 0.05em;
-  margin: auto;
-  width: auto;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.game a:first-child:nth-last-child(4),
+.game a:first-child:nth-last-child(4) ~ a {
+  width: 25%;
+  height: 100%;
+}
+.game div:first-child:nth-last-child(4),
+.game div:first-child:nth-last-child(4) ~ div {
+  height: 25%;
+  width: 100%;
+}
+.game a:first-child:nth-last-child(8),
+.game a:first-child:nth-last-child(8) ~ a {
+  width: 12.5%;
+  height: 100%;
+}
+.game div:first-child:nth-last-child(8),
+.game div:first-child:nth-last-child(8) ~ div {
+  height: 12.5%;
+  width: 100%;
+}
+.game a:only-child,
+.game div:only-child {
+  width: 100%;
+  height: 100%;
 }
 .clear {
   clear: both;
@@ -22,9 +52,6 @@
   float: left;
   border: 0.05em solid #f6f6FF;
   background-color: #E0E0FF;
-  width: 1.2em;
-  height: 1.2em;
-  margin: 0.1em;
   text-align: center;
 }
 .cell-one {
@@ -35,5 +62,13 @@
 }
 .cell-candidate {
   background-color: #C0FFC0;
+}
+.alert {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  margin: 0;
 }
 /*# sourceMappingURL=reversi.css.map */

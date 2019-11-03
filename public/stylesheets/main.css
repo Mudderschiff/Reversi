@@ -1,0 +1,36 @@
+@media (min-width: 768px) {
+  .navbar-light .navbar-toggler {
+    display: none;
+  }
+  .navbar-collapse {
+    display: flex !important;
+    flex-basis: auto;
+  }
+  .navbar-nav {
+    flex-direction: row;
+  }
+  .nav-item {
+    display: block;
+    padding: 0.5rem 1rem;
+  }
+  .fixed-top {
+    padding: 0 1em;
+  }
+  .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+}
+.carousel-caption {
+  background: #f8f9fa !important;
+  color: rgba(0, 0, 0, 0.7);
+}
+.carousel-inner {
+  margin: auto;
+  width: 40%;
+}
+.carousel-control-next,
+.carousel-control-prev {
+  background: #f8f9fa;
+  opacity: 1;
+}
+/*# sourceMappingURL=main.css.map */

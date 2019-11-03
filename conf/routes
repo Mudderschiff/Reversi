@@ -6,11 +6,16 @@
 
 GET     /                           controllers.ReversiController.reversi
 
-GET     /about/                     controllers.ReversiController.about
+GET     /new                       controllers.ReversiController.newgame
 
-GET     /set/:row/:col/             controllers.ReversiController.set(row:Int, col: Int)
+GET     /set/:row/:col             controllers.ReversiController.set(row:Int, col: Int)
 
-GET     /new/                       controllers.ReversiController.newgame
+GET     /resize/:size               controllers.ReversiController.resize(size: Int)
+
+GET     /about                     controllers.ReversiController.about
+
+
+
 
 
 # Map static resources from the /public folder to the /assets URL path

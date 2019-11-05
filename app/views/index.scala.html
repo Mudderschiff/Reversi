@@ -1,53 +1,49 @@
 @()(implicit request: RequestHeader)
 
 @main("HTWG Reversi") {
-    <h1>About Reversi</h1>
-    <section>
-        <p>
-            Reversi is a strategy board game for two players, played on an 8×8 uncheckered board. There are sixty-four identical game pieces called disks (often spelled "discs"), which are light on one side and dark on the other. Players take turns placing disks on the board with their assigned color facing up. During a play, any disks of the opponent's color that are in a straight line and bounded by the disk just placed and another disk of the current player's color are turned over to the current player's color.
-            <br><br>
-            The object of the game is to have the majority of disks turned to display your color when the last playable empty square is filled.
-        </p>
-    </section>
-    <div class="bd-example">
-        <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-                <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="@routes.Assets.versioned("images/reversi_new.png")" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <p>The following image shows a freshly initialized game.</p>
+    <div class="card">
+        <h1 class="card-header">About Reversi</h1>
+        <div class="card-body">
+
+            <p class="card-text">
+                Reversi is a strategy board game for two players, played on an 8×8 uncheckered board. There are sixty-four identical game pieces called disks (often spelled "discs"), which are light on one side and dark on the other. Players take turns placing disks on the board with their assigned color facing up. During a play, any disks of the opponent's color that are in a straight line and bounded by the disk just placed and another disk of the current player's color are turned over to the current player's color.
+            </p>
+
+            <p class="card-text">
+                The object of the game is to have the majority of disks turned to display your color when the last playable empty square is filled.
+            </p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">
+                                The following image shows a freshly initialized game. <br>
+                                <img src="@routes.Assets.versioned("images/reversi_new.png")" class="img-fluid">
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <img src="@routes.Assets.versioned("images/reversi_black_turn.png")" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <p>Now black made a valid turn</p>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">
+                                Now black made a valid turn <br>
+                                <img src="@routes.Assets.versioned("images/reversi_black_turn.png")" class="img-fluid">
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <img src="@routes.Assets.versioned("images/reversi_black_won.png")" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <p>The following picture shows a finished game where black won</p>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">
+                                The following picture shows a finished game where black won <br>
+                                <img src="@routes.Assets.versioned("images/reversi_black_won.png")" class="img-fluid">
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
     </div>
-
-
-
-
 }

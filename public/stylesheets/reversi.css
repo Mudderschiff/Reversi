@@ -16,8 +16,8 @@
   width: 100%;
   height: 100%;
 }
-.game a:first-child:nth-last-child(4),
-.game a:first-child:nth-last-child(4) ~ a {
+.game div div:first-child:nth-last-child(4),
+.game div div:first-child:nth-last-child(4) ~ div {
   width: 25%;
   height: 100%;
 }
@@ -26,8 +26,8 @@
   height: 25%;
   width: 100%;
 }
-.game a:first-child:nth-last-child(8),
-.game a:first-child:nth-last-child(8) ~ a {
+.game div div:first-child:nth-last-child(8),
+.game div div:first-child:nth-last-child(8) ~ div {
   width: 12.5%;
   height: 100%;
 }
@@ -36,7 +36,7 @@
   height: 12.5%;
   width: 100%;
 }
-.game a:only-child,
+.game .cell:only-child,
 .game div:only-child {
   width: 100%;
   height: 100%;

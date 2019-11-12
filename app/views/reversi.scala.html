@@ -1,6 +1,7 @@
 @(controller:de.htwg.se.reversi.controller.controllerComponent.ControllerInterface, message: String)(implicit request: RequestHeader)
 
 @size= @{ controller.gridSize }
+@toScalar(house:Int, cell:Int)=@{ house*size + cell}
 @col_type(row : Int,col: Int) = @{
     val value = controller.cell(row,col).value
     value match {
@@ -18,7 +19,7 @@
                     @for(row <- 0 until size) {
                     <div class="clear">
                         @for(col <- 0 until size) {
-                        <a class="@{"cell"+col_type(row,col)}" href="/set/@row/@col"></a>
+                        <div class="cell@{col_type(row,col)}" id="scalar@{toScalar(row, col)}"></div>
                         }
                     </div>
                     }

@@ -16,6 +16,8 @@ GET     /about                     controllers.ReversiController.about
 
 GET     /json                      controllers.ReversiController.gridtoJson
 
+GET     /websocket                 controllers.ReversiController.socket
+
 
 
 

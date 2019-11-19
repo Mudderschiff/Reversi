@@ -51,10 +51,10 @@ function updateGrid(grid) {
 function setCell(scalar, value) {
     console.log("Setting cell " + scalar + " to " + value);
     grid.cells[scalar] = value;
-    $("#scalar"+scalar).removeClass().addClass(col_type(value))
+    $("#scalar"+scalar).removeClass().addClass(col_type(value));
     setCellOnServer(row(scalar), col(scalar));
     $("#scalar"+scalar).off("click");
-    loadJson()
+    /*loadJson()*/
 }
 
 function registerClickListener() {
@@ -62,7 +62,6 @@ function registerClickListener() {
         if (grid.cells[scalar] == 3) {
             $("#scalar"+scalar).click(
                 function() {
-                    console.log(grid.player);
                     setCell(scalar, grid.player)
                 }
 
@@ -71,7 +70,6 @@ function registerClickListener() {
     }
 }
 function setCellOnServer(row,col) {
-    console.log(row,col);
     $.get("/set/"+row+"/"+col, function(data) {
         console.log("Set cell on Server");
     });
@@ -93,9 +91,38 @@ function loadJson() {
 }
 
 
+
+function connectWebSocket() {
+    var websocket = new WebSocket("ws://localhost:9000/websocket");
+
+    websocket.onopen = function(event) {
+        console.log("Connected to Websocket");
+    };
+
+    websocket.onclose = function () {
+        console.log('Connection with Websocket Closed!');
+    };
+
+    websocket.onerror = function (error) {
+        console.log('Error in Websocket Occured: ' + error);
+    };
+
+    websocket.onmessage = function (e) {
+        if (typeof e.data === "string") {
+            let json = JSON.parse(e.data);
+            let cells = json.grid.cells;
+            grid = new Grid(cells, json.grid.player);
+            grid.fill(cells);
+            updateGrid(grid);
+            registerClickListener();
+        }
+
+    };
+}
+
+
 $( document ).ready(function() {
     console.log( "Document is ready, filling grid" );
     loadJson();
+    connectWebSocket()
 });
-
-

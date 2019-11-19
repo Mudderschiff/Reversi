@@ -4,10 +4,16 @@ import javax.inject._
 import play.api.mvc._
 import de.htwg.se.reversi.Reversi
 import de.htwg.se.reversi.controller.controllerComponent.{ControllerInterface, GameStatus}
-import play.api.libs.json.{JsNumber, JsValue, Json}
+import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, Finished, CellChanged, GameStatus, GridSizeChanged}
+import play.api.libs.streams.ActorFlow
+import akka.actor.ActorSystem
+import akka.stream.Materializer
+import akka.actor._
+
+import scala.swing.Reactor
 
 @Singleton
-class ReversiController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class ReversiController @Inject()(cc: ControllerComponents) (implicit system: ActorSystem, mat: Materializer) extends AbstractController(cc) {
   val gameController = Reversi.controller
   def message = GameStatus.message(gameController.gameStatus)
 
@@ -34,24 +40,42 @@ class ReversiController @Inject()(cc: ControllerComponents) extends AbstractCont
   }
 
   def gridtoJson = Action { implicit request =>
-    Ok(toJson)
+    Ok(gameController.toJson)
   }
 
-  def toJson:JsValue = {
-    Json.obj(
-      "grid" -> Json.obj(
-        "size" -> JsNumber(gameController.gridSize), "player" -> JsNumber(gameController.getActivePlayer()),
-        "cells" -> Json.toJson(
-          for {row <- 0 until gameController.gridSize;
-               col <- 0 until gameController.gridSize} yield {
-            Json.obj(
-              "row" -> row,
-              "col" -> col,
-              "cell" -> Json.toJson(gameController.cell(row, col).value))
-          }
-        )
-      )
-    )
+  def socket = WebSocket.accept[String, String] { request =>
+    ActorFlow.actorRef { out =>
+      println("Connect received")
+      SudokuWebSocketActorFactory.create(out)
+    }
+  }
+
+  object SudokuWebSocketActorFactory {
+    def create(out: ActorRef) = {
+      Props(new SudokuWebSocketActor(out))
+    }
+  }
+
+  class SudokuWebSocketActor(out: ActorRef) extends Actor with Reactor {
+    listenTo(gameController)
+
+    def receive = {
+      case msg: String =>
+        out ! (gameController.toJson.toString())
+        println("Sent Json to Client"+ msg)
+    }
+
+    reactions += {
+      case event: GridSizeChanged => sendJsonToClient
+      case event: CellChanged     => sendJsonToClient
+      case event: Finished => sendJsonToClient
+      case event: BotStatus => sendJsonToClient
+    }
+
+    def sendJsonToClient = {
+      println("Received event from Controller")
+      out ! (gameController.toJson.toString)
+    }
   }
 
 

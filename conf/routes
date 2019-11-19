@@ -4,15 +4,17 @@
 
 # Controller for Reversi
 
-GET     /                           controllers.ReversiController.reversi
+GET     /                          controllers.ReversiController.reversi
 
 GET     /new                       controllers.ReversiController.newgame
 
 GET     /set/:row/:col             controllers.ReversiController.set(row:Int, col: Int)
 
-GET     /resize/:size               controllers.ReversiController.resize(size: Int)
+GET     /resize/:size              controllers.ReversiController.resize(size: Int)
 
 GET     /about                     controllers.ReversiController.about
+
+GET     /json                      controllers.ReversiController.gridtoJson
 
 
 

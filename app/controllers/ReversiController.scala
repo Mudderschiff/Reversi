@@ -1,10 +1,10 @@
 package controllers
 
 import javax.inject._
-
 import play.api.mvc._
 import de.htwg.se.reversi.Reversi
-import de.htwg.se.reversi.controller.controllerComponent.GameStatus
+import de.htwg.se.reversi.controller.controllerComponent.{ControllerInterface, GameStatus}
+import play.api.libs.json.{JsNumber, JsValue, Json}
 
 @Singleton
 class ReversiController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
@@ -31,6 +31,27 @@ class ReversiController @Inject()(cc: ControllerComponents) extends AbstractCont
   def newgame() = Action {implicit request =>
     gameController.createNewGrid()
     Ok(views.html.reversi(gameController, message))
+  }
+
+  def gridtoJson = Action { implicit request =>
+    Ok(toJson)
+  }
+
+  def toJson:JsValue = {
+    Json.obj(
+      "grid" -> Json.obj(
+        "size" -> JsNumber(gameController.gridSize), "player" -> JsNumber(gameController.getActivePlayer()),
+        "cells" -> Json.toJson(
+          for {row <- 0 until gameController.gridSize;
+               col <- 0 until gameController.gridSize} yield {
+            Json.obj(
+              "row" -> row,
+              "col" -> col,
+              "cell" -> Json.toJson(gameController.cell(row, col).value))
+          }
+        )
+      )
+    )
   }
 
 

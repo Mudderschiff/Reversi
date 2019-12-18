@@ -54,7 +54,6 @@ function setCell(scalar, value) {
     $("#scalar"+scalar).removeClass().addClass(col_type(value));
     setCellOnServer(row(scalar), col(scalar));
     $("#scalar"+scalar).off("click");
-    /*loadJson()*/
 }
 
 function registerClickListener() {
@@ -90,13 +89,12 @@ function loadJson() {
     });
 }
 
-
-
 function connectWebSocket() {
     var websocket = new WebSocket("ws://localhost:9000/websocket");
 
     websocket.onopen = function(event) {
         console.log("Connected to Websocket");
+        loadJson()
     };
 
     websocket.onclose = function () {
@@ -111,7 +109,6 @@ function connectWebSocket() {
         if (typeof e.data === "string") {
             let json = JSON.parse(e.data);
             let cells = json.grid.cells;
-            grid = new Grid(cells, json.grid.player);
             grid.fill(cells);
             updateGrid(grid);
             registerClickListener();
@@ -123,6 +120,5 @@ function connectWebSocket() {
 
 $( document ).ready(function() {
     console.log( "Document is ready, filling grid" );
-    loadJson();
     connectWebSocket()
 });

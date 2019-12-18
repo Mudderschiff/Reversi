@@ -1,6 +1,11 @@
-@()(implicit request: RequestHeader)
+@import play.api.i18n.Messages
+@import play.api.mvc.RequestHeader
+@import org.webjars.play.WebJarsUtil
+@import controllers.AssetsFinder
 
-@main("HTWG Reversi") {
+@()(implicit request: RequestHeader, messages: Messages, webJarsUtil: WebJarsUtil, assets: AssetsFinder)
+
+@main(messages("HTWG in Reveris")) {
     <div class="card">
         <h1 class="card-header">About Reversi</h1>
         <div class="card-body">

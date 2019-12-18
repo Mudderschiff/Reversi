@@ -4,16 +4,25 @@ import javax.inject._
 import play.api.mvc._
 import de.htwg.se.reversi.Reversi
 import de.htwg.se.reversi.controller.controllerComponent.{ControllerInterface, GameStatus}
-import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, Finished, CellChanged, GameStatus, GridSizeChanged}
+import de.htwg.se.reversi.controller.controllerComponent.{BotStatus, CellChanged, Finished, GameStatus, GridSizeChanged}
 import play.api.libs.streams.ActorFlow
 import akka.actor.ActorSystem
 import akka.stream.Materializer
 import akka.actor._
+import org.webjars.play.WebJarsUtil
+import play.api.i18n.I18nSupport
+import play.api.libs.streams.ActorFlow
+import play.api.mvc._
 
 import scala.swing.Reactor
 
 @Singleton
-class ReversiController @Inject()(cc: ControllerComponents) (implicit system: ActorSystem, mat: Materializer) extends AbstractController(cc) {
+class ReversiController @Inject()(cc: ControllerComponents) (
+  implicit
+  webJarsUtil: WebJarsUtil,
+  assets: AssetsFinder,
+  system: ActorSystem,
+  mat: Materializer) extends AbstractController(cc) with I18nSupport {
   val gameController = Reversi.controller
   def message = GameStatus.message(gameController.gameStatus)
 
@@ -46,23 +55,22 @@ class ReversiController @Inject()(cc: ControllerComponents) (implicit system: Ac
   def socket = WebSocket.accept[String, String] { request =>
     ActorFlow.actorRef { out =>
       println("Connect received")
-      SudokuWebSocketActorFactory.create(out)
+      ReversiWebSocketActorFactory.create(out)
     }
   }
 
-  object SudokuWebSocketActorFactory {
+  object ReversiWebSocketActorFactory {
     def create(out: ActorRef) = {
-      Props(new SudokuWebSocketActor(out))
+      Props(new ReversiWebSocketActor(out))
     }
   }
 
-  class SudokuWebSocketActor(out: ActorRef) extends Actor with Reactor {
+  class ReversiWebSocketActor(out: ActorRef) extends Actor with Reactor {
     listenTo(gameController)
 
     def receive = {
       case msg: String =>
-        out ! (gameController.toJson.toString())
-        println("Sent Json to Client"+ msg)
+        out ! (gameController.toJson)
     }
 
     reactions += {

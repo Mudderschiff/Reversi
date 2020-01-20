@@ -30,6 +30,10 @@ class ReversiController @Inject()(cc: ControllerComponents) (
     Ok(views.html.index())
   }
 
+  def offline= Action { implicit request =>
+    Ok(views.html.offline())
+  }
+
 
   def reversi = Action { implicit request =>
     Ok(views.html.reversi(gameController, message))

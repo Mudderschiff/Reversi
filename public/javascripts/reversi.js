@@ -1,5 +1,15 @@
 let size = 8;
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+        .then(function(registration) {
+            console.log('Registered:', registration);
+        })
+        .catch(function(error) {
+            console.log('Registration failed: ', error);
+        });
+}
+
 function col_type(value) {
     switch (value) {
         case 1:
